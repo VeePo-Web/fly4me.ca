@@ -29,8 +29,8 @@ export default function CaseStudyStory({ project }: { project: Project }) {
                 <p
                   className={
                     isLead
-                      ? "md:col-span-9 t-headline-2"
-                      : "md:col-span-9 t-lede text-foreground/85"
+                      ? "md:col-span-9 t-quote optical-hang"
+                      : "md:col-span-9 t-lede text-foreground/85 measure-wide"
                   }
                 >
                   {value}
