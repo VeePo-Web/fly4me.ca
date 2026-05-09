@@ -12,7 +12,7 @@ export default function Footer({ onContact }: Props) {
         <div className="md:col-span-5">
           <div className="flex items-center gap-2.5 mb-5">
             <img src={logo} alt="" width={28} height={28} className="size-6 object-contain" />
-            <span className="text-base font-medium tracking-tight">Fly4MEdia</span>
+            <span className="t-nav">Fly4MEdia</span>
           </div>
           <p className="t-meta text-muted-foreground max-w-xs">
             A cinematic perspective studio. We help brands, places, and stories

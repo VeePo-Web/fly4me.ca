@@ -50,7 +50,7 @@ export default function Hero({ onContact }: Props) {
 
         <div className="hidden md:flex items-end justify-between t-micro text-foreground/60">
           <span>Fly4MEdia / 2026</span>
-          <span className="text-right leading-relaxed">
+          <span className="text-right">
             Based in Alberta, Canada
             <br />
             Available worldwide

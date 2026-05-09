@@ -118,8 +118,8 @@ export default function ContactModal({ open, onClose }: Props) {
               </div>
 
               <div className="hidden md:flex flex-col gap-1 t-meta text-background/60">
-                <span className="tracking-wide">hello@fly4media.com</span>
-                <span className="tracking-wide">Alberta, Canada</span>
+                <span>hello@fly4media.com</span>
+                <span>Alberta, Canada</span>
               </div>
             </div>
           </aside>
@@ -144,10 +144,10 @@ export default function ContactModal({ open, onClose }: Props) {
 
               {status === "sent" ? (
                 <div className="space-y-6 animate-fade-in">
-                  <p className="text-lg leading-relaxed">
+                  <p className="t-lede">
                     In motion.
                   </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="t-meta text-muted-foreground">
                     We'll respond within one business day. Your email client should
                     have opened — if not, write to{" "}
                     <a
@@ -275,7 +275,7 @@ const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
             required={required}
             rows={3}
             placeholder={placeholder}
-            className="w-full bg-transparent outline-none text-base md:text-lg leading-relaxed pb-3 border-b border-border resize-none placeholder:text-muted-foreground/50"
+            className="t-lede w-full bg-transparent outline-none pb-3 border-b border-border resize-none placeholder:text-muted-foreground/50"
           />
         ) : (
           <input
@@ -287,7 +287,7 @@ const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
             required={required}
             placeholder={placeholder}
             autoComplete={autoComplete}
-            className="w-full bg-transparent outline-none text-base md:text-lg pb-3 border-b border-border placeholder:text-muted-foreground/50"
+            className="t-lede w-full bg-transparent outline-none pb-3 border-b border-border placeholder:text-muted-foreground/50"
           />
         )}
         <span className="field-underline" aria-hidden="true" />
