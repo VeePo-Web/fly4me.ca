@@ -209,6 +209,12 @@
   .py-section    { padding-top: var(--space-section);    padding-bottom: var(--space-section); }
   .py-section-sm { padding-top: var(--space-section-sm); padding-bottom: var(--space-section-sm); }
   .py-section-lg { padding-top: var(--space-section-lg); padding-bottom: var(--space-section-lg); }
+  .pt-section    { padding-top: var(--space-section); }
+  .pb-section    { padding-bottom: var(--space-section); }
+  .pt-section-sm { padding-top: var(--space-section-sm); }
+  .pb-section-sm { padding-bottom: var(--space-section-sm); }
+  .pt-section-lg { padding-top: var(--space-section-lg); }
+  .pb-section-lg { padding-bottom: var(--space-section-lg); }
 }
 
 @layer utilities {
