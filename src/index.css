@@ -115,6 +115,104 @@
   .text-balance { text-wrap: balance; }
   .text-pretty { text-wrap: pretty; }
 
+  /* ---------- Typography utility classes ---------- */
+  /* Each class is the single source of truth for size + line-height + tracking + weight per role.
+     Components apply ONE .t-* class instead of stacking text-7xl tracking-[-0.04em] leading-[0.98]. */
+
+  .t-display-1 {
+    font-size: var(--fs-display-1);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--track-display);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  .t-display-2 {
+    font-size: var(--fs-display-2);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--track-display);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  .t-headline-1 {
+    font-size: var(--fs-headline-1);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--track-display);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  .t-headline-2 {
+    font-size: var(--fs-headline-2);
+    line-height: var(--lh-normal);
+    letter-spacing: var(--track-headline);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  .t-headline-3 {
+    font-size: var(--fs-headline-3);
+    line-height: var(--lh-normal);
+    letter-spacing: var(--track-tight);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  .t-lede {
+    font-size: var(--fs-lede);
+    line-height: var(--lh-prose);
+    letter-spacing: var(--track-base);
+    font-weight: 400;
+    text-wrap: pretty;
+  }
+  .t-body {
+    font-size: var(--fs-body);
+    line-height: var(--lh-prose);
+    letter-spacing: var(--track-base);
+    font-weight: 400;
+    text-wrap: pretty;
+  }
+  .t-meta {
+    font-size: var(--fs-meta);
+    line-height: 1.55;
+    letter-spacing: var(--track-base);
+    font-weight: 400;
+  }
+  .t-eyebrow {
+    font-size: var(--fs-eyebrow);
+    line-height: var(--lh-eyebrow);
+    letter-spacing: var(--track-eyebrow);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-feature-settings: "tnum";
+  }
+  .t-micro {
+    font-size: var(--fs-micro);
+    line-height: var(--lh-eyebrow);
+    letter-spacing: var(--track-micro);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-feature-settings: "tnum";
+  }
+  .t-nav {
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 0;
+    font-weight: 500;
+  }
+
+  /* Editorial wrapping helper — disables forced <br /> on small screens.
+     Combined with text-balance on the headline, gives art-directed lines on desktop
+     and balanced wraps on mobile. */
+  .wrap-editorial > br { display: inline; }
+  @media (max-width: 640px) {
+    .wrap-editorial-mobile-off > br { display: none; }
+  }
+
+  /* Section rhythm utilities (fluid) */
+  .py-section    { padding-top: var(--space-section);    padding-bottom: var(--space-section); }
+  .py-section-sm { padding-top: var(--space-section-sm); padding-bottom: var(--space-section-sm); }
+  .py-section-lg { padding-top: var(--space-section-lg); padding-bottom: var(--space-section-lg); }
+}
+
+@layer utilities {
+
   .reveal {
     opacity: 0;
     transform: translateY(20px);
