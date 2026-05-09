@@ -99,7 +99,6 @@ export default function HeroMedia({
           playsInline
           preload="metadata"
           disableRemotePlayback
-          // @ts-expect-error non-standard but widely supported
           disablePictureInPicture
           aria-hidden="true"
           onCanPlay={() => setReady(true)}
