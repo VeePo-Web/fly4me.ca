@@ -96,28 +96,28 @@ export default function ContactModal({ open, onClose }: Props) {
 
             <div className="relative h-full flex flex-col justify-between p-6 md:p-14 lg:p-20 md:min-h-screen">
               <div className="hidden md:flex items-center gap-3">
-                <span className="text-[11px] uppercase tracking-[0.3em] text-background/70">
+                <span className="t-eyebrow text-background/70">
                   Fly4MEdia
                 </span>
               </div>
 
               <div className="max-w-md mt-auto">
-                <p className="text-[10px] md:text-[11px] uppercase tracking-[0.28em] md:tracking-[0.3em] text-background/70 md:text-background/60 mb-3 md:mb-8">
+                <p className="t-eyebrow text-background/70 md:text-background/60 mb-3 md:mb-8">
                   Fly4MEdia · A private consultation
                 </p>
                 <h2
                   id="contact-title"
-                  className="text-[28px] md:text-5xl lg:text-6xl font-medium leading-[1.05] md:leading-[1.02] tracking-tight text-balance"
+                  className="t-headline-1"
                 >
                   Let's create something worth looking up at.
                 </h2>
-                <p className="hidden md:block mt-8 text-base text-background/70 leading-relaxed max-w-sm">
+                <p className="hidden md:block t-lede mt-8 text-background/70 max-w-sm">
                   Fly4MEdia partners with brands, creators, tourism campaigns, and
                   studios to craft visually immersive aerial storytelling.
                 </p>
               </div>
 
-              <div className="hidden md:flex flex-col gap-1 text-[12px] text-background/60">
+              <div className="hidden md:flex flex-col gap-1 t-meta text-background/60">
                 <span className="tracking-wide">hello@fly4media.com</span>
                 <span className="tracking-wide">Alberta, Canada</span>
               </div>
@@ -135,10 +135,10 @@ export default function ContactModal({ open, onClose }: Props) {
             </button>
 
             <div className="w-full max-w-xl mx-auto px-6 md:px-14 lg:px-20 py-10 md:py-20">
-              <p className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-4 md:mb-5">
+              <p className="t-eyebrow text-muted-foreground mb-4 md:mb-5">
                 Begin a collaboration
               </p>
-              <h3 className="text-[26px] md:text-4xl font-medium leading-[1.05] tracking-tight mb-8 md:mb-14 text-balance">
+              <h3 className="t-headline-2 mb-8 md:mb-14">
                 Tell us what deserves a new perspective.
               </h3>
 
@@ -262,7 +262,7 @@ const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
     <div className="group relative">
       <label
         htmlFor={id}
-        className="block text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-2 md:mb-3"
+        className="block t-micro text-muted-foreground mb-2 md:mb-3"
       >
         {label}
       </label>
