@@ -74,7 +74,7 @@ const Intro = () => {
 
       <div className="relative flex flex-col items-center px-6 text-center">
         {/* eyebrow */}
-        <span className="text-white/55 text-[10px] sm:text-[11px] uppercase tracking-[0.32em] intro-eyebrow">
+        <span className="text-white/55 t-micro intro-eyebrow">
           Fly4MEdia
         </span>
 
@@ -83,7 +83,7 @@ const Intro = () => {
 
         {/* slogan — the brand thesis */}
         <span
-          className="mt-7 block text-white text-[20px] sm:text-[28px] md:text-[34px] font-medium tracking-[-0.02em] leading-[1.1] intro-word"
+          className="mt-7 block text-white t-headline-2 intro-word"
           style={{ maxWidth: "22ch" }}
         >
           Perspective changes everything.
