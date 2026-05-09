@@ -218,6 +218,11 @@ export default function ContactModal({ open, onClose }: Props) {
                   </div>
                 </form>
               )}
+
+              {/* Mobile-only footer info */}
+              <div className="md:hidden mt-10 pt-6 border-t border-border text-[11px] tracking-wide text-muted-foreground">
+                hello@fly4media.com · Alberta, Canada
+              </div>
             </div>
           </section>
         </div>
