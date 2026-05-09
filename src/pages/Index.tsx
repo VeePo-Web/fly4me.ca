@@ -2,8 +2,10 @@ import { useState } from "react";
 import Header from "@/components/fly4media/Header";
 import Hero from "@/components/fly4media/Hero";
 import FeaturedWork from "@/components/fly4media/FeaturedWork";
-import About from "@/components/fly4media/About";
+import BrandStatement from "@/components/fly4media/BrandStatement";
 import Services from "@/components/fly4media/Services";
+import Divider from "@/components/fly4media/Divider";
+import CaseStudyTeaser from "@/components/fly4media/CaseStudyTeaser";
 import CTA from "@/components/fly4media/CTA";
 import Footer from "@/components/fly4media/Footer";
 import ContactModal from "@/components/fly4media/ContactModal";
@@ -13,16 +15,19 @@ const Index = () => {
   const openContact = () => setOpen(true);
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground">
       <Header onContact={openContact} />
-      <Hero onContact={openContact} />
-      <FeaturedWork />
-      <About />
-      <Services />
-      <CTA onContact={openContact} />
+      <main>
+        <Hero onContact={openContact} />
+        <FeaturedWork />
+        <BrandStatement />
+        <Services />
+        <Divider />
+        <CaseStudyTeaser />
+        <CTA onContact={openContact} />
+      </main>
       <Footer onContact={openContact} />
 
-      {/* Floating "Start a Project" — minimal, always-on */}
       <button
         onClick={openContact}
         aria-label="Start a project"
@@ -32,7 +37,7 @@ const Index = () => {
       </button>
 
       <ContactModal open={open} onClose={() => setOpen(false)} />
-    </main>
+    </div>
   );
 };
 
