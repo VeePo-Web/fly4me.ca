@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import mark from "@/assets/fly4media-mark.png";
+
 
 const SESSION_KEY = "f4m:intro:v1";
 const HOLD_MS = 1700;
@@ -72,34 +72,26 @@ const Intro = () => {
         }}
       />
 
-      <div className="relative flex flex-col items-center">
-        {/* mark */}
-        <div className="relative intro-mark">
-          <img
-            src={mark}
-            alt=""
-            width={56}
-            height={56}
-            className="h-14 w-14 object-contain"
-            style={{ filter: "drop-shadow(0 0 24px rgba(255,255,255,0.08))" }}
-          />
-          {/* light sweep over mark */}
-          <span className="pointer-events-none absolute inset-0 overflow-hidden">
-            <span className="absolute inset-y-0 -left-1/2 w-1/2 intro-sweep bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)]" />
-          </span>
-        </div>
-
-        {/* hairline */}
-        <span className="block mt-6 h-px w-20 origin-center bg-white/20 intro-hairline" />
-
-        {/* wordmark */}
-        <span className="mt-6 text-white text-[15px] sm:text-[17px] font-medium intro-word">
+      <div className="relative flex flex-col items-center px-6 text-center">
+        {/* eyebrow */}
+        <span className="text-white/55 text-[10px] sm:text-[11px] uppercase tracking-[0.32em] intro-eyebrow">
           Fly4MEdia
         </span>
 
-        {/* eyebrow */}
-        <span className="mt-3 text-white/45 text-[10px] sm:text-[11px] uppercase tracking-[0.28em] intro-eyebrow">
-          Aerial Cinematography · Alberta
+        {/* hairline */}
+        <span className="block mt-5 h-px w-16 origin-center bg-white/25 intro-hairline" />
+
+        {/* slogan — the brand thesis */}
+        <span
+          className="mt-7 block text-white text-[20px] sm:text-[28px] md:text-[34px] font-medium tracking-[-0.02em] leading-[1.1] intro-word"
+          style={{ maxWidth: "22ch" }}
+        >
+          Perspective changes everything.
+        </span>
+
+        {/* mark light-sweep accent (kept as a subtle texture) */}
+        <span className="pointer-events-none absolute inset-0 overflow-hidden">
+          <span className="absolute inset-y-0 -left-1/2 w-1/2 intro-sweep bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent)]" />
         </span>
       </div>
     </div>

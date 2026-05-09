@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import { useReveal } from "./useReveal";
 
 const SERVICES = [
-  { n: "01", title: "Aerial Cinematography", desc: "Cinematic video production for commercial, editorial and broadcast." },
-  { n: "02", title: "FPV Drone Filming", desc: "Immersive first-person footage for dynamic, high-energy storytelling." },
-  { n: "03", title: "Aerial Photography", desc: "High-resolution stills for marketing, real estate and documentation." },
-  { n: "04", title: "Real Estate Media", desc: "Architectural showcases that frame property at its most flattering scale." },
-  { n: "05", title: "Tourism & Lifestyle", desc: "Visual campaigns that translate landscape into desire." },
+  { n: "01", title: "Aerial Cinematography", desc: "Cinematic perspectives that elevate how a brand is experienced." },
+  { n: "02", title: "FPV Drone Filming", desc: "Immersive movement that turns a moment into a memory." },
+  { n: "03", title: "Aerial Photography", desc: "Single frames that reposition a place in a viewer's mind." },
+  { n: "04", title: "Real Estate Media", desc: "Visual storytelling that turns properties into destinations." },
+  { n: "05", title: "Tourism & Lifestyle", desc: "Films that translate a landscape into longing." },
 ];
 
 export default function Services() {
@@ -20,9 +20,9 @@ export default function Services() {
           </p>
           <div className="md:col-span-6">
             <h2 className="text-4xl md:text-6xl font-medium tracking-[-0.035em] leading-[1.02] text-balance">
-              End-to-end aerial
+              Tools for shifting
               <br />
-              content solutions.
+              perception.
             </h2>
           </div>
           <div className="md:col-span-3 md:flex md:items-end md:justify-end">

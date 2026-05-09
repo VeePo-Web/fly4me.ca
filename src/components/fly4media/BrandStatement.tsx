@@ -10,8 +10,8 @@ export default function BrandStatement() {
         </p>
         <div className="md:col-span-9">
           <p className="text-3xl md:text-5xl lg:text-6xl font-medium tracking-[-0.035em] leading-[1.05] text-balance">
-            We create visual stories from above &mdash; with the patience of an
-            editor and the eye of a cinematographer.
+            How something is seen changes how it is valued. We build the
+            perspective that changes the perception.
           </p>
         </div>
       </div>
