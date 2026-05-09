@@ -196,7 +196,9 @@ export default function ContactModal({ open, onClose }: Props) {
                     <button
                       type="submit"
                       disabled={status === "sending"}
-                      className="group relative inline-flex items-center justify-center gap-3 bg-foreground text-background px-8 py-4 text-sm tracking-wide hover:-translate-y-px transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] disabled:opacity-60 disabled:translate-y-0 w-full sm:w-auto"
+                      data-cursor="hover"
+                      data-magnetic
+                      className="btn-primary group w-full sm:w-auto disabled:opacity-60"
                     >
                       <span>
                         {status === "sending"
@@ -210,9 +212,7 @@ export default function ContactModal({ open, onClose }: Props) {
                           <Dot delay="300ms" />
                         </span>
                       ) : (
-                        <span className="transition-transform duration-300 group-hover:translate-x-1">
-                          ↗
-                        </span>
+                        <span className="link-arrow">↗</span>
                       )}
                     </button>
                   </div>
@@ -259,10 +259,10 @@ const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
 ) {
   const id = `f-${label.toLowerCase()}`;
   return (
-    <div className="group relative">
+    <div className="field group relative">
       <label
         htmlFor={id}
-        className="block t-micro text-muted-foreground mb-2 md:mb-3"
+        className="field-label block t-micro text-muted-foreground mb-2 md:mb-3"
       >
         {label}
       </label>
@@ -275,7 +275,7 @@ const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
             required={required}
             rows={3}
             placeholder={placeholder}
-            className="w-full bg-transparent outline-none text-base md:text-lg leading-relaxed pb-3 border-b border-border focus:border-foreground transition-colors duration-300 resize-none placeholder:text-muted-foreground/50"
+            className="w-full bg-transparent outline-none text-base md:text-lg leading-relaxed pb-3 border-b border-border resize-none placeholder:text-muted-foreground/50"
           />
         ) : (
           <input
@@ -287,11 +287,10 @@ const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
             required={required}
             placeholder={placeholder}
             autoComplete={autoComplete}
-            className="w-full bg-transparent outline-none text-base md:text-lg pb-3 border-b border-border focus:border-foreground transition-colors duration-300 placeholder:text-muted-foreground/50"
+            className="w-full bg-transparent outline-none text-base md:text-lg pb-3 border-b border-border placeholder:text-muted-foreground/50"
           />
         )}
-        {/* underline draw on focus */}
-        <span className="absolute left-0 bottom-0 h-px w-0 bg-foreground transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-focus-within:w-full pointer-events-none" />
+        <span className="field-underline" aria-hidden="true" />
       </div>
     </div>
   );
