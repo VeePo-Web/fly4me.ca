@@ -3,9 +3,10 @@ import Header from "./Header";
 import Footer from "./Footer";
 import ContactModal from "./ContactModal";
 
+type ChildArg = { openContact: () => void };
+
 interface Props {
-  children: ReactNode;
-  /** Hides the floating button if false (e.g. on home where hero already has CTAs). */
+  children: ReactNode | ((args: ChildArg) => ReactNode);
   showFloating?: boolean;
 }
 
@@ -13,10 +14,12 @@ export default function PageShell({ children, showFloating = true }: Props) {
   const [open, setOpen] = useState(false);
   const openContact = () => setOpen(true);
 
+  const rendered = typeof children === "function" ? children({ openContact }) : children;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header onContact={openContact} />
-      <main>{typeof children === "function" ? (children as never)({ openContact }) : children}</main>
+      <main>{rendered}</main>
       <Footer onContact={openContact} />
 
       {showFloating && (
