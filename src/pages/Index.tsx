@@ -1,47 +1,39 @@
-import PageShell from "@/components/PageShell";
-import { Hero } from "@/components/sections/Hero";
-import { WhatThisIsNot } from "@/components/sections/WhatThisIsNot";
-import { VisionTease } from "@/components/sections/VisionTease";
-import { WhatToExpect } from "@/components/sections/WhatToExpect";
-import { ChurchesTogether } from "@/components/sections/ChurchesTogether";
-import { CrossInterstitial } from "@/components/sections/CrossInterstitial";
-import { SchedulePreview } from "@/components/sections/SchedulePreview";
-import { BeforeYouCome } from "@/components/sections/BeforeYouCome";
-import { NavGrid } from "@/components/sections/NavGrid";
-import { YouAreInvited } from "@/components/sections/YouAreInvited";
-import SectionDivider from "@/components/SectionDivider";
-import SectionBleed from "@/components/SectionBleed";
-import ScriptureWhisper from "@/components/ScriptureWhisper";
+import { useState } from "react";
+import Header from "@/components/fly4media/Header";
+import Hero from "@/components/fly4media/Hero";
+import FeaturedWork from "@/components/fly4media/FeaturedWork";
+import About from "@/components/fly4media/About";
+import Services from "@/components/fly4media/Services";
+import CTA from "@/components/fly4media/CTA";
+import Footer from "@/components/fly4media/Footer";
+import ContactModal from "@/components/fly4media/ContactModal";
 
-const Index = () => (
-  <PageShell transparentHeader>
-    <Hero />
-    <SectionDivider variant="line" />
-    <WhatThisIsNot />
-    <SectionBleed from="default" to="muted" />
-    <VisionTease />
-    <SectionDivider variant="thorns" />
-    <WhatToExpect />
-    <SectionBleed from="muted" to="default" />
-    <ChurchesTogether />
-    <CrossInterstitial />
-    <SchedulePreview />
-    <SectionBleed from="muted" to="default" />
-    <BeforeYouCome />
-    <SectionBleed from="default" to="muted" />
-    <NavGrid />
+const Index = () => {
+  const [open, setOpen] = useState(false);
+  const openContact = () => setOpen(true);
 
-    <div className="w-full bg-muted">
-      <ScriptureWhisper
-        verse="How good and pleasant it is when God's people live together in unity."
-        reference="Psalm 133:1"
-        variant="interstitial"
-      />
-    </div>
+  return (
+    <main className="min-h-screen bg-background text-foreground">
+      <Header onContact={openContact} />
+      <Hero onContact={openContact} />
+      <FeaturedWork />
+      <About />
+      <Services />
+      <CTA onContact={openContact} />
+      <Footer onContact={openContact} />
 
-    <YouAreInvited />
+      {/* Floating "Start a Project" — minimal, always-on */}
+      <button
+        onClick={openContact}
+        aria-label="Start a project"
+        className="fixed bottom-5 right-5 md:bottom-8 md:right-8 z-40 bg-foreground text-background text-xs md:text-sm font-medium px-5 py-3 md:px-6 md:py-3.5 shadow-[0_8px_30px_rgba(0,0,0,0.15)] hover:opacity-90 transition-opacity"
+      >
+        Start a project ↗
+      </button>
 
-  </PageShell>
-);
+      <ContactModal open={open} onClose={() => setOpen(false)} />
+    </main>
+  );
+};
 
 export default Index;
