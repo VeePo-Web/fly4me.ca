@@ -139,8 +139,10 @@
 
   body {
     @apply bg-background text-foreground font-sans;
-    font-feature-settings: "cv11", "ss01", "ss03";
-    letter-spacing: -0.011em;
+    font-family: "Inter", "InterFallback", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-feature-settings: "cv11", "ss01", "ss03", "kern", "calt";
+    font-optical-sizing: auto;
+    letter-spacing: var(--track-base);
   }
 
   ::selection {
@@ -149,7 +151,7 @@
   }
 
   h1, h2, h3, h4 {
-    letter-spacing: -0.035em;
+    letter-spacing: var(--track-headline);
     font-weight: 500;
   }
 }
@@ -162,12 +164,27 @@
   /* Each class is the single source of truth for size + line-height + tracking + weight per role.
      Components apply ONE .t-* class instead of stacking text-7xl tracking-[-0.04em] leading-[0.98]. */
 
+  .t-display-0 {
+    font-size: var(--fs-display-0);
+    line-height: var(--lh-cinema);
+    letter-spacing: var(--track-cinema);
+    font-weight: 500;
+    text-wrap: balance;
+    font-feature-settings: "ss01", "ss02", "cv11", "case", "kern";
+    font-variant-numeric: lining-nums proportional-nums;
+    font-optical-sizing: auto;
+    text-rendering: geometricPrecision;
+  }
   .t-display-1 {
     font-size: var(--fs-display-1);
     line-height: var(--lh-tight);
     letter-spacing: var(--track-display);
     font-weight: 500;
     text-wrap: balance;
+    font-feature-settings: "ss01", "ss02", "cv11", "case", "kern";
+    font-variant-numeric: lining-nums proportional-nums;
+    font-optical-sizing: auto;
+    text-rendering: geometricPrecision;
   }
   .t-display-2 {
     font-size: var(--fs-display-2);
@@ -175,6 +192,10 @@
     letter-spacing: var(--track-display);
     font-weight: 500;
     text-wrap: balance;
+    font-feature-settings: "ss01", "ss02", "cv11", "case", "kern";
+    font-variant-numeric: lining-nums proportional-nums;
+    font-optical-sizing: auto;
+    text-rendering: geometricPrecision;
   }
   .t-headline-1 {
     font-size: var(--fs-headline-1);
