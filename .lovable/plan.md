@@ -1,148 +1,194 @@
 ## Goal
 
-Tighten the existing interaction layer into a single, token-driven luxury motion system. Most primitives already exist (`.btn-primary`, `.link-underline`, `.link-arrow`, `.cursor-ring`, `.reveal`, `.img-zoom`, `Header` scroll state). This pass refines tuning, fills gaps (compression, spatial hover, scroll-reactive navbar, staggered reveals, form focus, scroll-velocity awareness), and removes inconsistencies — without adding Framer Motion or any new dependency.
+The token system from the previous pass is solid. This pass is the *optical refinement layer* — the difference between "good system" and "obsessively crafted." Three buckets:
 
-Stays inside CSS variables + transform/opacity. Honors existing `prefers-reduced-motion` guard.
+1. **Optical tuning** of the existing `.t-*` scale (sizes, line-heights, tracking, OpenType features).
+2. **Editorial wrapping & rhythm primitives** (measure caps, hanging punctuation, art-directed line-break helper, intentional contrast utilities).
+3. **Sweep** of the last components still using raw `text-7xl tracking-[-0.04em]` so the system is the only source of typographic truth.
+
+No new font family. Inter stays — the goal is to make Inter feel *like* SF Pro Display through optical features and spacing, not a swap.
 
 ---
 
-## 1. Motion token system (`src/index.css`)
+## 1. Optical scale refinement (`src/index.css` `:root`)
 
-Replace the ad-hoc easing/duration tokens with a tuned, named scale. Keep names already in use; add the missing ones.
+The current scale jumps slightly too fast at the top and is a touch tight in the middle. Recalibrate to a gentler musical curve, give `display-1` more cinematic top-end, and add two missing roles: `--fs-display-0` (single-page hero anchor) and `--fs-quote` (editorial pull-quote between case-study beats).
 
 ```text
---ease-out-soft   cubic-bezier(0.22, 1, 0.36, 1)   // primary expressive ease (current)
---ease-out-quart  cubic-bezier(0.25, 1, 0.32, 1)   // navbar / large surfaces
---ease-emphasized cubic-bezier(0.2, 0, 0, 1)       // entrance accents
---ease-spring     cubic-bezier(0.34, 1.25, 0.64, 1) // softened (was 1.4 — too bouncy)
---ease-press      cubic-bezier(0.4, 0, 0.2, 1)     // click compression in
---ease-release    cubic-bezier(0.16, 1.2, 0.32, 1) // tactile rebound out
-
---dur-instant 90ms
---dur-fast    180ms
---dur-base    260ms
---dur-soft    420ms
---dur-slow    640ms
---dur-cine    900ms
-
---lift-1     -2px
---lift-2     -4px
---press      0.985
---scale-hover 1.02
+--fs-display-0:  clamp(56px, 11vw, 144px)   // intro, About hero verbatim slogan
+--fs-display-1:  clamp(48px,  9.4vw, 112px) // hero
+--fs-display-2:  clamp(42px,  7.4vw,  92px)
+--fs-headline-1: clamp(36px,  5.8vw,  84px) // was 96 — too close to display-2
+--fs-headline-2: clamp(28px,  3.4vw,  52px)
+--fs-headline-3: clamp(22px,  1.9vw,  30px)
+--fs-quote:      clamp(22px,  2.4vw,  36px) // perspective-shift beat
+--fs-lede:       clamp(17px,  1.3vw,  21px) // was capped at 19 — too small at desktop
+--fs-body:       16px
+--fs-meta:       13px
+--fs-eyebrow:    11px
+--fs-micro:      10px
 ```
 
-All component transitions reference these tokens — no inline `cubic-bezier(...)` strings in JSX (sweep `Header.tsx` etc.).
+### Line-heights — looser at small sizes, tighter at huge sizes
 
-## 2. Button physics — compression + lift
+```text
+--lh-cinema:  0.94   // display-0 only — true title-card density
+--lh-tight:   0.98
+--lh-snug:    1.04
+--lh-normal:  1.18   // was 1.15 — slightly more air for headline-2
+--lh-prose:   1.62   // was 1.6 — more comfortable on Inter
+--lh-eyebrow: 1.25
+--lh-quote:   1.28
+```
 
-Refine `.btn-primary` / `.btn-ghost`:
+### Tracking — restraint pass
 
-- Hover: `translateY(var(--lift-1))` + soft shadow refinement, `--dur-base` `--ease-out-soft`.
-- Active (press): `translateY(0) scale(var(--press))`, `--dur-instant` `--ease-press`.
-- Release uses `--ease-release` to give the subtle tactile rebound (split via `:not(:active)` transition).
-- Add `:focus-visible` ring using foreground color at low opacity (no jarring blue outline).
-- Add `.btn-quiet` (text-only inline action, used in modal & footer) sharing the same press physics.
+Inter renders heavy at large sizes; tighten display tracking a hair, loosen body slightly to counter Inter's tight default rhythm.
 
-Apply same compression to mobile menu hamburger and modal close.
+```text
+--track-cinema:    -0.05em   // display-0
+--track-display:   -0.042em  // was -0.045
+--track-headline:  -0.032em  // was -0.035
+--track-tight:     -0.018em
+--track-base:      -0.008em  // was -0.011 — Inter body reads better looser
+--track-prose:      0
+--track-eyebrow:    0.26em   // was 0.28 — slight tighten for elegance
+--track-micro:      0.30em
+```
 
-## 3. Image hover choreography
+## 2. OpenType + rendering refinement (`@layer base`)
 
-Upgrade `.img-zoom` into a small composable system used by `FeaturedWork`, `CaseStudyTeaser`, `CaseStudyGallery`:
+Body already enables `cv11/ss01/ss03`. Add per-role features so headlines pick up Inter's display variants and tabular numbers stay isolated to metadata.
 
-- `.media-frame` — wraps image, masks overflow, sets `transform: translateZ(0)`.
-- `.media-img` — `scale(1)` → `scale(1.035)` on group hover, `--dur-cine` `--ease-out-soft`, plus `filter: contrast(1.04) brightness(1.02)`.
-- `.media-meta` — caption row that softly emerges: `opacity .55 → 1` and `translateY(4px → 0)`, `--dur-soft`.
-- `.media-frame::after` — 1px inner hairline that fades in on hover (perceived depth, no layout cost).
+- `body`: keep `"cv11", "ss01", "ss03"` + add `"calt", "kern"`.
+- `.t-display-*` and `.t-headline-*`: add `font-feature-settings: "ss01", "ss02", "cv11", "case", "kern"; font-variant-numeric: lining-nums proportional-nums;` and `font-optical-sizing: auto`.
+- `.t-eyebrow`, `.t-micro`, `.t-meta`: add `font-variant-numeric: tabular-nums`.
+- `.t-body`, `.t-lede`: `font-variant-numeric: oldstyle-nums proportional-nums` for editorial feel.
+- Add `text-rendering: geometricPrecision` only on display classes (more stable kerning at huge sizes than `optimizeLegibility`).
 
-No giant zooms, no overlays, no parallax JS — pure CSS group-hover.
+## 3. Optical alignment & hanging primitives
 
-## 4. Cursor — restraint pass
+New tiny utilities that solve real luxury-typography problems:
 
-Current cursor is solid; tune behavior:
+```css
+.optical-hang   { hanging-punctuation: first last; }   /* hangs quotes/periods past margin */
+.optical-lift   { transform: translateY(-0.04em); }    /* nudges all-caps eyebrows onto baseline */
+.optical-indent { text-indent: -0.05em; }              /* compensates large W/V/A left bearing */
+.measure-tight  { max-width: 26ch; }                   /* headline column */
+.measure        { max-width: 38ch; }                   /* lede / sub-headline */
+.measure-wide   { max-width: 62ch; }                   /* body prose */
+.text-edge      { margin-left: -0.04em; }              /* visual flush-left correction */
+```
 
-- Reduce hover scale from 56px → 44px (less attention-grabbing).
-- Add `is-press` state (scales to 22px) bound to `mousedown`/`mouseup` for tactile feedback.
-- Add subtle magnetic pull on `[data-magnetic]` elements: on mousemove within 80px, translate the element toward the cursor by max 6px (pure transform, rAF-throttled in `Cursor.tsx`). Apply `data-magnetic` to primary buttons only.
-- Keep mix-blend-difference and the `(hover: none)` opt-out.
+Apply `.optical-lift` automatically inside `.t-eyebrow` / `.t-micro` (built into the class). Apply `.optical-hang` to `.t-body` / `.t-lede`.
 
-## 5. Navbar — adaptive scroll response
+## 4. Editorial wrapping system
 
-Extend `Header.tsx` scroll handler from binary (`scrolled > 24`) to a smoothed progress value (0→1 over first 120px) used to drive:
+The existing `.wrap-editorial > br { display: inline }` works but is binary. Add a true art-directed primitive:
 
-- Background alpha: `bg-background/0 → /80`.
-- Backdrop blur: `0px → 14px`.
-- Hairline border opacity.
-- Logo + nav scale: `1 → 0.97` (very subtle compression).
+```css
+.wrap-art br { display: inline; }
+@media (min-width: 768px) {
+  .wrap-art br { display: block; content: ""; }
+}
+.no-orphan { display: inline-block; }   /* wrap last 2 words to prevent widows */
+```
 
-Implementation: rAF-throttled scroll listener writes a single CSS custom property `--nav-progress` on `<header>`; CSS interpolates via `calc()`. No re-render storm.
+Convention: components keep `<br />` for art-directed lines on desktop and let mobile wrap naturally with `text-wrap: balance`. The last two words of any `t-headline-*` paragraph can be wrapped in `<span class="no-orphan">…</span>` to kill widows.
 
-Add scroll-direction awareness: when scrolling down past 240px, translate header `-100%`; on scroll up, return to 0. `--dur-soft` `--ease-out-quart`.
+## 5. New role classes
 
-## 6. Scroll velocity awareness (light)
+Add to the `.t-*` system:
 
-A single shared module `src/components/fly4media/useScrollVelocity.ts`:
+- `.t-display-0` — for the slogan moment in `Intro` veil and `About` hero. Uses `--fs-display-0`, `--lh-cinema`, `--track-cinema`.
+- `.t-quote` — for the *Perspective Shift* beat in `CaseStudyStory`. Uses `--fs-quote`, `--lh-quote`, `--track-tight`, font-weight 400 (lighter to read as editorial pull-quote, not a heading).
+- `.t-caption` — for image captions (currently inline-styled). 12px, `--lh-eyebrow`, `--track-base`, `text-muted-foreground` baseline, `font-feature-settings: "tnum"`.
+- `.t-button` — codify button typography (14px, weight 500, tracking 0.005em, optical centering via `line-height: 1`). Apply inside `.btn-primary` / `.btn-ghost`.
+- `.t-link` — inline links inside body prose (current weight + underline-offset 4px + decoration-thickness 1px + decoration-color `currentColor / 0.4`).
 
-- Tracks scroll delta per frame, exposes `--scroll-vel` CSS var on `<html>` (clamped 0–1).
-- Used by `.media-img` to add `filter: blur(calc(var(--scroll-vel) * 0.6px))` during fast scroll, settling instantly. Subliminal — never noticed consciously.
+## 6. Vertical rhythm — pair tokens
 
-Mounted once in `PageShell`. Disabled under reduced motion.
+Spacing between *adjacent* type roles is currently ad-hoc. Add token-driven gaps:
 
-## 7. Reveal choreography — staggered, directed
+```text
+--gap-eyebrow-to-headline: clamp(14px, 1.4vw, 22px)
+--gap-headline-to-lede:    clamp(18px, 1.8vw, 28px)
+--gap-lede-to-body:        clamp(20px, 2vw,   32px)
+--gap-section-meta:        clamp(36px, 4vw,   64px)
+```
 
-Keep `useReveal` + `.reveal` mechanism. Add variants:
+Exposed as `.gap-eyebrow`, `.gap-headline`, `.gap-lede`, `.gap-meta` margin-top utilities. Replace hand-tuned `mb-3 md:mb-5` etc. across editorial components.
 
-- `.reveal-up` (current default), `.reveal-fade`, `.reveal-rise-lg` (24px for large headlines).
-- `data-stagger="N"` on parent: children get `transition-delay: calc(var(--i) * 70ms)` via small CSS rule, where `--i` is set inline by index. Used on `Services` list, `Capabilities`, `FeaturedWork`, mobile menu.
-- Threshold raised slightly (`0.18`) and `rootMargin` tuned so reveals fire when the section is meaningfully on-screen.
+## 7. Font loading polish (`index.html`)
 
-No JS scroll-tied progress; observers only.
+Inter only, weights 400 + 500 — already correct. Add:
 
-## 8. Form interactions (`ContactModal.tsx`)
+- `<link rel="preload" as="font" type="font/woff2" crossorigin href="..."/>` for the woff2 of Inter 500 latin subset (the LCP weight on hero).
+- Append `&text=…` is overkill; instead add `&display=swap` (already present) and a small inline `font-display: swap; font-feature-settings: "cv11","ss01","ss03","kern","calt"; font-optical-sizing: auto;` `@font-face` override for Inter so the OS fallback (system-ui) inherits the same metrics.
+- Add `size-adjust` matching to a fallback stack so FOUT shifts are imperceptible:
 
-Inputs already have a clean shell. Add:
+```css
+@font-face {
+  font-family: "InterFallback";
+  src: local("Inter Variable"), local("Inter"), local("system-ui");
+  size-adjust: 100.4%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+body { font-family: "Inter", "InterFallback", system-ui, -apple-system, sans-serif; }
+```
 
-- `.field` wrapper with `position: relative`.
-- Underline element (`span.field-underline`) — `scaleX(0)` → `scaleX(1)` on `:focus-within`, transform-origin left, `--dur-soft` `--ease-out-soft`.
-- Label micro-shift on focus (`translateY(-1px)` + opacity .6 → 1).
-- Submit button uses full button compression system; success state fades in over 320ms with hairline check mark (no toast spam).
-- Error state: 1px border tint + 4px shake using transform keyframe (capped at 1 cycle).
+This is the trick Apple/Vercel use to make swap invisible.
 
-## 9. Page enter polish
+## 8. Component sweep — make `.t-*` the only source of truth
 
-`.page-enter > *` keyframe stays. Add `.page-enter-stagger > *` that uses `nth-child` delays up to 6 children, so route changes feel composed rather than uniform.
+Replace remaining raw size/tracking combos:
 
-`PageShell` applies one or the other based on a prop (default: stagger).
+- `src/pages/CaseStudy.tsx` line 43 → `t-eyebrow`; line 46 → `t-headline-3 measure max-w-2xl`.
+- `src/pages/NotFound.tsx` lines 15/18/26 → `t-eyebrow`, `t-display-1`, `btn-primary`.
+- `src/pages/Index.tsx` line 35 → use `<PageShell>` floating button instead of bespoke.
+- `src/components/fly4media/Services.tsx` line 31 → wrap text in `t-nav` and use `link-underline` + `link-arrow` instead of inline `text-sm font-medium`.
+- `Intro.tsx` slogan line → `.t-display-0` (currently using inline letter-spacing animation; keep animation, swap base class).
+- `About.tsx` hero → `.t-display-0` for the verbatim slogan moment.
+- `CaseStudyStory.tsx` Perspective Shift block → `.t-quote`.
+- All gallery captions → `.t-caption`.
 
-## 10. Mobile interaction parity
+## 9. Hierarchy contrast pass (visual only — no copy changes)
 
-- Replace any `:hover`-only affordance with `:active` equivalent (compression on tap).
-- Add `touch-action: manipulation` to all buttons/links (kill 300ms tap delay).
-- Mobile menu items: stagger via `--i` (already inline-styled — switch to the shared system).
-- Ensure scroll velocity hook is no-op on reduced motion + low-end heuristic (`navigator.hardwareConcurrency < 4` → skip blur).
+Where the editorial system currently stacks similar sizes, apply *dramatic contrast* per the brief:
 
-## 11. Component sweep (apply tokens + classes)
+- Section headers: keep `eyebrow` as `t-micro` (10px) when paired with `t-display-2` (huge) → max contrast.
+- Featured Work card meta: `t-micro` (10px) + `t-headline-3` (28-32px) — already close, verify.
+- Footer: `t-micro` labels + `t-headline-2` brand statement.
 
-- `Header.tsx` — adopt `--nav-progress`, drop inline `cubic-bezier(...)`.
-- `Button.tsx` — add `data-magnetic` on primary, `:focus-visible` ring.
-- `FeaturedWork.tsx`, `CaseStudyTeaser.tsx`, `CaseStudyGallery.tsx`, `NextProject.tsx` — wrap media in `.media-frame` + `.media-img` + `.media-meta`.
-- `Services.tsx`, `Capabilities.tsx`, `ProcessList.tsx` — `data-stagger`.
-- `ContactModal.tsx` — `.field` + underline + button compression.
-- `PageShell.tsx` — mount `useScrollVelocity`, apply `.page-enter-stagger`.
-- `Cursor.tsx` — add press state + magnetic loop.
+This is a verification + small adjustment pass through `Hero`, `BrandStatement`, `Capabilities`, `Footer`, `FeaturedWork`, `CaseStudyHero`, `CaseStudyMeta`.
 
-No copy changes, no layout changes, no new dependencies.
+## 10. Reveal pacing for typography (light)
 
-## 12. Performance contract
+The reveal system already staggers. Add one motion-tied typography touch:
 
-- Only `transform`, `opacity`, `filter` (cheap), `background-color`, `backdrop-filter` animated.
-- Single rAF loop in `Cursor.tsx`, single in `useScrollVelocity`, single in `Header.tsx` scroll handler.
-- No `box-shadow` animation on large surfaces (use `::after` opacity for shadow lift on media tiles).
-- All heavy effects gated by `prefers-reduced-motion` and `(hover: none)` where appropriate.
+```css
+.t-reveal-track {
+  animation: t-track-settle 1100ms var(--ease-out-soft) both;
+}
+@keyframes t-track-settle {
+  from { letter-spacing: 0.04em; opacity: 0; }
+  to   { letter-spacing: var(--track-display); opacity: 1; }
+}
+```
+
+Apply only to the very first display headline on each route (Hero, Work index, About, Services). Subliminal "type composing itself" effect — under 1.1s, no looping.
+
+## 11. Documentation
+
+Update `mem://design/typography.md` with the refined scale, the new `t-display-0` / `t-quote` / `t-caption` / `t-button` classes, optical primitives (`optical-hang`, `optical-lift`, `measure-*`), wrapping rules, and the gap tokens.
 
 ## Out of scope
 
-- No Framer Motion / GSAP / Lenis.
-- No new typefaces, colors, or layout changes.
+- No font-family swap (Inter stays).
 - No copy edits.
-- No new pages or routes.
-- No video autoplay changes.
+- No layout changes beyond replacing raw classes with tokens.
+- No new Tailwind config breakpoints.
+- No motion library.
+- shadcn UI primitives (unused on editorial pages) untouched.
