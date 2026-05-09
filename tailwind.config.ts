@@ -73,12 +73,27 @@ export default {
           from: { opacity: "0" },
           to: { opacity: "1" },
         },
+        "modal-overlay-in": {
+          from: { opacity: "0", backdropFilter: "blur(0px)" },
+          to: { opacity: "1", backdropFilter: "blur(14px)" },
+        },
+        "modal-panel-in": {
+          from: { opacity: "0", transform: "translateY(16px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "kenburns": {
+          from: { transform: "scale(1.02)" },
+          to: { transform: "scale(1.12)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
         "accordion-up": "accordion-up 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
         "fade-up": "fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both",
         "fade-in": "fade-in 0.6s ease both",
+        "modal-overlay-in": "modal-overlay-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both",
+        "modal-panel-in": "modal-panel-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 80ms both",
+        "kenburns": "kenburns 24s ease-out both",
       },
     },
   },
