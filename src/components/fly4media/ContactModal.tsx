@@ -64,7 +64,7 @@ export default function ContactModal({ open, onClose }: Props) {
       <div className="relative h-full w-full overflow-y-auto animate-modal-panel-in">
         <div className="min-h-full grid grid-cols-1 md:grid-cols-2">
           {/* LEFT — Brand panel */}
-          <aside className="relative isolate overflow-hidden bg-foreground text-background min-h-[42vh] md:min-h-screen">
+          <aside className="relative isolate overflow-hidden bg-foreground text-background h-[34vh] min-h-[220px] max-h-[280px] md:h-auto md:min-h-screen md:max-h-none">
             <img
               src={heroImage}
               alt=""
@@ -85,20 +85,29 @@ export default function ContactModal({ open, onClose }: Props) {
               }}
             />
 
-            <div className="relative h-full flex flex-col justify-between p-8 md:p-14 lg:p-20 min-h-[42vh] md:min-h-screen">
-              <div className="flex items-center gap-3">
+            {/* Mobile-only close */}
+            <button
+              onClick={onClose}
+              aria-label="Close"
+              className="md:hidden absolute top-4 right-4 z-10 p-2 text-background/80 hover:text-background transition-colors"
+            >
+              <X className="size-5" strokeWidth={1.25} />
+            </button>
+
+            <div className="relative h-full flex flex-col justify-between p-6 md:p-14 lg:p-20 md:min-h-screen">
+              <div className="hidden md:flex items-center gap-3">
                 <span className="text-[11px] uppercase tracking-[0.3em] text-background/70">
                   Fly4MEdia
                 </span>
               </div>
 
-              <div className="max-w-md">
-                <p className="text-[11px] uppercase tracking-[0.3em] text-background/60 mb-6 md:mb-8">
-                  A private consultation
+              <div className="max-w-md mt-auto">
+                <p className="text-[10px] md:text-[11px] uppercase tracking-[0.28em] md:tracking-[0.3em] text-background/70 md:text-background/60 mb-3 md:mb-8">
+                  Fly4MEdia · A private consultation
                 </p>
                 <h2
                   id="contact-title"
-                  className="text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.02] tracking-tight text-balance"
+                  className="text-[28px] md:text-5xl lg:text-6xl font-medium leading-[1.05] md:leading-[1.02] tracking-tight text-balance"
                 >
                   Let's create something cinematic.
                 </h2>
@@ -116,20 +125,20 @@ export default function ContactModal({ open, onClose }: Props) {
           </aside>
 
           {/* RIGHT — Form panel */}
-          <section className="relative bg-background text-foreground flex items-center min-h-screen">
+          <section className="relative bg-background text-foreground flex items-center md:min-h-screen">
             <button
               onClick={onClose}
               aria-label="Close"
-              className="absolute top-5 right-5 md:top-8 md:right-8 p-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="hidden md:block absolute top-5 right-5 md:top-8 md:right-8 p-2 text-muted-foreground hover:text-foreground transition-colors"
             >
               <X className="size-5" strokeWidth={1.25} />
             </button>
 
-            <div className="w-full max-w-xl mx-auto px-8 md:px-14 lg:px-20 py-16 md:py-20">
-              <p className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-5">
+            <div className="w-full max-w-xl mx-auto px-6 md:px-14 lg:px-20 py-10 md:py-20">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-4 md:mb-5">
                 Start a project
               </p>
-              <h3 className="text-3xl md:text-4xl font-medium leading-[1.05] tracking-tight mb-12 md:mb-14 text-balance">
+              <h3 className="text-[26px] md:text-4xl font-medium leading-[1.05] tracking-tight mb-8 md:mb-14 text-balance">
                 Tell us about your vision.
               </h3>
 
