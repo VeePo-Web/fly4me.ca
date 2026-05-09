@@ -24,9 +24,9 @@ export default function CTA({
         <h2 className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-[-0.04em] leading-[0.98] text-balance max-w-5xl mx-auto">
           {heading ?? (
             <>
-              Let&rsquo;s capture
+              Some stories deserve
               <br />
-              something unforgettable.
+              to be seen from above.
             </>
           )}
         </h2>

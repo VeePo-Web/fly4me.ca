@@ -24,17 +24,20 @@ export default function Hero({ onContact }: Props) {
 
       <div className="relative container-x pt-32 md:pt-40 pb-20 min-h-[100dvh] flex flex-col justify-between">
         <div className="max-w-3xl animate-fade-up">
+          <p className="text-[11px] uppercase tracking-[0.28em] text-foreground/60 mb-6 md:mb-8">
+            A cinematic perspective studio
+          </p>
           <h1 className="text-[44px] leading-[1.02] sm:text-6xl md:text-7xl lg:text-[88px] font-medium tracking-[-0.04em] text-foreground text-balance">
-            We capture
+            We make brands,
             <br />
-            perspectives
+            places, and stories
             <br />
-            that move you.
+            worth looking up at.
           </h1>
 
           <p className="mt-8 max-w-md text-base md:text-lg text-foreground/70 leading-relaxed text-pretty">
-            Aerial cinematography and photography for brands, real estate, and
-            stories that deserve to be seen.
+            Aerial cinematography for the brands and destinations that
+            understand presentation is positioning.
           </p>
 
           <div className="mt-10 flex items-center gap-6 flex-wrap">

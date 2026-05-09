@@ -15,8 +15,8 @@ export default function Footer({ onContact }: Props) {
             <span className="text-base font-medium tracking-tight">Fly4MEdia</span>
           </div>
           <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
-            A premium aerial cinematography studio based in Alberta, Canada.
-            Available worldwide.
+            A cinematic perspective studio. We help brands, places, and stories
+            be seen — and remembered.
           </p>
         </div>
 
@@ -54,7 +54,7 @@ export default function Footer({ onContact }: Props) {
 
       <div className="container-x pb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
         <span>© {new Date().getFullYear()} Fly4MEdia. All rights reserved.</span>
-        <span>Cinematic Aerial Cinematography</span>
+        <span>Cinematic perspective studio · Alberta</span>
       </div>
     </footer>
   );

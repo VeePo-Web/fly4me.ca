@@ -109,7 +109,7 @@ export default function ContactModal({ open, onClose }: Props) {
                   id="contact-title"
                   className="text-[28px] md:text-5xl lg:text-6xl font-medium leading-[1.05] md:leading-[1.02] tracking-tight text-balance"
                 >
-                  Let's create something cinematic.
+                  Let's create something worth looking up at.
                 </h2>
                 <p className="hidden md:block mt-8 text-base text-background/70 leading-relaxed max-w-sm">
                   Fly4MEdia partners with brands, creators, tourism campaigns, and
@@ -136,16 +136,16 @@ export default function ContactModal({ open, onClose }: Props) {
 
             <div className="w-full max-w-xl mx-auto px-6 md:px-14 lg:px-20 py-10 md:py-20">
               <p className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-4 md:mb-5">
-                Start a project
+                Begin a collaboration
               </p>
               <h3 className="text-[26px] md:text-4xl font-medium leading-[1.05] tracking-tight mb-8 md:mb-14 text-balance">
-                Tell us about your vision.
+                Tell us what deserves a new perspective.
               </h3>
 
               {status === "sent" ? (
                 <div className="space-y-6 animate-fade-in">
                   <p className="text-lg leading-relaxed">
-                    Message in motion.
+                    In motion.
                   </p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     We'll respond within one business day. Your email client should
@@ -201,7 +201,7 @@ export default function ContactModal({ open, onClose }: Props) {
                       <span>
                         {status === "sending"
                           ? "Sending"
-                          : "Start the Conversation"}
+                          : "Begin the conversation"}
                       </span>
                       {status === "sending" ? (
                         <span className="inline-flex gap-1">
