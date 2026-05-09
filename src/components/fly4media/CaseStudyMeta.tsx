@@ -17,7 +17,7 @@ export default function CaseStudyMeta({ project }: { project: Project }) {
             <p className="t-micro text-muted-foreground mb-2">
               {it.label}
             </p>
-            <p className="t-body font-medium tracking-tight text-pretty">
+            <p className="t-body text-pretty">
               {it.value}
             </p>
           </div>

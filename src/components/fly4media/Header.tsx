@@ -81,9 +81,7 @@ export default function Header({ onContact }: Props) {
             height={28}
             className="size-6 md:size-7 object-contain transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:rotate-[8deg]"
           />
-          <span className="text-[15px] md:text-base font-medium tracking-tight">
-            Fly4MEdia
-          </span>
+          <span className="t-nav">Fly4MEdia</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-9" aria-label="Primary">
@@ -140,7 +138,7 @@ export default function Header({ onContact }: Props) {
             <Link
               key={item.to}
               to={item.to}
-              className="text-3xl font-medium tracking-tight text-foreground"
+              className="t-headline-2 text-foreground"
               style={{
                 animation: open
                   ? `page-enter-fade 480ms var(--ease-out-soft) ${80 + i * 70}ms both`
@@ -152,7 +150,7 @@ export default function Header({ onContact }: Props) {
           ))}
           <button
             onClick={handleContact}
-            className="text-left text-3xl font-medium tracking-tight text-foreground"
+            className="t-headline-2 text-left text-foreground"
             style={{
               animation: open
                 ? `page-enter-fade 480ms var(--ease-out-soft) ${80 + NAV.length * 70}ms both`

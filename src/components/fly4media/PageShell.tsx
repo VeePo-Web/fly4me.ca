@@ -32,7 +32,7 @@ export default function PageShell({ children, showFloating = true }: Props) {
           aria-label="Start a project"
           data-cursor="hover"
           data-magnetic
-          className="btn-primary group fixed bottom-5 right-5 md:bottom-8 md:right-8 z-40 !px-5 !py-3 md:!px-6 md:!py-3.5 text-xs md:text-sm rounded-full"
+          className="btn-primary group fixed bottom-5 right-5 md:bottom-8 md:right-8 z-40 !px-5 !py-3 md:!px-6 md:!py-3.5 rounded-full"
         >
           <span>Start a project</span>
           <span className="link-arrow">↗</span>

@@ -29,7 +29,7 @@ export default function FeaturedWork() {
             <Link
               to="/work"
               data-cursor="hover"
-              className="group inline-flex items-center gap-2 text-sm font-medium"
+              className="group inline-flex items-center gap-2 t-button"
             >
               <span className="link-underline">View all projects</span>
               <span className="link-arrow">↗</span>
