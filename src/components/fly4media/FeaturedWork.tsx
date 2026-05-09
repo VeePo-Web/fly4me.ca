@@ -28,10 +28,11 @@ export default function FeaturedWork() {
           <div className="md:col-span-3 md:flex md:items-end md:justify-end">
             <Link
               to="/work"
+              data-cursor="hover"
               className="group inline-flex items-center gap-2 text-sm font-medium"
             >
-              View all projects
-              <span className="transition-transform group-hover:translate-x-0.5">↗</span>
+              <span className="link-underline">View all projects</span>
+              <span className="link-arrow">↗</span>
             </Link>
           </div>
         </div>
@@ -52,7 +53,8 @@ function ProjectCard({ project, className }: { project: Project; className: stri
     <Link
       ref={ref as never}
       to={`/work/${project.slug}`}
-      className={`reveal group block ${className}`}
+      data-cursor="hover"
+      className={`reveal group block transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 ${className}`}
     >
       <div className="overflow-hidden bg-secondary aspect-[4/5]">
         <img
@@ -71,10 +73,10 @@ function ProjectCard({ project, className }: { project: Project; className: stri
             {project.number} — {project.category}
           </p>
           <h3 className="text-xl md:text-2xl font-medium tracking-tight">
-            {project.title}
+            <span className="link-underline">{project.title}</span>
           </h3>
         </div>
-        <span className="text-foreground/50 group-hover:text-foreground transition-colors">↗</span>
+        <span className="link-arrow text-foreground/50 group-hover:text-foreground transition-colors">↗</span>
       </div>
     </Link>
   );

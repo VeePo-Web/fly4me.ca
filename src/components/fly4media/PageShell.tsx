@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import ContactModal from "./ContactModal";
+import { usePageEnter } from "@/hooks/usePageEnter";
 
 type ChildArg = { openContact: () => void };
 
@@ -13,6 +14,7 @@ interface Props {
 export default function PageShell({ children, showFloating = true }: Props) {
   const [open, setOpen] = useState(false);
   const openContact = () => setOpen(true);
+  usePageEnter();
 
   const rendered = typeof children === "function" ? children({ openContact }) : children;
 
@@ -26,9 +28,11 @@ export default function PageShell({ children, showFloating = true }: Props) {
         <button
           onClick={openContact}
           aria-label="Start a project"
-          className="fixed bottom-5 right-5 md:bottom-8 md:right-8 z-40 bg-foreground text-background text-xs md:text-sm font-medium px-5 py-3 md:px-6 md:py-3.5 shadow-[0_8px_30px_rgba(0,0,0,0.15)] hover:opacity-90 transition-opacity"
+          data-cursor="hover"
+          className="btn-primary group fixed bottom-5 right-5 md:bottom-8 md:right-8 z-40 !px-5 !py-3 md:!px-6 md:!py-3.5 text-xs md:text-sm rounded-full"
         >
-          Start a project ↗
+          <span>Start a project</span>
+          <span className="link-arrow">↗</span>
         </button>
       )}
 

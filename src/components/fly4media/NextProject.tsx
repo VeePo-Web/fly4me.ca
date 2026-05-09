@@ -9,7 +9,8 @@ export default function NextProject({ next }: { next: Project }) {
       <Link
         ref={ref as never}
         to={`/work/${next.slug}`}
-        className="reveal group block container-x py-20 md:py-32"
+        data-cursor="hover"
+        className="reveal group block container-x py-20 md:py-32 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1"
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-end">
           <div className="md:col-span-7">

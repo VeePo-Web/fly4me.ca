@@ -1,4 +1,5 @@
 import { useReveal } from "./useReveal";
+import { Button } from "./Button";
 
 interface Props {
   onContact: () => void;
@@ -29,13 +30,9 @@ export default function CTA({
             </>
           )}
         </h2>
-        <button
-          onClick={onContact}
-          className="group mt-14 inline-flex items-center gap-3 bg-foreground text-background px-7 py-4 text-sm font-medium hover:opacity-90 transition-opacity"
-        >
-          {cta}
-          <span className="transition-transform group-hover:translate-x-0.5">↗</span>
-        </button>
+        <div className="mt-14 inline-flex">
+          <Button onClick={onContact}>{cta}</Button>
+        </div>
       </div>
     </section>
   );
