@@ -221,6 +221,47 @@
   }
 }
 
+/* ---------- Cinematic intro ---------- */
+@layer utilities {
+  @keyframes intro-mark-in {
+    0%   { opacity: 0; transform: scale(0.92); filter: blur(6px); }
+    100% { opacity: 1; transform: scale(1);    filter: blur(0); }
+  }
+  @keyframes intro-hairline-in {
+    0%   { opacity: 0; transform: scaleX(0); }
+    100% { opacity: 1; transform: scaleX(1); }
+  }
+  @keyframes intro-sweep {
+    0%   { transform: translateX(0); opacity: 0; }
+    20%  { opacity: 1; }
+    100% { transform: translateX(400%); opacity: 0; }
+  }
+  @keyframes intro-word-in {
+    0%   { opacity: 0; letter-spacing: 0.4em; transform: translateY(6px); }
+    100% { opacity: 1; letter-spacing: 0.18em; transform: translateY(0); }
+  }
+  @keyframes intro-eyebrow-in {
+    0%   { opacity: 0; transform: translateY(4px); }
+    100% { opacity: 0.7; transform: translateY(0); }
+  }
+  @keyframes intro-fog-drift {
+    0%   { transform: translate3d(-3%, 0, 0) scale(1.05); }
+    50%  { transform: translate3d(3%, 1%, 0) scale(1.08); }
+    100% { transform: translate3d(-3%, 0, 0) scale(1.05); }
+  }
+  @keyframes intro-veil-fade {
+    to { opacity: 0; }
+  }
+
+  .intro-mark     { animation: intro-mark-in 900ms var(--ease-out-soft) 100ms both; }
+  .intro-hairline { animation: intro-hairline-in 700ms var(--ease-out-soft) 450ms both; }
+  .intro-sweep    { animation: intro-sweep 700ms var(--ease-out-soft) 550ms both; }
+  .intro-word     { display: inline-block; animation: intro-word-in 900ms var(--ease-out-soft) 700ms both; }
+  .intro-eyebrow  { animation: intro-eyebrow-in 700ms var(--ease-out-soft) 1050ms both; }
+  .intro-fog      { animation: intro-fog-drift 40s ease-in-out infinite; }
+  .intro-veil-out { animation: intro-veil-fade 500ms var(--ease-out-soft) forwards; }
+}
+
 /* ---------- Reduced motion guard ---------- */
 @media (prefers-reduced-motion: reduce) {
   *,
