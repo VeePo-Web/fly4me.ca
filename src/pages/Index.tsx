@@ -38,6 +38,7 @@ const Index = () => {
       </button>
 
       <ContactModal open={open} onClose={() => setOpen(false)} />
+      <Intro />
     </div>
   );
 };
