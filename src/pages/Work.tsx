@@ -21,11 +21,11 @@ export default function Work() {
     <PageShell>
       {({ openContact }: { openContact: () => void }) => (
         <>
-          <section className="pt-36 md:pt-48 pb-20 md:pb-32 container-x">
-            <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground mb-6">
+          <section className="pt-36 md:pt-48 pb-section-sm container-x">
+            <p className="t-eyebrow text-muted-foreground mb-6">
               Selected Work / 2024 &mdash; 2025
             </p>
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-[-0.04em] leading-[0.98] max-w-5xl text-balance animate-fade-up">
+            <h1 className="t-display-2 wrap-editorial wrap-editorial-mobile-off max-w-5xl animate-fade-up">
               Perspective,
               <br />
               in motion.
@@ -68,10 +68,10 @@ function Card({ project, className }: { project: Project; className: string }) {
       </div>
       <div className="mt-6 flex items-baseline justify-between gap-6">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground mb-2">
+          <p className="t-eyebrow text-muted-foreground mb-2">
             {project.number} — {project.category} · {project.year}
           </p>
-          <h2 className="text-2xl md:text-3xl font-medium tracking-tight">
+          <h2 className="t-headline-3">
             {project.title}
           </h2>
         </div>

@@ -14,13 +14,13 @@ export default function NextProject({ next }: { next: Project }) {
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-end">
           <div className="md:col-span-7">
-            <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground mb-5">
+            <p className="t-eyebrow text-muted-foreground mb-5">
               Next Project
             </p>
-            <h3 className="text-4xl md:text-6xl lg:text-7xl font-medium tracking-[-0.04em] leading-[1] text-balance">
+            <h3 className="t-headline-1">
               {next.title}
             </h3>
-            <p className="mt-4 text-base md:text-lg text-muted-foreground">
+            <p className="t-lede mt-4 text-muted-foreground">
               {next.category} · {next.year}
             </p>
           </div>

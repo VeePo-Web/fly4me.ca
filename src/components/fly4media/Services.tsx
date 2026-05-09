@@ -12,14 +12,14 @@ const SERVICES = [
 export default function Services() {
   const headRef = useReveal<HTMLDivElement>();
   return (
-    <section id="services" className="bg-foreground text-background py-24 md:py-40">
+    <section id="services" className="bg-foreground text-background py-section">
       <div className="container-x">
         <div ref={headRef} className="reveal grid grid-cols-1 md:grid-cols-12 gap-y-10 mb-16 md:mb-24">
-          <p className="md:col-span-3 text-[11px] uppercase tracking-[0.25em] text-background/50">
+          <p className="md:col-span-3 t-eyebrow text-background/50">
             What we do
           </p>
           <div className="md:col-span-6">
-            <h2 className="text-4xl md:text-6xl font-medium tracking-[-0.035em] leading-[1.02] text-balance">
+            <h2 className="t-headline-1 wrap-editorial">
               Tools for shifting
               <br />
               perception.
@@ -53,13 +53,13 @@ function ServiceRow({ n, title, desc }: { n: string; title: string; desc: string
       ref={ref}
       className="reveal group border-b border-background/15 py-7 md:py-8 grid grid-cols-12 gap-6 items-baseline transition-colors hover:bg-background/[0.04]"
     >
-      <span className="col-span-2 md:col-span-1 text-[11px] uppercase tracking-[0.25em] text-background/50">
+      <span className="col-span-2 md:col-span-1 t-micro text-background/50">
         {n}
       </span>
-      <h3 className="col-span-10 md:col-span-5 text-2xl md:text-3xl font-medium tracking-tight">
+      <h3 className="col-span-10 md:col-span-5 t-headline-3">
         {title}
       </h3>
-      <p className="col-span-12 md:col-span-6 text-sm md:text-base text-background/65 leading-relaxed text-pretty">
+      <p className="col-span-12 md:col-span-6 t-body text-background/65">
         {desc}
       </p>
     </li>

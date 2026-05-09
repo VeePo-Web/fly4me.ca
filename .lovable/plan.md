@@ -1,119 +1,125 @@
-## "Perspective Changes Everything" — brand integration
+## Typography system — editorial cinematic
 
-The slogan becomes the invisible spine of the experience. We won't repeat it everywhere; we'll let it echo through copy, structure, and one signature visual moment. Edits are surgical — copy, micro-structure, and the intro — no new dependencies, no redesign.
+Today the site uses good editorial typography ad-hoc per component (large `text-7xl` headlines, `tracking-[-0.04em]`, `text-[11px] uppercase tracking-[0.25em]` eyebrows, etc.). The values are right but they're scattered as raw Tailwind utilities. This plan formalizes them into a single named system (tokens → utilities → applied), so every screen breathes from the same source.
 
-### 1. Intro — the first whisper
+No new fonts. Inter stays — it's the right grotesk for this brief and already loaded.
 
-`src/components/fly4media/Intro.tsx`
+### 1. Type tokens (`src/index.css`)
 
-- Replace the current wordmark+drone composition with a two-beat title-card sequence:
-  - Beat A (0.0–1.1s): hairline + tiny eyebrow `Fly4MEdia` fades up.
-  - Beat B (1.1–1.7s): single line `Perspective changes everything.` reveals (existing word-in keyframe, tracking expand 0.32em → 0.16em).
-- Veil dissolves at 1.9s, unchanged.
-- This is the only place the full slogan appears verbatim on the homepage. Sets the lens for everything that follows.
+Add a fluid type scale via `clamp()` as CSS custom properties under `:root`. All headline sizes scale with the viewport between mobile and large desktop — no rigid breakpoints.
 
-### 2. Hero — restraint, then resonance
+```text
+--fs-display-1   clamp(48px,  10.5vw, 144px)   // hero on / and case-study heroes
+--fs-display-2   clamp(40px,   8vw,   112px)   // page H1s (Work / Services / About)
+--fs-headline-1  clamp(32px,   5.6vw,  80px)   // CTA heading
+--fs-headline-2  clamp(28px,   4vw,    56px)   // section H2s, brand statement
+--fs-headline-3  clamp(22px,   2.4vw,  32px)   // service row titles
+--fs-lede        clamp(17px,   1.4vw,  22px)   // hero sub-copy, page lede
+--fs-body        16px                          // (md: 17px via utility)
+--fs-meta        13px                          // muted body / outcome lines
+--fs-eyebrow     11px                          // uppercase eyebrows
+--fs-micro       10px                          // case-study meta labels
 
-`src/components/fly4media/Hero.tsx`
+--lh-tight       0.98     // display-1
+--lh-snug        1.05     // display-2 / headline-1
+--lh-normal      1.15     // headline-2 / headline-3
+--lh-prose       1.6      // body / lede
+--lh-eyebrow     1.2
 
-- Eyebrow above H1: `A cinematic perspective studio.`
-- H1 stays large but rewritten with the brand cadence:
-  - `We make brands,` / `places, and stories` / `worth looking up at.`
-- Sub-copy: `Aerial cinematography for the brands and destinations that understand presentation is positioning.`
-- CTAs unchanged (`View our work` / `Start a project`). No literal slogan repeat — the hero earns the slogan rather than restates it.
+--track-display  -0.045em // tightens at large sizes (optical density)
+--track-headline -0.035em
+--track-tight    -0.02em
+--track-base     -0.011em // body baseline (already on body)
+--track-eyebrow   0.28em  // tweak from 0.25em — slightly more air
+--track-micro     0.32em  // tightest-text-on-tiniest-size needs the most air
+```
 
-### 3. Brand statement — the philosophy beat
+### 2. Type utility classes (`src/index.css` `@layer components`)
 
-`src/components/fly4media/BrandStatement.tsx`
+One class per role. Components apply one class instead of stringing 5 utilities together. Each class encodes size + line-height + tracking + weight as a unit — so the *system* changes when the token changes, not 40 components.
 
-- Eyebrow: `Studio — Philosophy`
-- Statement (replaces the current "editor / cinematographer" line):
-  - `How something is seen changes how it is valued. We build the perspective that changes the perception.`
-- Same 3 / 9 grid, same scale.
+```text
+.t-display-1    -> hero anchor (Hero, CaseStudyHero)
+.t-display-2    -> page H1 (Work, Services, About)
+.t-headline-1   -> CTA section
+.t-headline-2   -> in-page H2 (Services strip head, BrandStatement, Capabilities)
+.t-headline-3   -> service row titles, project card titles
+.t-lede         -> hero/page sub-copy
+.t-body         -> default paragraph (rare; body inherits)
+.t-meta         -> small muted body (footer, secondary captions)
+.t-eyebrow      -> ALL uppercase tracked eyebrows
+.t-micro        -> tiny labels (case-study meta, footer copyright)
+.t-nav          -> nav links (medium weight, slight tracking, .link-underline ready)
+.t-button       -> button label (already inside .btn-primary, exposed for ghost-only)
+```
 
-### 4. Services (homepage row) — perception, not deliverables
+Notes:
+- `.t-display-*` and `.t-headline-*` set `text-wrap: balance` by default. `.t-lede` sets `text-wrap: pretty`. This kills awkward orphan wraps without per-component overrides.
+- `.t-eyebrow` and `.t-micro` set `font-feature-settings: "tnum"` for tabular consistency on numbered eyebrows (`01 — Real Estate · 2025`).
+- All sizes use `font-weight: 500` for headlines, `400` for body — no new weights pulled from Inter.
+- Hero classes get `font-feature-settings: "ss01", "ss03", "cv11"` (already on body) plus optical correction: a touch tighter via `--track-display`.
 
-`src/components/fly4media/Services.tsx`
+### 3. Vertical rhythm tokens
 
-- Section eyebrow stays `What we do`.
-- Heading: `Tools for shifting perception.`
-- Rewrite the 5 row descriptions to read as perception transformations, not deliverables. Examples:
-  - 01 Aerial Cinematography — `Cinematic perspectives that elevate how a brand is experienced.`
-  - 02 FPV Drone Filming — `Immersive movement that turns a moment into a memory.`
-  - 03 Aerial Photography — `Single frames that reposition a place in a viewer's mind.`
-  - 04 Real Estate Media — `Visual storytelling that turns properties into destinations.`
-  - 05 Tourism & Lifestyle — `Films that translate a landscape into longing.`
+Add four spacing variables for section pacing — used in component spacing rather than the current ad-hoc `py-24 md:py-40` etc.
 
-### 5. Services page — same shift, longer form
+```text
+--space-section-sm   clamp(64px,  10vw, 128px)   // tight sections
+--space-section      clamp(96px,  14vw, 192px)   // standard
+--space-section-lg   clamp(128px, 18vw, 256px)   // hero CTA, BrandStatement
+```
 
-`src/pages/Services.tsx` + `src/components/fly4media/ServiceFeature.tsx` (copy only)
+Expose as Tailwind utilities (`py-section`, `py-section-lg`, etc.) by mapping in the spacing scale via `tailwind.config.ts`.
 
-- H1: `Cinematic perspective,` / `engineered to be felt.`
-- Lede: `Every engagement begins with the same question: what should this be perceived as?`
-- Rewrite each of the 8 service descriptions in the same perception-first voice (see service-page copy file in plan #9 for full list).
+### 4. Editorial wrapping helpers
 
-### 6. Case studies — Challenge / Perspective Shift / Cinematic Execution / Emotional Impact
+Two short utilities so manual `<br />` line breaks remain art-directed without becoming brittle on mobile:
 
-`src/data/projects.ts` + `src/components/fly4media/CaseStudyStory.tsx`
+- `.wrap-stack > br { display: inline; }` (default)
+- `.wrap-stack-mobile-off > br { display: none; }` on `<sm` — drop forced breaks where they cause awkward 1-word lines on 320px screens, e.g. on the longer service-page H1.
+- Combined with `text-balance` on `.t-display-*`, gives art-directed lines on desktop and balanced wraps on mobile.
 
-- Extend `Project` type with three optional fields: `challenge`, `perspectiveShift`, `impact`. `story` becomes the cinematic-execution paragraph.
-- `CaseStudyStory` becomes a four-beat editorial layout:
-  ```text
-  Eyebrow: The Project
-  ── Challenge          [single sentence]
-  ── Perspective Shift  [the lens we chose — the heart of each case study]
-  ── Cinematic Execution[existing story prose]
-  ── Emotional Impact   [outcome reframed in feeling, not metrics first]
-  ```
-- Backfill the four existing projects with concise copy in the new voice. Keep `outcome` for the meta sidebar.
+### 5. Apply across the site
 
-### 7. About — the philosophical core
+Sweep through components — replace the manual size/tracking/leading combos with the new classes. No structural change, just substitution. Files touched:
 
-`src/pages/About.tsx`
+- `src/components/fly4media/Hero.tsx` — H1 → `.t-display-1`, lede → `.t-lede`, eyebrow → `.t-eyebrow`.
+- `src/components/fly4media/CaseStudyHero.tsx` — H1 → `.t-display-1`, tagline → `.t-lede`.
+- `src/components/fly4media/CTA.tsx` — heading → `.t-headline-1`, eyebrow → `.t-eyebrow`.
+- `src/components/fly4media/BrandStatement.tsx` — statement → `.t-headline-2`, eyebrow → `.t-eyebrow`.
+- `src/components/fly4media/Services.tsx` — H2 → `.t-headline-2`, row title → `.t-headline-3`, row desc → `.t-body`, eyebrows → `.t-eyebrow`, row number → `.t-micro`.
+- `src/components/fly4media/Capabilities.tsx` — H2 → `.t-headline-2`, items → `.t-body`, eyebrows.
+- `src/components/fly4media/ServiceFeature.tsx` — H3 → `.t-headline-2` (this one is page-level, so headline-2 not 3), desc → `.t-lede`, number → `.t-eyebrow`.
+- `src/components/fly4media/CaseStudyStory.tsx` — Perspective Shift beat → `.t-headline-2`, other beats → `.t-lede`, labels → `.t-micro`.
+- `src/components/fly4media/CaseStudyMeta.tsx` — labels → `.t-micro`, values → existing tracking.
+- `src/components/fly4media/FeaturedWork.tsx`, `NextProject.tsx` — project titles → `.t-headline-3`, meta → `.t-eyebrow`.
+- `src/components/fly4media/Footer.tsx` — section labels → `.t-eyebrow`, copyright row → `.t-micro`.
+- `src/components/fly4media/Header.tsx` — nav links → `.t-nav`.
+- `src/components/fly4media/ContactModal.tsx` — title → `.t-headline-1`, h3 → `.t-headline-2`, eyebrows → `.t-eyebrow`, field labels → `.t-micro`.
+- `src/pages/Work.tsx`, `Services.tsx`, `About.tsx` — H1 → `.t-display-2`, eyebrows + ledes mapped.
 
-- Hero H1 stays `We believe perspective` / `changes everything.` (this is the only page where the slogan appears literally in body — it's the thesis page).
-- Rewrite Philosophy block as three short paragraphs:
-  - 1. Perception precedes value.
-  - 2. Restraint is the loudest creative choice.
-  - 3. Altitude as a discipline — Alberta as the teacher.
-- Closing `CTA` heading swaps to `Built for brands that understand presentation is positioning.`
+Where `<br />` currently forces hero wrapping, keep them but rely on `text-balance` + `.wrap-stack-mobile-off` for the longer service-page H1.
 
-### 8. Contact modal — beginning a collaboration
+### 6. Performance & loading
 
-`src/components/fly4media/ContactModal.tsx`
+- Keep Inter only. Trim font weights pulled from Google Fonts to `400; 500` only (currently `300;400;500;600`). Reduces font payload by ~50%.
+- Add `font-display: swap` (already implicit with Google CSS); add `<link rel="preload" as="font" type="font/woff2" crossorigin>` for the 500 weight only — the LCP weight on the hero.
 
-- Brand panel title: `Let's create something worth looking up at.` (replaces "Let's create something cinematic.")
-- Eyebrow inside form: `Begin a collaboration` (replaces "Start a project").
-- H3: `Tell us what deserves a new perspective.`
-- Submit label: `Begin the conversation`. Success state: `In motion.`
-- The floating button + nav button text remains "Start a project" for product clarity.
+### 7. Memory
 
-### 9. Site-wide CTAs and footer
+Save a `mem://design/typography.md` recording the token names, scale rationale, and the rule "always use `.t-*` classes; never raw `text-7xl` etc. for editorial hierarchy." Add a one-liner to Core memory.
 
-- `CTA` default heading rewrites to:
-  - `Some stories deserve` / `to be seen from above.`
-- Footer tagline (right-bottom): `Cinematic perspective studio · Alberta` (replaces "Cinematic Aerial Cinematography").
-- Footer studio descriptor: `A cinematic perspective studio. We help brands, places, and stories be seen — and remembered.`
+### Files
 
-### 10. Page titles & meta
+Edit: `src/index.css`, `tailwind.config.ts`, `index.html`,  
+`src/components/fly4media/{Hero,CaseStudyHero,CTA,BrandStatement,Services,Capabilities,ServiceFeature,CaseStudyStory,CaseStudyMeta,FeaturedWork,NextProject,Footer,Header,ContactModal}.tsx`,  
+`src/pages/{Work,Services,About}.tsx`.
 
-- `index.html` `<title>` and `<meta name="description">`:
-  - Title: `Fly4MEdia — Perspective Changes Everything.`
-  - Description: `A cinematic perspective studio. Aerial films and stills that change how brands, places, and stories are experienced.`
-- Per-page `document.title`:
-  - About: `About — Perspective Changes Everything · Fly4MEdia`
-  - Services: `Services — Tools for shifting perception · Fly4MEdia`
-  - Work: `Work — Perspective in motion · Fly4MEdia`
-
-### Files touched
-
-- Edit: `src/components/fly4media/Intro.tsx`, `Hero.tsx`, `BrandStatement.tsx`, `Services.tsx`, `CTA.tsx`, `Footer.tsx`, `ContactModal.tsx`, `CaseStudyStory.tsx`
-- Edit: `src/pages/Index.tsx` (title only), `About.tsx`, `Services.tsx`, `Work.tsx` (titles only)
-- Edit: `src/data/projects.ts` — add `challenge`, `perspectiveShift`, `impact` to all four projects
-- Edit: `index.html` — title + description
+Create: `mem://design/typography.md` + update `mem://index.md`.
 
 ### Out of scope
 
-- New imagery, video, or motion systems beyond the intro copy swap.
-- New routes, new components, backend, payments, analytics.
-- Changing the contact button label outside the modal (kept "Start a project" for clarity).
+- New typeface (Inter stays).
+- Dark mode tokens.
+- Animation/motion changes — the existing `.reveal` and `animate-fade-up` keep working untouched.
+- Any layout structure changes; only typographic and section-spacing classes swap.

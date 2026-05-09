@@ -85,7 +85,7 @@ export default function Header({ onContact }: Props) {
               key={item.to}
               to={item.to}
               data-cursor="hover"
-              className={`link-underline text-sm transition-colors duration-300 ${
+              className={`link-underline t-nav transition-colors duration-300 ${
                 isActive(item.to)
                   ? "text-foreground is-active"
                   : "text-foreground/70 hover:text-foreground"
@@ -97,7 +97,7 @@ export default function Header({ onContact }: Props) {
           <button
             onClick={handleContact}
             data-cursor="hover"
-            className="link-underline text-sm text-foreground/70 hover:text-foreground transition-colors"
+            className="link-underline t-nav text-foreground/70 hover:text-foreground transition-colors"
           >
             Contact
           </button>

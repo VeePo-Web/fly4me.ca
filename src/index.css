@@ -46,6 +46,39 @@
     /* Elevation */
     --shadow-rest: 0 1px 2px rgb(0 0 0 / 0.04);
     --shadow-lift: 0 18px 40px -18px rgb(0 0 0 / 0.28);
+
+    /* ---------- Typography system ---------- */
+    /* Fluid type scale (mobile → desktop, no breakpoints) */
+    --fs-display-1:  clamp(44px,  9vw,    104px);
+    --fs-display-2:  clamp(40px,  7.2vw,   96px);
+    --fs-headline-1: clamp(36px,  6vw,     96px);
+    --fs-headline-2: clamp(28px,  3.6vw,   56px);
+    --fs-headline-3: clamp(22px,  2vw,     32px);
+    --fs-lede:       clamp(16px,  1.25vw,  19px);
+    --fs-body:       16px;
+    --fs-meta:       13px;
+    --fs-eyebrow:    11px;
+    --fs-micro:      10px;
+
+    /* Line-heights */
+    --lh-tight:   0.98;
+    --lh-snug:    1.05;
+    --lh-normal:  1.15;
+    --lh-prose:   1.6;
+    --lh-eyebrow: 1.2;
+
+    /* Tracking */
+    --track-display:  -0.045em;
+    --track-headline: -0.035em;
+    --track-tight:    -0.02em;
+    --track-base:     -0.011em;
+    --track-eyebrow:   0.28em;
+    --track-micro:     0.32em;
+
+    /* Vertical rhythm — fluid section pacing */
+    --space-section-sm: clamp(64px,  10vw, 128px);
+    --space-section:    clamp(96px,  14vw, 192px);
+    --space-section-lg: clamp(128px, 18vw, 256px);
   }
 }
 
@@ -81,6 +114,110 @@
 @layer utilities {
   .text-balance { text-wrap: balance; }
   .text-pretty { text-wrap: pretty; }
+
+  /* ---------- Typography utility classes ---------- */
+  /* Each class is the single source of truth for size + line-height + tracking + weight per role.
+     Components apply ONE .t-* class instead of stacking text-7xl tracking-[-0.04em] leading-[0.98]. */
+
+  .t-display-1 {
+    font-size: var(--fs-display-1);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--track-display);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  .t-display-2 {
+    font-size: var(--fs-display-2);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--track-display);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  .t-headline-1 {
+    font-size: var(--fs-headline-1);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--track-display);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  .t-headline-2 {
+    font-size: var(--fs-headline-2);
+    line-height: var(--lh-normal);
+    letter-spacing: var(--track-headline);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  .t-headline-3 {
+    font-size: var(--fs-headline-3);
+    line-height: var(--lh-normal);
+    letter-spacing: var(--track-tight);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  .t-lede {
+    font-size: var(--fs-lede);
+    line-height: var(--lh-prose);
+    letter-spacing: var(--track-base);
+    font-weight: 400;
+    text-wrap: pretty;
+  }
+  .t-body {
+    font-size: var(--fs-body);
+    line-height: var(--lh-prose);
+    letter-spacing: var(--track-base);
+    font-weight: 400;
+    text-wrap: pretty;
+  }
+  .t-meta {
+    font-size: var(--fs-meta);
+    line-height: 1.55;
+    letter-spacing: var(--track-base);
+    font-weight: 400;
+  }
+  .t-eyebrow {
+    font-size: var(--fs-eyebrow);
+    line-height: var(--lh-eyebrow);
+    letter-spacing: var(--track-eyebrow);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-feature-settings: "tnum";
+  }
+  .t-micro {
+    font-size: var(--fs-micro);
+    line-height: var(--lh-eyebrow);
+    letter-spacing: var(--track-micro);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-feature-settings: "tnum";
+  }
+  .t-nav {
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 0;
+    font-weight: 500;
+  }
+
+  /* Editorial wrapping helper — disables forced <br /> on small screens.
+     Combined with text-balance on the headline, gives art-directed lines on desktop
+     and balanced wraps on mobile. */
+  .wrap-editorial > br { display: inline; }
+  @media (max-width: 640px) {
+    .wrap-editorial-mobile-off > br { display: none; }
+  }
+
+  /* Section rhythm utilities (fluid) */
+  .py-section    { padding-top: var(--space-section);    padding-bottom: var(--space-section); }
+  .py-section-sm { padding-top: var(--space-section-sm); padding-bottom: var(--space-section-sm); }
+  .py-section-lg { padding-top: var(--space-section-lg); padding-bottom: var(--space-section-lg); }
+  .pt-section    { padding-top: var(--space-section); }
+  .pb-section    { padding-bottom: var(--space-section); }
+  .pt-section-sm { padding-top: var(--space-section-sm); }
+  .pb-section-sm { padding-bottom: var(--space-section-sm); }
+  .pt-section-lg { padding-top: var(--space-section-lg); }
+  .pb-section-lg { padding-bottom: var(--space-section-lg); }
+}
+
+@layer utilities {
 
   .reveal {
     opacity: 0;
