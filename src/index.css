@@ -203,6 +203,10 @@
     letter-spacing: var(--track-display);
     font-weight: 500;
     text-wrap: balance;
+    font-feature-settings: "ss01", "ss02", "cv11", "case", "kern";
+    font-variant-numeric: lining-nums proportional-nums;
+    font-optical-sizing: auto;
+    text-rendering: geometricPrecision;
   }
   .t-headline-2 {
     font-size: var(--fs-headline-2);
@@ -210,6 +214,9 @@
     letter-spacing: var(--track-headline);
     font-weight: 500;
     text-wrap: balance;
+    font-feature-settings: "ss01", "cv11", "kern";
+    font-variant-numeric: lining-nums proportional-nums;
+    font-optical-sizing: auto;
   }
   .t-headline-3 {
     font-size: var(--fs-headline-3);
@@ -217,6 +224,17 @@
     letter-spacing: var(--track-tight);
     font-weight: 500;
     text-wrap: balance;
+    font-feature-settings: "ss01", "cv11", "kern";
+    font-optical-sizing: auto;
+  }
+  .t-quote {
+    font-size: var(--fs-quote);
+    line-height: var(--lh-quote);
+    letter-spacing: var(--track-tight);
+    font-weight: 400;
+    text-wrap: balance;
+    hanging-punctuation: first last;
+    font-feature-settings: "ss01", "cv11", "kern", "calt";
   }
   .t-lede {
     font-size: var(--fs-lede);
@@ -224,6 +242,8 @@
     letter-spacing: var(--track-base);
     font-weight: 400;
     text-wrap: pretty;
+    hanging-punctuation: first last;
+    font-variant-numeric: oldstyle-nums proportional-nums;
   }
   .t-body {
     font-size: var(--fs-body);
@@ -231,12 +251,23 @@
     letter-spacing: var(--track-base);
     font-weight: 400;
     text-wrap: pretty;
+    hanging-punctuation: first last;
+    font-variant-numeric: oldstyle-nums proportional-nums;
   }
   .t-meta {
     font-size: var(--fs-meta);
     line-height: 1.55;
     letter-spacing: var(--track-base);
     font-weight: 400;
+    font-variant-numeric: tabular-nums;
+  }
+  .t-caption {
+    font-size: var(--fs-caption);
+    line-height: var(--lh-eyebrow);
+    letter-spacing: var(--track-base);
+    font-weight: 400;
+    color: hsl(var(--muted-foreground));
+    font-variant-numeric: tabular-nums;
   }
   .t-eyebrow {
     font-size: var(--fs-eyebrow);
@@ -245,6 +276,8 @@
     font-weight: 500;
     text-transform: uppercase;
     font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+    transform: translateY(-0.04em);
   }
   .t-micro {
     font-size: var(--fs-micro);
@@ -253,6 +286,8 @@
     font-weight: 500;
     text-transform: uppercase;
     font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+    transform: translateY(-0.04em);
   }
   .t-nav {
     font-size: 14px;
@@ -260,13 +295,54 @@
     letter-spacing: 0;
     font-weight: 500;
   }
+  .t-button {
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: 0.005em;
+    font-weight: 500;
+  }
+  .t-link {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    text-decoration-color: hsl(var(--foreground) / 0.4);
+    transition: text-decoration-color var(--dur-base) var(--ease-out-soft);
+  }
+  .t-link:hover { text-decoration-color: hsl(var(--foreground)); }
 
-  /* Editorial wrapping helper — disables forced <br /> on small screens.
-     Combined with text-balance on the headline, gives art-directed lines on desktop
-     and balanced wraps on mobile. */
+  /* ---------- Optical alignment & measure primitives ---------- */
+  .optical-hang   { hanging-punctuation: first last; }
+  .optical-lift   { transform: translateY(-0.04em); }
+  .optical-indent { text-indent: -0.05em; }
+  .text-edge      { margin-left: -0.04em; }
+  .measure-tight  { max-width: 26ch; }
+  .measure        { max-width: 38ch; }
+  .measure-wide   { max-width: 62ch; }
+  .no-orphan      { display: inline-block; }
+
+  /* ---------- Pair-gap utilities (margin-top between adjacent type roles) ---------- */
+  .gap-eyebrow  { margin-top: var(--gap-eyebrow); }
+  .gap-headline { margin-top: var(--gap-headline); }
+  .gap-lede     { margin-top: var(--gap-lede); }
+  .gap-meta     { margin-top: var(--gap-meta); }
+
+  /* ---------- Typography reveal — type composing itself ---------- */
+  @keyframes t-track-settle {
+    from { letter-spacing: 0.04em; opacity: 0; }
+    to   { letter-spacing: var(--track-display); opacity: 1; }
+  }
+  .t-reveal-track {
+    animation: t-track-settle 1100ms var(--ease-out-soft) both;
+  }
+
+  /* Editorial wrapping helpers — art-directed line breaks on desktop, balanced wrap on mobile. */
   .wrap-editorial > br { display: inline; }
   @media (max-width: 640px) {
     .wrap-editorial-mobile-off > br { display: none; }
+  }
+  .wrap-art > br { display: inline; }
+  @media (min-width: 768px) {
+    .wrap-art > br { display: block; }
   }
 
   /* Section rhythm utilities (fluid) */
