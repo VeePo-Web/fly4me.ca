@@ -9,6 +9,7 @@ import CaseStudyTeaser from "@/components/fly4media/CaseStudyTeaser";
 import CTA from "@/components/fly4media/CTA";
 import Footer from "@/components/fly4media/Footer";
 import ContactModal from "@/components/fly4media/ContactModal";
+import Intro from "@/components/fly4media/Intro";
 
 const Index = () => {
   const [open, setOpen] = useState(false);
