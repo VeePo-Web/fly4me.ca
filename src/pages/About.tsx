@@ -30,10 +30,10 @@ export default function About() {
               aria-hidden
             />
             <div className="relative container-x pt-32 md:pt-40 pb-12 md:pb-16 min-h-[80dvh] md:min-h-[100dvh] flex flex-col justify-end">
-              <p className="text-[11px] uppercase tracking-[0.25em] text-background/80 mb-6">
+              <p className="t-eyebrow text-background/80 mb-6">
                 Studio &mdash; About
               </p>
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-[-0.04em] leading-[0.98] text-background max-w-5xl text-balance animate-fade-up">
+              <h1 className="t-display-2 wrap-editorial text-background max-w-5xl animate-fade-up">
                 We believe perspective
                 <br />
                 changes everything.
@@ -65,24 +65,24 @@ export default function About() {
 function Philosophy() {
   const ref = useReveal<HTMLDivElement>();
   return (
-    <section className="bg-background py-24 md:py-40">
+    <section className="bg-background py-section">
       <div ref={ref} className="reveal container-x grid grid-cols-1 md:grid-cols-12 gap-10">
-        <p className="md:col-span-3 text-[11px] uppercase tracking-[0.25em] text-muted-foreground">
+        <p className="md:col-span-3 t-eyebrow text-muted-foreground">
           Philosophy
         </p>
         <div className="md:col-span-9 max-w-3xl space-y-8">
-          <p className="text-2xl md:text-4xl font-medium tracking-[-0.03em] leading-[1.15] text-balance">
+          <p className="t-headline-2">
             Perception precedes value. How something is seen decides how it is
             felt — and how it is remembered.
           </p>
-          <p className="text-base md:text-lg text-muted-foreground leading-relaxed text-pretty">
+          <p className="t-lede text-muted-foreground">
             Restraint is the loudest creative choice we make. The strongest
             visual is rarely the loudest one, and the most cinematic frame is
             usually the one we waited an hour longer for. We treat every
             decision as an edit — what we leave out matters as much as what
             we keep.
           </p>
-          <p className="text-base md:text-lg text-muted-foreground leading-relaxed text-pretty">
+          <p className="t-lede text-muted-foreground">
             Altitude is a discipline. We started in Alberta, where the
             landscape teaches you to wait — for light, for weather, for the
             right line. That patience travels with us into every brief, every

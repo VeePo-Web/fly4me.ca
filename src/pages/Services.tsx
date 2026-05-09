@@ -79,16 +79,16 @@ export default function Services() {
     <PageShell>
       {({ openContact }: { openContact: () => void }) => (
         <>
-          <section className="pt-36 md:pt-48 pb-20 md:pb-32 container-x">
-            <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground mb-6">
+          <section className="pt-36 md:pt-48 pb-section-sm container-x">
+            <p className="t-eyebrow text-muted-foreground mb-6">
               Services
             </p>
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-[-0.04em] leading-[0.98] max-w-5xl text-balance animate-fade-up">
+            <h1 className="t-display-2 wrap-editorial wrap-editorial-mobile-off max-w-5xl animate-fade-up">
               Cinematic perspective,
               <br />
               engineered to be felt.
             </h1>
-            <p className="mt-10 max-w-xl text-base md:text-lg text-muted-foreground text-pretty">
+            <p className="t-lede mt-10 max-w-xl text-muted-foreground">
               Every engagement begins with the same question: what should this
               be perceived as?
             </p>
