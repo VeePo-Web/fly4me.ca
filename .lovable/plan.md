@@ -1,47 +1,50 @@
-## Goal
+# Cinematic Hero Video — DJI_0723
 
-Eliminate the last raw Tailwind typography classes (`text-sm`, `text-lg`, `text-3xl`, `text-[15px]`, `tracking-tight`, `tracking-wide`, `leading-relaxed`, `font-medium`) still scattered across components and modals, and route every text node through a single `.t-*` role from the typography system.
+Use the uploaded drone clip (`DJI_0723.mp4`, 7s, 1280×720, H.264, 2.2 MB) as the home hero background. The site already has the right plumbing — `HeroMedia` accepts `videoSrc`, and there's a `public/hero/` folder. We extend it into a true cinematic, performance-first video layer without changing the typography or layout.
 
-## Audit findings
+## What changes
 
-After grep across `src/pages` and `src/components/fly4media` (excluding shadcn `ui/`), the remaining offenders are:
+1. **Encode optimized variants** of the uploaded clip (under `public/hero/`):
+   - `hero-drone.mp4` — H.264, 1920-wide, ~3–4 Mbps, faststart, no audio
+   - `hero-drone.webm` — VP9, ~2 Mbps (smaller, modern browsers)
+   - `hero-drone-mobile.mp4` — H.264, 960-wide, ~1.2 Mbps (served on small viewports / Save-Data)
+   - `hero-drone-poster.jpg` — first-frame poster, blurred-edge variant for instant paint
+   
+   The existing `hero-aerial.*` files stay (used elsewhere or as fallback) — we add new ones rather than overwrite.
 
-- `Header.tsx` — wordmark (`text-[15px] md:text-base font-medium tracking-tight`); mobile nav links (`text-3xl font-medium tracking-tight`, ×2)
-- `Footer.tsx` — wordmark (`text-base font-medium tracking-tight`)
-- `Hero.tsx:53` — right column line (`text-right leading-relaxed`)
-- `FeaturedWork.tsx:32` — "View all work" link (`text-sm font-medium`)
-- `PageShell.tsx:35` — floating CTA button (`text-xs md:text-sm`)
-- `CaseStudyMeta.tsx:20` — meta value (`t-body font-medium tracking-tight` — duplicates already on `.t-body`)
-- `ContactModal.tsx` — meta spans `tracking-wide` (×2), success/error `text-lg leading-relaxed` + `text-sm leading-relaxed`, textarea + input (`text-base md:text-lg [leading-relaxed]`)
+2. **Upgrade `HeroMedia`** into a true cinematic video layer:
+   - Multiple `<source>` (WebM → MP4), `<picture>`-style poster as the LCP image so paint is instant
+   - `playsInline muted autoPlay loop preload="metadata"` + `disableRemotePlayback` + `disablePictureInPicture`
+   - Mobile source swap via `<source media="(max-width: 768px)">`
+   - Respects `prefers-reduced-motion` → renders the still poster only
+   - Respects `navigator.connection.saveData` / `effectiveType === '2g'` → poster only
+   - IntersectionObserver pauses playback when hero scrolls offscreen (saves battery / GPU)
+   - Fades the `<video>` from 0 → 1 opacity over ~600ms on `canplay`, layered above the poster — no black flash, no layout shift
+   - GPU-friendly: `transform: translateZ(0)`, `will-change: opacity`, `object-fit: cover`
 
-Pages (`Index`, `Work`, `About`, `Services`, `CaseStudy`, `NotFound`) came back clean.
+3. **Wire it into `Hero.tsx`** by passing the new sources. Layout, gradient overlay, and typography stay exactly as they are — the only visible change is the still becomes a slow cinematic loop.
 
-## Refactor mapping
+4. **Preload hint** in `index.html` for the poster only (not the video — we never want video to compete with LCP).
 
-| Location | Current | New role |
-|---|---|---|
-| Header wordmark | `text-[15px] md:text-base font-medium tracking-tight` | `t-nav` (or new `.t-wordmark` if we want a touch heavier — see Q1) |
-| Header mobile nav links | `text-3xl font-medium tracking-tight` | `t-headline-2` |
-| Footer wordmark | `text-base font-medium tracking-tight` | same as Header wordmark |
-| Hero right line | `text-right leading-relaxed` | `t-body text-right` (drop `leading-relaxed`; `.t-body` already sets `--lh-prose`) |
-| FeaturedWork link | `text-sm font-medium` | `t-button` |
-| PageShell floating CTA | `text-xs md:text-sm` | drop — `.btn-primary` defines its own type; rely on it |
-| CaseStudyMeta value | `t-body font-medium tracking-tight` | `t-body` (strip dupes) |
-| ContactModal meta spans | `tracking-wide` | `t-meta` |
-| ContactModal success `<p>` | `text-lg leading-relaxed` | `t-lede` |
-| ContactModal helper `<p>` | `text-sm text-muted-foreground leading-relaxed` | `t-meta text-muted-foreground` |
-| ContactModal textarea | `text-base md:text-lg leading-relaxed` | add `t-lede` (keep layout/border classes) |
-| ContactModal input | `text-base md:text-lg` | add `t-lede` |
+## Out of scope (this pass)
 
-No new `.t-*` classes are required unless Q1 says otherwise — the existing scale covers every case.
+- Background-loop videos in case study cards, dividers, or project teasers — those wait for additional clips.
+- New `BackgroundLoopVideo` / `CinematicCardVideo` components — we'll introduce them when the second/third clip arrives so the abstraction is informed by real footage.
+- Copy, color, type, or layout changes.
 
-## Out of scope
+## Technical notes
 
-- No copy edits, no layout shifts, no color/spacing tokens beyond removing now-redundant `tracking-*`/`leading-*`/`font-*` props.
-- No shadcn `ui/` files (those follow their own component contract).
-- No changes to `index.css` tokens.
+- Encoding via `ffmpeg` in `code--exec`:
+  - MP4: `-c:v libx264 -preset slow -crf 22 -pix_fmt yuv420p -movflags +faststart -an -vf scale=1920:-2`
+  - WebM: `-c:v libvpx-vp9 -b:v 2M -row-mt 1 -an -vf scale=1920:-2`
+  - Mobile MP4: same as MP4 but `scale=960:-2 -crf 26`
+  - Poster: `-vframes 1 -q:v 3` from frame ~0.5s
+- Source clip is only 7s — perfect for a seamless ambient loop. We won't trim, but we'll verify the loop point visually with a still at frame 0 vs last frame.
+- Estimated final asset weight: ~3.5 MB MP4 + ~2 MB WebM + ~1 MB mobile MP4 + ~120 KB poster. Browser picks one; only poster is on the critical path.
 
 ## Verification
 
-- Re-run the same `rg` sweep — expect zero matches in `src/pages` + `src/components/fly4media`.
-- Visual sanity check on `/`, `/work`, `/work/:slug`, `/services`, `/about`, and the contact modal at mobile (390px) + desktop widths.
+- `ls -lh public/hero/` to confirm sizes
+- Render hero in preview, watch network tab: poster paints first, video swaps in with fade
+- Throttle to Slow 3G in mind: poster alone is enough; video is progressive
+- Check mobile viewport (390px) — mobile MP4 served, no jank
