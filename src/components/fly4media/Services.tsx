@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useReveal } from "./useReveal";
+import { useReveal, useRevealStagger } from "./useReveal";
 
 const SERVICES = [
   { n: "01", title: "Aerial Cinematography", desc: "Cinematic perspectives that elevate how a brand is experienced." },
@@ -36,7 +36,7 @@ export default function Services() {
           </div>
         </div>
 
-        <ul className="border-t border-background/15">
+        <ul ref={useRevealStagger<HTMLUListElement>()} className="border-t border-background/15">
           {SERVICES.map((s) => (
             <ServiceRow key={s.n} {...s} />
           ))}
