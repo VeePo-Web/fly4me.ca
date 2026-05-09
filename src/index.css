@@ -68,38 +68,61 @@
     --scroll-vel: 0;
 
     /* ---------- Typography system ---------- */
-    /* Fluid type scale (mobile → desktop, no breakpoints) */
-    --fs-display-1:  clamp(44px,  9vw,    104px);
-    --fs-display-2:  clamp(40px,  7.2vw,   96px);
-    --fs-headline-1: clamp(36px,  6vw,     96px);
-    --fs-headline-2: clamp(28px,  3.6vw,   56px);
-    --fs-headline-3: clamp(22px,  2vw,     32px);
-    --fs-lede:       clamp(16px,  1.25vw,  19px);
+    /* Fluid type scale — recalibrated for cinematic top-end + readable mid-range */
+    --fs-display-0:  clamp(56px,  11vw,   144px);
+    --fs-display-1:  clamp(48px,  9.4vw,  112px);
+    --fs-display-2:  clamp(42px,  7.4vw,   92px);
+    --fs-headline-1: clamp(36px,  5.8vw,   84px);
+    --fs-headline-2: clamp(28px,  3.4vw,   52px);
+    --fs-headline-3: clamp(22px,  1.9vw,   30px);
+    --fs-quote:      clamp(22px,  2.4vw,   36px);
+    --fs-lede:       clamp(17px,  1.3vw,   21px);
     --fs-body:       16px;
     --fs-meta:       13px;
+    --fs-caption:    12px;
     --fs-eyebrow:    11px;
     --fs-micro:      10px;
 
-    /* Line-heights */
+    /* Line-heights — looser at small sizes, tighter at huge sizes */
+    --lh-cinema:  0.94;
     --lh-tight:   0.98;
-    --lh-snug:    1.05;
-    --lh-normal:  1.15;
-    --lh-prose:   1.6;
-    --lh-eyebrow: 1.2;
+    --lh-snug:    1.04;
+    --lh-normal:  1.18;
+    --lh-prose:   1.62;
+    --lh-quote:   1.28;
+    --lh-eyebrow: 1.25;
 
-    /* Tracking */
-    --track-display:  -0.045em;
-    --track-headline: -0.035em;
-    --track-tight:    -0.02em;
-    --track-base:     -0.011em;
-    --track-eyebrow:   0.28em;
-    --track-micro:     0.32em;
+    /* Tracking — restraint pass tuned for Inter at scale */
+    --track-cinema:    -0.05em;
+    --track-display:   -0.042em;
+    --track-headline:  -0.032em;
+    --track-tight:     -0.018em;
+    --track-base:      -0.008em;
+    --track-prose:      0;
+    --track-eyebrow:    0.26em;
+    --track-micro:      0.30em;
 
     /* Vertical rhythm — fluid section pacing */
     --space-section-sm: clamp(64px,  10vw, 128px);
     --space-section:    clamp(96px,  14vw, 192px);
     --space-section-lg: clamp(128px, 18vw, 256px);
+
+    /* Pair-gap tokens — spacing between adjacent type roles */
+    --gap-eyebrow:  clamp(14px, 1.4vw, 22px);
+    --gap-headline: clamp(18px, 1.8vw, 28px);
+    --gap-lede:     clamp(20px, 2vw,   32px);
+    --gap-meta:     clamp(36px, 4vw,   64px);
   }
+}
+
+/* ---------- Font fallback metric override (invisible FOUT) ---------- */
+@font-face {
+  font-family: "InterFallback";
+  src: local("Inter Variable"), local("Inter"), local("system-ui"), local("-apple-system");
+  size-adjust: 100.4%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
 }
 
 @layer base {
