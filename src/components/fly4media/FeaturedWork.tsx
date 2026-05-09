@@ -1,14 +1,12 @@
+import { Link } from "react-router-dom";
 import { useReveal } from "./useReveal";
-import w1 from "@/assets/work-01-mountain-road.jpg";
-import w2 from "@/assets/work-02-architecture.jpg";
-import w3 from "@/assets/work-03-lake-boat.jpg";
-import w4 from "@/assets/work-04-industrial.jpg";
+import { projects, type Project } from "@/data/projects";
 
-const PROJECTS = [
-  { n: "01", img: w1, title: "Northern Roads", category: "Tourism" },
-  { n: "02", img: w2, title: "Canmore Heights", category: "Real Estate" },
-  { n: "03", img: w3, title: "Above the Lake", category: "Lifestyle" },
-  { n: "04", img: w4, title: "Field & Frequency", category: "Industrial" },
+const LAYOUTS = [
+  "md:col-span-7",
+  "md:col-span-5 md:col-start-8 md:mt-24",
+  "md:col-span-6 md:col-start-2",
+  "md:col-span-5 md:col-start-8",
 ];
 
 export default function FeaturedWork() {
@@ -28,19 +26,19 @@ export default function FeaturedWork() {
             </h2>
           </div>
           <div className="md:col-span-3 md:flex md:items-end md:justify-end">
-            <a
-              href="#contact"
+            <Link
+              to="/work"
               className="group inline-flex items-center gap-2 text-sm font-medium"
             >
               View all projects
               <span className="transition-transform group-hover:translate-x-0.5">↗</span>
-            </a>
+            </Link>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-20 md:gap-y-32">
-          {PROJECTS.map((p, i) => (
-            <Project key={p.n} project={p} index={i} />
+          {projects.map((p, i) => (
+            <ProjectCard key={p.slug} project={p} className={LAYOUTS[i] ?? ""} />
           ))}
         </div>
       </div>
@@ -48,30 +46,17 @@ export default function FeaturedWork() {
   );
 }
 
-function Project({
-  project,
-  index,
-}: {
-  project: (typeof PROJECTS)[number];
-  index: number;
-}) {
+function ProjectCard({ project, className }: { project: Project; className: string }) {
   const ref = useReveal<HTMLAnchorElement>();
-  // Editorial asymmetric layout: alternating column spans + offsets
-  const layouts = [
-    "md:col-span-7",
-    "md:col-span-5 md:col-start-8 md:mt-24",
-    "md:col-span-6 md:col-start-2",
-    "md:col-span-5 md:col-start-8",
-  ];
   return (
-    <a
-      ref={ref}
-      href="#contact"
-      className={`reveal group block ${layouts[index] ?? ""}`}
+    <Link
+      ref={ref as never}
+      to={`/work/${project.slug}`}
+      className={`reveal group block ${className}`}
     >
       <div className="overflow-hidden bg-secondary aspect-[4/5]">
         <img
-          src={project.img}
+          src={project.cardImage}
           alt={project.title}
           loading="lazy"
           decoding="async"
@@ -83,7 +68,7 @@ function Project({
       <div className="mt-5 flex items-baseline justify-between gap-6">
         <div>
           <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground mb-1.5">
-            {project.n} — {project.category}
+            {project.number} — {project.category}
           </p>
           <h3 className="text-xl md:text-2xl font-medium tracking-tight">
             {project.title}
@@ -91,6 +76,6 @@ function Project({
         </div>
         <span className="text-foreground/50 group-hover:text-foreground transition-colors">↗</span>
       </div>
-    </a>
+    </Link>
   );
 }

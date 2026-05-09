@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import HeroMedia from "./HeroMedia";
 import hero from "@/assets/hero-drone.jpg";
 
 interface Props {
@@ -10,16 +12,11 @@ export default function Hero({ onContact }: Props) {
       id="top"
       className="relative min-h-[100dvh] w-full overflow-hidden bg-secondary"
     >
-      <img
-        src={hero}
+      <HeroMedia
+        image={hero}
         alt="Aerial drone in flight over the Canadian Rockies"
-        width={1920}
-        height={1080}
-        fetchPriority="high"
-        decoding="async"
-        className="absolute inset-0 w-full h-full object-cover"
+        priority
       />
-      {/* soft fade for text legibility */}
       <div
         className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/30 to-transparent"
         aria-hidden
@@ -41,17 +38,13 @@ export default function Hero({ onContact }: Props) {
           </p>
 
           <div className="mt-10 flex items-center gap-6 flex-wrap">
-            <a
-              href="#work"
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector("#work")?.scrollIntoView({ behavior: "smooth" });
-              }}
+            <Link
+              to="/work"
               className="group inline-flex items-center gap-3 bg-foreground text-background px-6 py-3.5 text-sm font-medium hover:opacity-90 transition-opacity"
             >
               View our work
               <span className="transition-transform group-hover:translate-x-0.5">↗</span>
-            </a>
+            </Link>
             <button
               onClick={onContact}
               className="group inline-flex items-center gap-2 text-sm font-medium text-foreground"

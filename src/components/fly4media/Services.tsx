@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useReveal } from "./useReveal";
 
 const SERVICES = [
@@ -6,9 +7,6 @@ const SERVICES = [
   { n: "03", title: "Aerial Photography", desc: "High-resolution stills for marketing, real estate and documentation." },
   { n: "04", title: "Real Estate Media", desc: "Architectural showcases that frame property at its most flattering scale." },
   { n: "05", title: "Tourism & Lifestyle", desc: "Visual campaigns that translate landscape into desire." },
-  { n: "06", title: "Industrial Inspections", desc: "Precision aerial surveys for infrastructure, energy and inspection." },
-  { n: "07", title: "Commercial Campaigns", desc: "End-to-end production from concept to final delivery." },
-  { n: "08", title: "Creative Direction", desc: "Shot listing, location scouting, and creative planning." },
 ];
 
 export default function Services() {
@@ -20,11 +18,22 @@ export default function Services() {
           <p className="md:col-span-3 text-[11px] uppercase tracking-[0.25em] text-background/50">
             What we do
           </p>
-          <h2 className="md:col-span-9 text-4xl md:text-6xl font-medium tracking-[-0.035em] leading-[1.02] text-balance">
-            End-to-end aerial
-            <br />
-            content solutions.
-          </h2>
+          <div className="md:col-span-6">
+            <h2 className="text-4xl md:text-6xl font-medium tracking-[-0.035em] leading-[1.02] text-balance">
+              End-to-end aerial
+              <br />
+              content solutions.
+            </h2>
+          </div>
+          <div className="md:col-span-3 md:flex md:items-end md:justify-end">
+            <Link
+              to="/services"
+              className="group inline-flex items-center gap-2 text-sm font-medium text-background"
+            >
+              All services
+              <span className="transition-transform group-hover:translate-x-0.5">↗</span>
+            </Link>
+          </div>
         </div>
 
         <ul className="border-t border-background/15">

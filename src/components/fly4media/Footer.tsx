@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import logo from "@/assets/fly4media-mark.png";
 
 interface Props {
@@ -24,9 +25,9 @@ export default function Footer({ onContact }: Props) {
             Studio
           </p>
           <ul className="space-y-2.5 text-sm">
-            <li><a href="#work" className="hover:text-foreground/70 transition-colors">Work</a></li>
-            <li><a href="#services" className="hover:text-foreground/70 transition-colors">Services</a></li>
-            <li><a href="#about" className="hover:text-foreground/70 transition-colors">About</a></li>
+            <li><Link to="/work" className="hover:text-foreground/70 transition-colors">Work</Link></li>
+            <li><Link to="/services" className="hover:text-foreground/70 transition-colors">Services</Link></li>
+            <li><Link to="/about" className="hover:text-foreground/70 transition-colors">About</Link></li>
           </ul>
         </div>
 
