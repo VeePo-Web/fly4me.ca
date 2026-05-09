@@ -38,12 +38,12 @@ export default function CaseStudy() {
 function Outcome({ text }: { text: string }) {
   const ref = useReveal<HTMLDivElement>();
   return (
-    <section className="bg-background py-20 md:py-32">
+    <section className="bg-background py-section">
       <div ref={ref} className="reveal container-x grid grid-cols-1 md:grid-cols-12 gap-10">
-        <p className="md:col-span-3 text-[11px] uppercase tracking-[0.25em] text-muted-foreground">
+        <p className="md:col-span-3 t-micro text-muted-foreground">
           Outcome
         </p>
-        <p className="md:col-span-9 text-2xl md:text-3xl font-medium tracking-[-0.025em] leading-[1.2] text-balance max-w-2xl">
+        <p className="md:col-span-9 t-headline-3 measure max-w-2xl">
           {text}
         </p>
       </div>
