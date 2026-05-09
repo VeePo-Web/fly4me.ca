@@ -262,7 +262,7 @@ const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
     <div className="group relative">
       <label
         htmlFor={id}
-        className="block text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-3"
+        className="block text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-2 md:mb-3"
       >
         {label}
       </label>
