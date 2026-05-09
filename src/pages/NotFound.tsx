@@ -12,20 +12,18 @@ const NotFound = () => {
   return (
     <div className="min-h-screen bg-background text-foreground flex items-center justify-center px-6">
       <div className="text-center max-w-md">
-        <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground mb-6">
+        <p className="t-eyebrow text-muted-foreground mb-6">
           Error / 404
         </p>
-        <h1 className="text-5xl md:text-7xl font-medium tracking-[-0.04em] leading-[1] mb-6">
+        <h1 className="t-display-1 mb-6">
           Lost signal.
         </h1>
-        <p className="text-base text-muted-foreground mb-10">
+        <p className="t-lede text-muted-foreground mb-10">
           The page you&rsquo;re looking for has drifted out of frame.
         </p>
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 bg-foreground text-background px-6 py-3.5 text-sm font-medium hover:opacity-90 transition-opacity"
-        >
-          Return home <span>↗</span>
+        <Link to="/" className="btn-primary">
+          <span className="t-button">Return home</span>
+          <span aria-hidden>↗</span>
         </Link>
       </div>
     </div>
