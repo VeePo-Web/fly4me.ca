@@ -28,13 +28,13 @@ export interface Project {
   year: string;
   services: string[];
   tagline: string;
+  challenge: string;
+  perspectiveShift: string;
   story: string;
+  impact: string;
   outcome: string;
-  // Editorial card image (4:5 portrait)
   cardImage: string;
-  // Wide hero (16:9)
   heroImage: string;
-  // Gallery (mixed ratios)
   gallery: { src: string; alt: string; ratio: "wide" | "portrait" | "square" }[];
 }
 
@@ -49,8 +49,14 @@ export const projects: Project[] = [
     year: "2025",
     services: ["Aerial Cinematography", "Real Estate Media", "Creative Direction"],
     tagline: "A modern alpine residence, framed at the scale it was built for.",
+    challenge:
+      "The home was being shown the way every home is shown — accurately, but without altitude. Buyers were seeing square footage, not a place worth standing in.",
+    perspectiveShift:
+      "We stopped framing it as a property and started framing it as a vantage point. The architecture became a quiet instrument; the range became the room.",
     story:
       "Architecture this confident asks for restraint. We approached Canmore Heights as a single, composed portrait — patient camera moves, golden-hour light, and the surrounding range allowed to do what it does. The result is a film that feels less like a listing and more like a quiet introduction.",
+    impact:
+      "Buyers stopped comparing it to other listings. They started comparing it to the idea of living differently.",
     outcome: "Listed and sold within nineteen days of release.",
     cardImage: work2,
     heroImage: csCanmoreHero,
@@ -69,8 +75,14 @@ export const projects: Project[] = [
     year: "2025",
     services: ["Aerial Cinematography", "Tourism & Destination Films"],
     tagline: "A campaign about the road as much as the destination.",
+    challenge:
+      "Tourism films had become loud — quick cuts, hero music, postcards in motion. The parkway deserved something quieter, and the audience was tired of being sold to.",
+    perspectiveShift:
+      "We treated the road itself as the protagonist. Instead of selling a destination, we framed a meditation — a single vehicle, a single line of light moving through a vast country.",
     story:
       "Travel Alberta wanted a film that didn't oversell. We followed a single vehicle from Lake Louise to Jasper across two pre-dawn shoots, framing the parkway as something closer to a meditation. No music swell, no hard sell — just the road, the range, and the light moving across both.",
+    impact:
+      "The campaign changed the conversation around the parkway from a place to visit to a feeling people wanted to chase.",
     outcome: "Featured across the 2025 destination campaign and short-film circuit.",
     cardImage: work1,
     heroImage: csNorthernHero,
@@ -89,8 +101,14 @@ export const projects: Project[] = [
     year: "2024",
     services: ["Aerial Photography", "FPV Drone Filming", "Creative Direction"],
     tagline: "A morning on the water, captured at the pace of the morning itself.",
+    challenge:
+      "The brand had compelling product but uninspired visuals — outdoor lifestyle images that looked like every other outdoor lifestyle brand.",
+    perspectiveShift:
+      "We removed the action and kept the atmosphere. The camera held still long enough for stillness itself to become the subject.",
     story:
       "The brief was simple: tell the truth about a quiet morning. We split the day between top-down stills and a single FPV pass that opened the film. The water did most of the work — we just held the camera still long enough to notice.",
+    impact:
+      "The work re-anchored the brand around restraint. Customers started describing the company as the one that 'feels different' — without being able to say why.",
     outcome: "Anthology series picked up by three regional outfitters.",
     cardImage: work3,
     heroImage: csLakeHero,
@@ -109,8 +127,14 @@ export const projects: Project[] = [
     year: "2024",
     services: ["Aerial Documentation", "Industrial Inspections", "Commercial Campaigns"],
     tagline: "A renewable-energy estate, documented at the scale it deserves.",
+    challenge:
+      "Renewable infrastructure was being communicated as engineering — accurate, technical, and emotionally invisible to the public it served.",
+    perspectiveShift:
+      "We framed the estate as landscape architecture. The same turbines, photographed from above, became something closer to a sculpture garden — purposeful, patient, beautiful.",
     story:
       "Two weeks across three sites, alternating between editorial coverage for the brand campaign and high-resolution inspection passes for the engineering team. The same drone, two completely different mandates, one consistent visual language.",
+    impact:
+      "The brand stopped defending its presence in the landscape and started being celebrated as part of it.",
     outcome: "Adopted as the visual standard for the brand's 2025 reporting.",
     cardImage: work4,
     heroImage: csFieldHero,

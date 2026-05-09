@@ -15,56 +15,56 @@ const SERVICES = [
   {
     number: "01",
     title: "Aerial Cinematography",
-    desc: "Cinematic video production for commercial, editorial and broadcast — patient camera moves and considered framing, every time.",
+    desc: "Cinematic perspectives that change how a brand is experienced — patient camera moves, considered framing, every time.",
     image: work1,
     alt: "Aerial cinematography over mountain road",
   },
   {
     number: "02",
     title: "FPV Drone Production",
-    desc: "Immersive first-person sequences that move with the story. From single-shot reveals to choreographed brand films.",
+    desc: "Immersive movement that turns a moment into a memory — single-shot reveals and choreographed brand films.",
     image: csLake2,
     alt: "FPV drone over alpine lake",
   },
   {
     number: "03",
     title: "Tourism & Destination Films",
-    desc: "Visual campaigns that translate landscape into desire — without the cliché.",
+    desc: "Films that translate a landscape into longing — without the cliché.",
     image: work1,
     alt: "Tourism aerial across the Rockies",
   },
   {
     number: "04",
     title: "Commercial Brand Campaigns",
-    desc: "End-to-end production from creative direction to final delivery, built around the brand voice.",
+    desc: "End-to-end production built around a single question: what should this brand be perceived as?",
     image: csField2,
     alt: "Commercial wind turbine campaign",
   },
   {
     number: "05",
     title: "Real Estate Cinematics",
-    desc: "Architectural showcases that frame property at its most flattering scale and light.",
+    desc: "Visual storytelling that turns properties into destinations — and listings into invitations.",
     image: work2,
     alt: "Mountain home architectural aerial",
   },
   {
     number: "06",
     title: "Industrial Aerial Documentation",
-    desc: "Precision aerial surveys and inspections for infrastructure, energy and construction.",
+    desc: "Precision passes that reframe infrastructure as landscape — for engineering, brand, and report alike.",
     image: work4,
     alt: "Industrial aerial documentation",
   },
   {
     number: "07",
     title: "Social Media Visual Campaigns",
-    desc: "Vertical-first cuts engineered for feed, story and reel — without sacrificing the cinematic master.",
+    desc: "Vertical-first cuts engineered for the feed — without sacrificing the cinematic master.",
     image: csCanmore1,
     alt: "Social campaign cinematography",
   },
   {
     number: "08",
     title: "Creative Direction",
-    desc: "Shot listing, location scouting, and creative planning. The work before the work.",
+    desc: "Shot listing, scouting, and the discipline of deciding what not to film. The work before the work.",
     image: work3,
     alt: "Top-down lake creative direction",
   },
@@ -72,7 +72,7 @@ const SERVICES = [
 
 export default function Services() {
   useEffect(() => {
-    document.title = "Services — Fly4MEdia";
+    document.title = "Services — Tools for shifting perception · Fly4MEdia";
   }, []);
 
   return (
@@ -84,13 +84,13 @@ export default function Services() {
               Services
             </p>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-[-0.04em] leading-[0.98] max-w-5xl text-balance animate-fade-up">
-              Cinematic aerial content
+              Cinematic perspective,
               <br />
-              for modern brands.
+              engineered to be felt.
             </h1>
             <p className="mt-10 max-w-xl text-base md:text-lg text-muted-foreground text-pretty">
-              From single-shot films to multi-day campaigns. Every engagement
-              starts the same way: a conversation about the story.
+              Every engagement begins with the same question: what should this
+              be perceived as?
             </p>
           </section>
 
@@ -117,9 +117,9 @@ export default function Services() {
             onContact={openContact}
             heading={
               <>
-                Let&rsquo;s build
+                Some stories deserve
                 <br />
-                something unforgettable.
+                to be seen from above.
               </>
             }
           />

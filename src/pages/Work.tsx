@@ -14,7 +14,7 @@ const LAYOUTS = [
 
 export default function Work() {
   useEffect(() => {
-    document.title = "Selected Work — Fly4MEdia";
+    document.title = "Work — Perspective in motion · Fly4MEdia";
   }, []);
 
   return (
@@ -26,9 +26,9 @@ export default function Work() {
               Selected Work / 2024 &mdash; 2025
             </p>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-[-0.04em] leading-[0.98] max-w-5xl text-balance animate-fade-up">
-              A portfolio that
+              Perspective,
               <br />
-              earns the second look.
+              in motion.
             </h1>
           </section>
 

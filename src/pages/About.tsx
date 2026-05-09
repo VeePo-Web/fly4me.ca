@@ -9,7 +9,7 @@ import about from "@/assets/about-hero.jpg";
 
 export default function About() {
   useEffect(() => {
-    document.title = "About — Fly4MEdia";
+    document.title = "About — Perspective Changes Everything · Fly4MEdia";
   }, []);
 
   return (
@@ -50,9 +50,9 @@ export default function About() {
             eyebrow="Let's work together"
             heading={
               <>
-                Built for brands that
+                Built for brands that understand
                 <br />
-                care about visual storytelling.
+                presentation is positioning.
               </>
             }
           />
@@ -72,19 +72,21 @@ function Philosophy() {
         </p>
         <div className="md:col-span-9 max-w-3xl space-y-8">
           <p className="text-2xl md:text-4xl font-medium tracking-[-0.03em] leading-[1.15] text-balance">
-            Fly4MEdia is a small studio with an editorial habit. We treat every
-            frame as a decision, not a default.
+            Perception precedes value. How something is seen decides how it is
+            felt — and how it is remembered.
           </p>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed text-pretty">
-            We started in Alberta, where the landscape teaches restraint. The
-            mountains don&rsquo;t need our help — they need the right light, the
-            right altitude, and the patience to wait for both. That principle
-            travels with us: every project, regardless of scale, is built around
-            the discipline of removing rather than adding.
+            Restraint is the loudest creative choice we make. The strongest
+            visual is rarely the loudest one, and the most cinematic frame is
+            usually the one we waited an hour longer for. We treat every
+            decision as an edit — what we leave out matters as much as what
+            we keep.
           </p>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed text-pretty">
-            We work with brands, broadcasters, architects and tourism boards who
-            understand that the strongest visual is rarely the loudest one.
+            Altitude is a discipline. We started in Alberta, where the
+            landscape teaches you to wait — for light, for weather, for the
+            right line. That patience travels with us into every brief, every
+            client, every frame.
           </p>
         </div>
       </div>
