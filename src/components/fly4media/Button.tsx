@@ -18,7 +18,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
 ) {
   const base = variant === "primary" ? "btn-primary group" : "btn-ghost group";
   return (
-    <button ref={ref} data-cursor="hover" className={`${base} ${className}`} {...rest}>
+    <button
+      ref={ref}
+      data-cursor="hover"
+      {...(variant === "primary" ? { "data-magnetic": "" } : {})}
+      className={`${base} ${className}`}
+      {...rest}
+    >
       <span>{children}</span>
       {arrow && <span className="link-arrow">↗</span>}
     </button>
@@ -45,6 +51,7 @@ export function LinkButton({
     <Link
       to={to}
       data-cursor="hover"
+      {...(variant === "primary" ? { "data-magnetic": "" } : {})}
       aria-label={ariaLabel}
       onClick={onClick}
       className={`${base} ${className}`}
