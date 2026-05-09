@@ -54,9 +54,9 @@ function ProjectCard({ project, className }: { project: Project; className: stri
       ref={ref as never}
       to={`/work/${project.slug}`}
       data-cursor="hover"
-      className={`reveal group block transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 ${className}`}
+      className={`reveal group block transition-transform duration-500 ease-[var(--ease-out-soft)] hover:-translate-y-1 ${className}`}
     >
-      <div className="overflow-hidden bg-secondary aspect-[4/5]">
+      <div className="media-frame aspect-[4/5]">
         <img
           src={project.cardImage}
           alt={project.title}
@@ -64,10 +64,10 @@ function ProjectCard({ project, className }: { project: Project; className: stri
           decoding="async"
           width={1280}
           height={1600}
-          className="img-zoom w-full h-full object-cover"
+          className="media-img"
         />
       </div>
-      <div className="mt-5 flex items-baseline justify-between gap-6">
+      <div className="media-meta mt-5 flex items-baseline justify-between gap-6">
         <div>
           <p className="t-eyebrow text-muted-foreground mb-1.5">
             {project.number} — {project.category}

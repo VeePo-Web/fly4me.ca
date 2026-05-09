@@ -12,8 +12,8 @@ export default function CaseStudyTeaser() {
           Featured Case Study
         </p>
 
-        <Link to={`/work/${featured.slug}`} className="group block">
-          <div className="overflow-hidden bg-secondary aspect-[16/9]">
+        <Link to={`/work/${featured.slug}`} data-cursor="hover" className="group block">
+          <div className="media-frame aspect-[16/9]">
             <img
               src={featured.heroImage}
               alt={featured.title}
@@ -21,23 +21,23 @@ export default function CaseStudyTeaser() {
               decoding="async"
               width={1920}
               height={1080}
-              className="img-zoom w-full h-full object-cover"
+              className="media-img"
             />
           </div>
 
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
+          <div className="media-meta mt-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
             <div className="md:col-span-7">
-              <h3 className="text-3xl md:text-5xl font-medium tracking-[-0.035em] leading-[1.05] text-balance">
+              <h3 className="t-headline-2">
                 {featured.title}
               </h3>
-              <p className="mt-4 text-base md:text-lg text-muted-foreground max-w-xl text-pretty">
+              <p className="t-lede mt-4 text-muted-foreground max-w-xl">
                 {featured.tagline}
               </p>
             </div>
             <div className="md:col-span-5 md:flex md:justify-end">
-              <span className="group inline-flex items-center gap-2 text-sm font-medium">
-                View case study
-                <span className="transition-transform group-hover:translate-x-0.5">↗</span>
+              <span className="inline-flex items-center gap-2 t-nav">
+                <span className="link-underline">View case study</span>
+                <span className="link-arrow">↗</span>
               </span>
             </div>
           </div>
