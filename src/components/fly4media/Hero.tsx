@@ -27,7 +27,7 @@ export default function Hero({ onContact }: Props) {
           <p className="t-eyebrow text-foreground/60 mb-6 md:mb-8">
             A cinematic perspective studio
           </p>
-          <h1 className="t-display-1 wrap-editorial text-foreground">
+          <h1 className="t-display-1 wrap-editorial text-foreground t-reveal-track">
             We make brands,
             <br />
             places, and stories
@@ -35,7 +35,7 @@ export default function Hero({ onContact }: Props) {
             worth looking up at.
           </h1>
 
-          <p className="t-lede mt-8 max-w-md text-foreground/70">
+          <p className="t-lede gap-lede max-w-md text-foreground/70 measure">
             Aerial cinematography for the brands and destinations that
             understand presentation is positioning.
           </p>

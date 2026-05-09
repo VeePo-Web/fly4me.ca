@@ -33,7 +33,7 @@ export default function About() {
               <p className="t-eyebrow text-background/80 mb-6">
                 Studio &mdash; About
               </p>
-              <h1 className="t-display-2 wrap-editorial text-background max-w-5xl animate-fade-up">
+              <h1 className="t-display-1 wrap-editorial text-background max-w-5xl animate-fade-up">
                 We believe perspective
                 <br />
                 changes everything.

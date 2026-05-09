@@ -68,38 +68,61 @@
     --scroll-vel: 0;
 
     /* ---------- Typography system ---------- */
-    /* Fluid type scale (mobile → desktop, no breakpoints) */
-    --fs-display-1:  clamp(44px,  9vw,    104px);
-    --fs-display-2:  clamp(40px,  7.2vw,   96px);
-    --fs-headline-1: clamp(36px,  6vw,     96px);
-    --fs-headline-2: clamp(28px,  3.6vw,   56px);
-    --fs-headline-3: clamp(22px,  2vw,     32px);
-    --fs-lede:       clamp(16px,  1.25vw,  19px);
+    /* Fluid type scale — recalibrated for cinematic top-end + readable mid-range */
+    --fs-display-0:  clamp(56px,  11vw,   144px);
+    --fs-display-1:  clamp(48px,  9.4vw,  112px);
+    --fs-display-2:  clamp(42px,  7.4vw,   92px);
+    --fs-headline-1: clamp(36px,  5.8vw,   84px);
+    --fs-headline-2: clamp(28px,  3.4vw,   52px);
+    --fs-headline-3: clamp(22px,  1.9vw,   30px);
+    --fs-quote:      clamp(22px,  2.4vw,   36px);
+    --fs-lede:       clamp(17px,  1.3vw,   21px);
     --fs-body:       16px;
     --fs-meta:       13px;
+    --fs-caption:    12px;
     --fs-eyebrow:    11px;
     --fs-micro:      10px;
 
-    /* Line-heights */
+    /* Line-heights — looser at small sizes, tighter at huge sizes */
+    --lh-cinema:  0.94;
     --lh-tight:   0.98;
-    --lh-snug:    1.05;
-    --lh-normal:  1.15;
-    --lh-prose:   1.6;
-    --lh-eyebrow: 1.2;
+    --lh-snug:    1.04;
+    --lh-normal:  1.18;
+    --lh-prose:   1.62;
+    --lh-quote:   1.28;
+    --lh-eyebrow: 1.25;
 
-    /* Tracking */
-    --track-display:  -0.045em;
-    --track-headline: -0.035em;
-    --track-tight:    -0.02em;
-    --track-base:     -0.011em;
-    --track-eyebrow:   0.28em;
-    --track-micro:     0.32em;
+    /* Tracking — restraint pass tuned for Inter at scale */
+    --track-cinema:    -0.05em;
+    --track-display:   -0.042em;
+    --track-headline:  -0.032em;
+    --track-tight:     -0.018em;
+    --track-base:      -0.008em;
+    --track-prose:      0;
+    --track-eyebrow:    0.26em;
+    --track-micro:      0.30em;
 
     /* Vertical rhythm — fluid section pacing */
     --space-section-sm: clamp(64px,  10vw, 128px);
     --space-section:    clamp(96px,  14vw, 192px);
     --space-section-lg: clamp(128px, 18vw, 256px);
+
+    /* Pair-gap tokens — spacing between adjacent type roles */
+    --gap-eyebrow:  clamp(14px, 1.4vw, 22px);
+    --gap-headline: clamp(18px, 1.8vw, 28px);
+    --gap-lede:     clamp(20px, 2vw,   32px);
+    --gap-meta:     clamp(36px, 4vw,   64px);
   }
+}
+
+/* ---------- Font fallback metric override (invisible FOUT) ---------- */
+@font-face {
+  font-family: "InterFallback";
+  src: local("Inter Variable"), local("Inter"), local("system-ui"), local("-apple-system");
+  size-adjust: 100.4%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
 }
 
 @layer base {
@@ -116,8 +139,10 @@
 
   body {
     @apply bg-background text-foreground font-sans;
-    font-feature-settings: "cv11", "ss01", "ss03";
-    letter-spacing: -0.011em;
+    font-family: "Inter", "InterFallback", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-feature-settings: "cv11", "ss01", "ss03", "kern", "calt";
+    font-optical-sizing: auto;
+    letter-spacing: var(--track-base);
   }
 
   ::selection {
@@ -126,7 +151,7 @@
   }
 
   h1, h2, h3, h4 {
-    letter-spacing: -0.035em;
+    letter-spacing: var(--track-headline);
     font-weight: 500;
   }
 }
@@ -139,12 +164,27 @@
   /* Each class is the single source of truth for size + line-height + tracking + weight per role.
      Components apply ONE .t-* class instead of stacking text-7xl tracking-[-0.04em] leading-[0.98]. */
 
+  .t-display-0 {
+    font-size: var(--fs-display-0);
+    line-height: var(--lh-cinema);
+    letter-spacing: var(--track-cinema);
+    font-weight: 500;
+    text-wrap: balance;
+    font-feature-settings: "ss01", "ss02", "cv11", "case", "kern";
+    font-variant-numeric: lining-nums proportional-nums;
+    font-optical-sizing: auto;
+    text-rendering: geometricPrecision;
+  }
   .t-display-1 {
     font-size: var(--fs-display-1);
     line-height: var(--lh-tight);
     letter-spacing: var(--track-display);
     font-weight: 500;
     text-wrap: balance;
+    font-feature-settings: "ss01", "ss02", "cv11", "case", "kern";
+    font-variant-numeric: lining-nums proportional-nums;
+    font-optical-sizing: auto;
+    text-rendering: geometricPrecision;
   }
   .t-display-2 {
     font-size: var(--fs-display-2);
@@ -152,6 +192,10 @@
     letter-spacing: var(--track-display);
     font-weight: 500;
     text-wrap: balance;
+    font-feature-settings: "ss01", "ss02", "cv11", "case", "kern";
+    font-variant-numeric: lining-nums proportional-nums;
+    font-optical-sizing: auto;
+    text-rendering: geometricPrecision;
   }
   .t-headline-1 {
     font-size: var(--fs-headline-1);
@@ -159,6 +203,10 @@
     letter-spacing: var(--track-display);
     font-weight: 500;
     text-wrap: balance;
+    font-feature-settings: "ss01", "ss02", "cv11", "case", "kern";
+    font-variant-numeric: lining-nums proportional-nums;
+    font-optical-sizing: auto;
+    text-rendering: geometricPrecision;
   }
   .t-headline-2 {
     font-size: var(--fs-headline-2);
@@ -166,6 +214,9 @@
     letter-spacing: var(--track-headline);
     font-weight: 500;
     text-wrap: balance;
+    font-feature-settings: "ss01", "cv11", "kern";
+    font-variant-numeric: lining-nums proportional-nums;
+    font-optical-sizing: auto;
   }
   .t-headline-3 {
     font-size: var(--fs-headline-3);
@@ -173,6 +224,17 @@
     letter-spacing: var(--track-tight);
     font-weight: 500;
     text-wrap: balance;
+    font-feature-settings: "ss01", "cv11", "kern";
+    font-optical-sizing: auto;
+  }
+  .t-quote {
+    font-size: var(--fs-quote);
+    line-height: var(--lh-quote);
+    letter-spacing: var(--track-tight);
+    font-weight: 400;
+    text-wrap: balance;
+    hanging-punctuation: first last;
+    font-feature-settings: "ss01", "cv11", "kern", "calt";
   }
   .t-lede {
     font-size: var(--fs-lede);
@@ -180,6 +242,8 @@
     letter-spacing: var(--track-base);
     font-weight: 400;
     text-wrap: pretty;
+    hanging-punctuation: first last;
+    font-variant-numeric: oldstyle-nums proportional-nums;
   }
   .t-body {
     font-size: var(--fs-body);
@@ -187,12 +251,23 @@
     letter-spacing: var(--track-base);
     font-weight: 400;
     text-wrap: pretty;
+    hanging-punctuation: first last;
+    font-variant-numeric: oldstyle-nums proportional-nums;
   }
   .t-meta {
     font-size: var(--fs-meta);
     line-height: 1.55;
     letter-spacing: var(--track-base);
     font-weight: 400;
+    font-variant-numeric: tabular-nums;
+  }
+  .t-caption {
+    font-size: var(--fs-caption);
+    line-height: var(--lh-eyebrow);
+    letter-spacing: var(--track-base);
+    font-weight: 400;
+    color: hsl(var(--muted-foreground));
+    font-variant-numeric: tabular-nums;
   }
   .t-eyebrow {
     font-size: var(--fs-eyebrow);
@@ -201,6 +276,8 @@
     font-weight: 500;
     text-transform: uppercase;
     font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+    transform: translateY(-0.04em);
   }
   .t-micro {
     font-size: var(--fs-micro);
@@ -209,6 +286,8 @@
     font-weight: 500;
     text-transform: uppercase;
     font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+    transform: translateY(-0.04em);
   }
   .t-nav {
     font-size: 14px;
@@ -216,13 +295,54 @@
     letter-spacing: 0;
     font-weight: 500;
   }
+  .t-button {
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: 0.005em;
+    font-weight: 500;
+  }
+  .t-link {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    text-decoration-color: hsl(var(--foreground) / 0.4);
+    transition: text-decoration-color var(--dur-base) var(--ease-out-soft);
+  }
+  .t-link:hover { text-decoration-color: hsl(var(--foreground)); }
 
-  /* Editorial wrapping helper — disables forced <br /> on small screens.
-     Combined with text-balance on the headline, gives art-directed lines on desktop
-     and balanced wraps on mobile. */
+  /* ---------- Optical alignment & measure primitives ---------- */
+  .optical-hang   { hanging-punctuation: first last; }
+  .optical-lift   { transform: translateY(-0.04em); }
+  .optical-indent { text-indent: -0.05em; }
+  .text-edge      { margin-left: -0.04em; }
+  .measure-tight  { max-width: 26ch; }
+  .measure        { max-width: 38ch; }
+  .measure-wide   { max-width: 62ch; }
+  .no-orphan      { display: inline-block; }
+
+  /* ---------- Pair-gap utilities (margin-top between adjacent type roles) ---------- */
+  .gap-eyebrow  { margin-top: var(--gap-eyebrow); }
+  .gap-headline { margin-top: var(--gap-headline); }
+  .gap-lede     { margin-top: var(--gap-lede); }
+  .gap-meta     { margin-top: var(--gap-meta); }
+
+  /* ---------- Typography reveal — type composing itself ---------- */
+  @keyframes t-track-settle {
+    from { letter-spacing: 0.04em; opacity: 0; }
+    to   { letter-spacing: var(--track-display); opacity: 1; }
+  }
+  .t-reveal-track {
+    animation: t-track-settle 1100ms var(--ease-out-soft) both;
+  }
+
+  /* Editorial wrapping helpers — art-directed line breaks on desktop, balanced wrap on mobile. */
   .wrap-editorial > br { display: inline; }
   @media (max-width: 640px) {
     .wrap-editorial-mobile-off > br { display: none; }
+  }
+  .wrap-art > br { display: inline; }
+  @media (min-width: 768px) {
+    .wrap-art > br { display: block; }
   }
 
   /* Section rhythm utilities (fluid) */

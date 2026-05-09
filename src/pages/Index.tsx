@@ -32,9 +32,10 @@ const Index = () => {
       <button
         onClick={openContact}
         aria-label="Start a project"
-        className="fixed bottom-5 right-5 md:bottom-8 md:right-8 z-40 bg-foreground text-background text-xs md:text-sm font-medium px-5 py-3 md:px-6 md:py-3.5 shadow-[0_8px_30px_rgba(0,0,0,0.15)] hover:opacity-90 transition-opacity"
+        data-magnetic
+        className="btn-primary t-button fixed bottom-5 right-5 md:bottom-8 md:right-8 z-40 shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
       >
-        Start a project ↗
+        Start a project <span aria-hidden>↗</span>
       </button>
 
       <ContactModal open={open} onClose={() => setOpen(false)} />

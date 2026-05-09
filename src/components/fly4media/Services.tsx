@@ -28,10 +28,10 @@ export default function Services() {
           <div className="md:col-span-3 md:flex md:items-end md:justify-end">
             <Link
               to="/services"
-              className="group inline-flex items-center gap-2 text-sm font-medium text-background"
+              className="group inline-flex items-center gap-2 t-nav text-background link-underline"
             >
               All services
-              <span className="transition-transform group-hover:translate-x-0.5">↗</span>
+              <span className="link-arrow" aria-hidden>↗</span>
             </Link>
           </div>
         </div>

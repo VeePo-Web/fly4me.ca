@@ -8,7 +8,7 @@ export default function CaseStudyTeaser() {
   return (
     <section className="bg-background py-24 md:py-40">
       <div ref={ref} className="reveal container-x">
-        <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground mb-8">
+        <p className="t-eyebrow text-muted-foreground mb-8">
           Featured Case Study
         </p>
 

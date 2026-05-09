@@ -160,7 +160,7 @@ export default function ContactModal({ open, onClose }: Props) {
                   </p>
                   <button
                     onClick={onClose}
-                    className="text-[12px] uppercase tracking-[0.25em] text-muted-foreground hover:text-foreground transition-colors"
+                    className="t-eyebrow text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Close ↗
                   </button>
