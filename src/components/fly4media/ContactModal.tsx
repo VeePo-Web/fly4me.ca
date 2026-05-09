@@ -220,7 +220,7 @@ export default function ContactModal({ open, onClose }: Props) {
               )}
 
               {/* Mobile-only footer info */}
-              <div className="md:hidden mt-10 pt-6 border-t border-border text-[11px] tracking-wide text-muted-foreground">
+              <div className="md:hidden mt-10 pt-6 border-t border-border t-micro text-muted-foreground normal-case tracking-wide">
                 hello@fly4media.com · Alberta, Canada
               </div>
             </div>
