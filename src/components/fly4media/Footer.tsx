@@ -25,9 +25,9 @@ export default function Footer({ onContact }: Props) {
             Studio
           </p>
           <ul className="space-y-2.5 text-sm">
-            <li><Link to="/work" className="hover:text-foreground/70 transition-colors">Work</Link></li>
-            <li><Link to="/services" className="hover:text-foreground/70 transition-colors">Services</Link></li>
-            <li><Link to="/about" className="hover:text-foreground/70 transition-colors">About</Link></li>
+            <li><Link to="/work" data-cursor="hover" className="link-underline">Work</Link></li>
+            <li><Link to="/services" data-cursor="hover" className="link-underline">Services</Link></li>
+            <li><Link to="/about" data-cursor="hover" className="link-underline">About</Link></li>
           </ul>
         </div>
 
@@ -37,14 +37,15 @@ export default function Footer({ onContact }: Props) {
           </p>
           <ul className="space-y-2.5 text-sm">
             <li>
-              <a href="mailto:hello@fly4media.com" className="hover:text-foreground/70 transition-colors">
+              <a href="mailto:hello@fly4media.com" data-cursor="hover" className="link-underline">
                 hello@fly4media.com
               </a>
             </li>
-            <li>Calgary · Alberta · Canada</li>
+            <li className="text-muted-foreground">Calgary · Alberta · Canada</li>
             <li>
-              <button onClick={onContact} className="underline underline-offset-4 hover:no-underline">
-                Start a project ↗
+              <button onClick={onContact} data-cursor="hover" className="group inline-flex items-center gap-1.5">
+                <span className="link-underline">Start a project</span>
+                <span className="link-arrow">↗</span>
               </button>
             </li>
           </ul>

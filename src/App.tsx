@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "@/components/fly4media/ScrollToTop";
+import Cursor from "@/components/fly4media/Cursor";
 import Index from "./pages/Index";
 import Work from "./pages/Work";
 import CaseStudy from "./pages/CaseStudy";
@@ -20,6 +21,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
+        <Cursor />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/work" element={<Work />} />

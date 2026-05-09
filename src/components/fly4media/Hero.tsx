@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import HeroMedia from "./HeroMedia";
+import { Button, LinkButton } from "./Button";
 import hero from "@/assets/hero-drone.jpg";
 
 interface Props {
@@ -38,20 +38,10 @@ export default function Hero({ onContact }: Props) {
           </p>
 
           <div className="mt-10 flex items-center gap-6 flex-wrap">
-            <Link
-              to="/work"
-              className="group inline-flex items-center gap-3 bg-foreground text-background px-6 py-3.5 text-sm font-medium hover:opacity-90 transition-opacity"
-            >
-              View our work
-              <span className="transition-transform group-hover:translate-x-0.5">↗</span>
-            </Link>
-            <button
-              onClick={onContact}
-              className="group inline-flex items-center gap-2 text-sm font-medium text-foreground"
-            >
+            <LinkButton to="/work">View our work</LinkButton>
+            <Button onClick={onContact} variant="ghost">
               Start a project
-              <span className="transition-transform group-hover:translate-x-0.5">↗</span>
-            </button>
+            </Button>
           </div>
         </div>
 
