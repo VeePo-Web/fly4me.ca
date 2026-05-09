@@ -12,13 +12,13 @@ const ITEMS = [
 export default function Capabilities() {
   const ref = useReveal<HTMLDivElement>();
   return (
-    <section className="bg-foreground text-background py-24 md:py-40">
+    <section className="bg-foreground text-background py-section">
       <div ref={ref} className="reveal container-x grid grid-cols-1 md:grid-cols-12 gap-10">
         <div className="md:col-span-4">
-          <p className="text-[11px] uppercase tracking-[0.25em] text-background/50 mb-6">
+          <p className="t-eyebrow text-background/50 mb-6">
             Capabilities
           </p>
-          <h2 className="text-3xl md:text-4xl font-medium tracking-[-0.03em] leading-[1.1] text-balance">
+          <h2 className="t-headline-2">
             Built for productions that can&rsquo;t miss the shot.
           </h2>
         </div>
@@ -26,9 +26,9 @@ export default function Capabilities() {
           {ITEMS.map((item, i) => (
             <li
               key={item}
-              className="flex items-baseline gap-4 border-t border-background/15 pt-5 text-base md:text-lg"
+              className="flex items-baseline gap-4 border-t border-background/15 pt-5 t-body"
             >
-              <span className="text-[10px] uppercase tracking-[0.25em] text-background/50 tabular-nums">
+              <span className="t-micro text-background/50 tabular-nums">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span className="text-pretty">{item}</span>

@@ -39,13 +39,13 @@ export default function ServiceFeature({
           </div>
         </div>
         <div className="md:col-span-6">
-          <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground mb-5">
+          <p className="t-eyebrow text-muted-foreground mb-5">
             {number}
           </p>
-          <h3 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-[-0.035em] leading-[1.02] mb-6 text-balance">
+          <h3 className="t-headline-1 mb-6">
             {title}
           </h3>
-          <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-md text-pretty">
+          <p className="t-lede text-muted-foreground max-w-md">
             {desc}
           </p>
         </div>

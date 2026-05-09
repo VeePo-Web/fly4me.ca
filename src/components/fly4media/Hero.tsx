@@ -24,10 +24,10 @@ export default function Hero({ onContact }: Props) {
 
       <div className="relative container-x pt-32 md:pt-40 pb-20 min-h-[100dvh] flex flex-col justify-between">
         <div className="max-w-3xl animate-fade-up">
-          <p className="text-[11px] uppercase tracking-[0.28em] text-foreground/60 mb-6 md:mb-8">
+          <p className="t-eyebrow text-foreground/60 mb-6 md:mb-8">
             A cinematic perspective studio
           </p>
-          <h1 className="text-[44px] leading-[1.02] sm:text-6xl md:text-7xl lg:text-[88px] font-medium tracking-[-0.04em] text-foreground text-balance">
+          <h1 className="t-display-1 wrap-editorial text-foreground">
             We make brands,
             <br />
             places, and stories
@@ -35,7 +35,7 @@ export default function Hero({ onContact }: Props) {
             worth looking up at.
           </h1>
 
-          <p className="mt-8 max-w-md text-base md:text-lg text-foreground/70 leading-relaxed text-pretty">
+          <p className="t-lede mt-8 max-w-md text-foreground/70">
             Aerial cinematography for the brands and destinations that
             understand presentation is positioning.
           </p>
@@ -48,7 +48,7 @@ export default function Hero({ onContact }: Props) {
           </div>
         </div>
 
-        <div className="hidden md:flex items-end justify-between text-xs uppercase tracking-[0.22em] text-foreground/60">
+        <div className="hidden md:flex items-end justify-between t-micro text-foreground/60">
           <span>Fly4MEdia / 2026</span>
           <span className="text-right leading-relaxed">
             Based in Alberta, Canada

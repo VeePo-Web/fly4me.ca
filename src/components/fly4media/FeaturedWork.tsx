@@ -12,14 +12,14 @@ const LAYOUTS = [
 export default function FeaturedWork() {
   const titleRef = useReveal<HTMLDivElement>();
   return (
-    <section id="work" className="bg-background py-24 md:py-40">
+    <section id="work" className="bg-background py-section">
       <div className="container-x">
         <div ref={titleRef} className="reveal grid grid-cols-1 md:grid-cols-12 gap-y-10 mb-16 md:mb-24">
-          <p className="md:col-span-3 text-[11px] uppercase tracking-[0.25em] text-muted-foreground">
+          <p className="md:col-span-3 t-eyebrow text-muted-foreground">
             Featured Work
           </p>
           <div className="md:col-span-6">
-            <h2 className="text-4xl md:text-6xl font-medium tracking-[-0.035em] leading-[1.02] text-balance">
+            <h2 className="t-headline-1 wrap-editorial">
               Visual stories
               <br />
               from above.
@@ -69,10 +69,10 @@ function ProjectCard({ project, className }: { project: Project; className: stri
       </div>
       <div className="mt-5 flex items-baseline justify-between gap-6">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground mb-1.5">
+          <p className="t-eyebrow text-muted-foreground mb-1.5">
             {project.number} — {project.category}
           </p>
-          <h3 className="text-xl md:text-2xl font-medium tracking-tight">
+          <h3 className="t-headline-3">
             <span className="link-underline">{project.title}</span>
           </h3>
         </div>
