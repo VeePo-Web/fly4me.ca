@@ -35,8 +35,8 @@ function GalleryImage({
   const aspect =
     ratio === "wide" ? "aspect-[16/9]" : ratio === "portrait" ? "aspect-[4/5]" : "aspect-square";
   return (
-    <div ref={ref} className={`reveal ${layout}`}>
-      <div className={`overflow-hidden bg-secondary ${aspect}`}>
+    <div ref={ref} className={`reveal group ${layout}`}>
+      <div className={`media-frame ${aspect}`}>
         <img
           src={src}
           alt={alt}
@@ -44,7 +44,7 @@ function GalleryImage({
           decoding="async"
           width={ratio === "wide" ? 1920 : 1280}
           height={ratio === "wide" ? 1080 : 1600}
-          className="w-full h-full object-cover"
+          className="media-img"
         />
       </div>
     </div>

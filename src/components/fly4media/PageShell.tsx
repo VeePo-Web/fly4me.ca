@@ -3,6 +3,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import ContactModal from "./ContactModal";
 import { usePageEnter } from "@/hooks/usePageEnter";
+import { useScrollVelocity } from "./useScrollVelocity";
 
 type ChildArg = { openContact: () => void };
 
@@ -15,6 +16,7 @@ export default function PageShell({ children, showFloating = true }: Props) {
   const [open, setOpen] = useState(false);
   const openContact = () => setOpen(true);
   usePageEnter();
+  useScrollVelocity();
 
   const rendered = typeof children === "function" ? children({ openContact }) : children;
 
@@ -29,6 +31,7 @@ export default function PageShell({ children, showFloating = true }: Props) {
           onClick={openContact}
           aria-label="Start a project"
           data-cursor="hover"
+          data-magnetic
           className="btn-primary group fixed bottom-5 right-5 md:bottom-8 md:right-8 z-40 !px-5 !py-3 md:!px-6 md:!py-3.5 text-xs md:text-sm rounded-full"
         >
           <span>Start a project</span>

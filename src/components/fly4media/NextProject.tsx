@@ -10,10 +10,10 @@ export default function NextProject({ next }: { next: Project }) {
         ref={ref as never}
         to={`/work/${next.slug}`}
         data-cursor="hover"
-        className="reveal group block container-x py-20 md:py-32 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1"
+        className="reveal group block container-x py-20 md:py-32 transition-transform duration-500 ease-[var(--ease-out-soft)] hover:-translate-y-1"
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-end">
-          <div className="md:col-span-7">
+          <div className="md:col-span-7 media-meta">
             <p className="t-eyebrow text-muted-foreground mb-5">
               Next Project
             </p>
@@ -25,7 +25,7 @@ export default function NextProject({ next }: { next: Project }) {
             </p>
           </div>
           <div className="md:col-span-5">
-            <div className="overflow-hidden bg-secondary aspect-[16/10]">
+            <div className="media-frame aspect-[16/10]">
               <img
                 src={next.heroImage}
                 alt={next.title}
@@ -33,7 +33,7 @@ export default function NextProject({ next }: { next: Project }) {
                 decoding="async"
                 width={1920}
                 height={1200}
-                className="img-zoom w-full h-full object-cover"
+                className="media-img"
               />
             </div>
           </div>
