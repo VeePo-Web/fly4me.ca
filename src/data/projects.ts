@@ -158,25 +158,40 @@ export const projects: Project[] = [
     number: "04",
     title: "Field & Frequency",
     category: "Industrial",
-    client: "TransAlta Renewables",
+    client: "Private commission",
     location: "Southern Alberta",
-    year: "2024",
-    services: ["Aerial Documentation", "Industrial Inspections", "Commercial Campaigns"],
-    tagline: "A renewable-energy estate, documented at the scale it deserves.",
+    year: "2026",
+    services: ["Aerial Cinematography", "Industrial Documentation", "Brand Films"],
+    tagline:
+      "A working landscape, framed at the scale it actually operates at.",
     challenge:
-      "Renewable infrastructure was being communicated as engineering — accurate, technical, and emotionally invisible to the public it served.",
+      "Industrial sites are usually documented for compliance — flat, top-down, evidentiary. The land they sit in disappears, and so does any sense of the human decisions that shaped them.",
     perspectiveShift:
-      "We framed the estate as landscape architecture. The same turbines, photographed from above, became something closer to a sculpture garden — purposeful, patient, beautiful.",
+      "We treated the site as terrain instead of inventory. Held altitude long enough for the geometry to register, dropped low enough for the surface to read as ground, and let the rhythm between the two do the talking.",
     story:
-      "Two weeks across three sites, alternating between editorial coverage for the brand campaign and high-resolution inspection passes for the engineering team. The same drone, two completely different mandates, one consistent visual language.",
+      "A single winter morning, three passes. One high and slow to register the pattern of the work against the prairie. Two lower traverses to register texture — the seams in the snow, the lines in the dirt, the quiet repetition of something built to last decades.",
     impact:
-      "The brand stopped defending its presence in the landscape and started being celebrated as part of it.",
-    outcome: "Adopted as the visual standard for the brand's 2025 reporting.",
-    cardImage: work4,
-    heroImage: csFieldHero,
+      "The same site that read as infrastructure on a survey began reading as place on a screen.",
+    outcome:
+      "Carried into the brand's 2026 internal and partner-facing reporting.",
+    cardImage: "/work/field/field-1-poster.jpg",
+    cardVideoSources: [{ src: "/work/field/field-1.mp4", type: "video/mp4" }],
+    cardObjectPosition: "center",
+    heroImage: "/work/field/field-1-poster.jpg",
+    heroVideoSources: [{ src: "/work/field/field-1.mp4", type: "video/mp4" }],
     gallery: [
-      { src: csField1, alt: "Top-down of a solar farm geometric pattern", ratio: "wide" },
-      { src: csField2, alt: "Single white wind turbine against deep blue sky", ratio: "portrait" },
+      {
+        src: "/work/field/field-2-poster.jpg",
+        alt: "Aerial pass over a working southern Alberta site at winter light",
+        ratio: "wide",
+        videoSources: [{ src: "/work/field/field-2.mp4", type: "video/mp4" }],
+      },
+      {
+        src: "/work/field/field-3-poster.jpg",
+        alt: "Low-altitude traverse across the surface of a southern Alberta industrial estate",
+        ratio: "portrait",
+        videoSources: [{ src: "/work/field/field-3.mp4", type: "video/mp4" }],
+      },
     ],
   },
 ];
