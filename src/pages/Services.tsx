@@ -84,13 +84,13 @@ export default function Services() {
               Services
             </p>
             <h1 className="t-display-2 wrap-editorial wrap-editorial-mobile-off max-w-5xl animate-fade-up">
-              Cinematic perspective,
+              Not deliverables.
               <br />
-              engineered to be felt.
+              Tools for shifting perception.
             </h1>
             <p className="t-lede mt-10 max-w-xl text-muted-foreground">
-              Every engagement begins with the same question: what should this
-              be perceived as?
+              Every brief starts in the same place — the question you're already
+              asking yourself: what should this be perceived as?
             </p>
           </section>
 
