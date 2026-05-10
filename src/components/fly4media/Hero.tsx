@@ -21,6 +21,9 @@ export default function Hero({ onContact }: Props) {
           { src: "/hero/hero-drone.webm", type: "video/webm" },
           { src: "/hero/hero-drone.mp4", type: "video/mp4" },
         ]}
+        nextSources={[
+          { src: "/hero/dji-0398.mp4", type: "video/mp4" },
+        ]}
       />
       <div
         className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/30 to-transparent"
