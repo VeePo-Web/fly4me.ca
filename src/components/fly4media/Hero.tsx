@@ -10,7 +10,7 @@ export default function Hero({ onContact }: Props) {
   return (
     <section
       id="top"
-      className="relative min-h-[100dvh] w-full overflow-hidden bg-secondary"
+      className="relative w-full overflow-hidden bg-secondary h-[100svh] md:h-[100dvh] max-h-[100dvh]"
     >
       <HeroMedia
         image={hero}
@@ -27,12 +27,12 @@ export default function Hero({ onContact }: Props) {
         aria-hidden
       />
 
-      <div className="relative container-x pt-32 md:pt-40 pb-20 min-h-[100dvh] flex flex-col justify-between">
-        <div className="max-w-3xl animate-fade-up">
-          <p className="t-eyebrow text-foreground/60 mb-6 md:mb-8">
+      <div className="relative container-x h-full hero-pt hero-pb flex flex-col">
+        <div className="flex-1 min-h-0 flex flex-col justify-center max-w-3xl animate-fade-up">
+          <p className="hero-eyebrow t-eyebrow text-foreground/60 mb-4 md:mb-6">
             A cinematic perspective studio
           </p>
-          <h1 className="t-display-1 wrap-editorial text-foreground t-reveal-track">
+          <h1 className="hero-display wrap-editorial text-foreground t-reveal-track">
             We make brands,
             <br />
             places, and stories
@@ -40,12 +40,12 @@ export default function Hero({ onContact }: Props) {
             worth looking up at.
           </h1>
 
-          <p className="t-lede gap-lede max-w-md text-foreground/70 measure">
+          <p className="hero-lede hero-gap-lede max-w-md text-foreground/70 measure">
             Aerial cinematography for the brands and destinations that
             understand presentation is positioning.
           </p>
 
-          <div className="mt-10 flex items-center gap-6 flex-wrap">
+          <div className="hero-gap-cta flex items-center gap-6 flex-wrap">
             <LinkButton to="/work">View our work</LinkButton>
             <Button onClick={onContact} variant="ghost">
               Start a project
@@ -53,7 +53,7 @@ export default function Hero({ onContact }: Props) {
           </div>
         </div>
 
-        <div className="hidden md:flex items-end justify-between t-micro text-foreground/60">
+        <div className="hidden md:flex items-end justify-between t-micro text-foreground/60 shrink-0">
           <span>Fly4MEdia / 2026</span>
           <span className="text-right">
             Based in Alberta, Canada
