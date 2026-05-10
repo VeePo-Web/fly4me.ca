@@ -15,56 +15,56 @@ const SERVICES = [
   {
     number: "01",
     title: "Aerial Cinematography",
-    desc: "Cinematic perspectives that change how a brand is experienced — patient camera moves, considered framing, every time.",
+    desc: "For the brand that's tired of looking like everyone else from above. Patient camera moves, considered framing, and the discipline to wait for the frame that earns the cut.",
     image: work1,
     alt: "Aerial cinematography over mountain road",
   },
   {
     number: "02",
     title: "FPV Drone Production",
-    desc: "Immersive movement that turns a moment into a memory — single-shot reveals and choreographed brand films.",
+    desc: "When a single shot has to do the work of an entire scene. Choreographed, immersive, and built to be the moment the room goes quiet.",
     image: csLake2,
     alt: "FPV drone over alpine lake",
   },
   {
     number: "03",
     title: "Tourism & Destination Films",
-    desc: "Films that translate a landscape into longing — without the cliché.",
+    desc: "Built for the marketing lead who can't run another helicopter-shot-over-the-Rockies cliché. Films that turn a place into a feeling — and a feeling into a booking.",
     image: work1,
     alt: "Tourism aerial across the Rockies",
   },
   {
     number: "04",
     title: "Commercial Brand Campaigns",
-    desc: "End-to-end production built around a single question: what should this brand be perceived as?",
+    desc: "End-to-end production for creative directors who think in story arcs, not shot lists. We start every brief with one question — what should this brand be perceived as — and reverse-engineer the campaign from there.",
     image: csField2,
     alt: "Commercial wind turbine campaign",
   },
   {
     number: "05",
     title: "Real Estate Cinematics",
-    desc: "Visual storytelling that turns properties into destinations — and listings into invitations.",
+    desc: "For the listing that deserves a launch, not a tour. We frame the property the way the buyer is going to remember it — as a destination, not a transaction.",
     image: work2,
     alt: "Mountain home architectural aerial",
   },
   {
     number: "06",
     title: "Industrial Aerial Documentation",
-    desc: "Precision passes that reframe infrastructure as landscape — for engineering, brand, and report alike.",
+    desc: "Engineering precision with cinematic restraint. Footage that holds up in the technical report and earns its place in the annual review.",
     image: work4,
     alt: "Industrial aerial documentation",
   },
   {
     number: "07",
     title: "Social Media Visual Campaigns",
-    desc: "Vertical-first cuts engineered for the feed — without sacrificing the cinematic master.",
+    desc: "Vertical-first cuts engineered for the scroll, mastered for the boardroom. The same story, sized to land everywhere it lives.",
     image: csCanmore1,
     alt: "Social campaign cinematography",
   },
   {
     number: "08",
     title: "Creative Direction",
-    desc: "Shot listing, scouting, and the discipline of deciding what not to film. The work before the work.",
+    desc: "Shot lists, location scouts, and the harder discipline of deciding what not to film. The work before the work — where most of the cinematic actually happens.",
     image: work3,
     alt: "Top-down lake creative direction",
   },
@@ -84,13 +84,13 @@ export default function Services() {
               Services
             </p>
             <h1 className="t-display-2 wrap-editorial wrap-editorial-mobile-off max-w-5xl animate-fade-up">
-              Cinematic perspective,
+              Not deliverables.
               <br />
-              engineered to be felt.
+              Tools for shifting perception.
             </h1>
             <p className="t-lede mt-10 max-w-xl text-muted-foreground">
-              Every engagement begins with the same question: what should this
-              be perceived as?
+              Every brief starts in the same place — the question you're already
+              asking yourself: what should this be perceived as?
             </p>
           </section>
 
@@ -119,7 +119,7 @@ export default function Services() {
               <>
                 Some stories deserve
                 <br />
-                to be seen from above.
+                a different angle.
               </>
             }
           />
