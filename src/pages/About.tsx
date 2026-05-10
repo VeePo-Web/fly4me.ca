@@ -73,14 +73,13 @@ function Philosophy() {
         <div className="md:col-span-9 max-w-3xl space-y-8">
           <p className="t-headline-2">
             Perception precedes value. How something is seen decides how it is
-            felt — and how it is remembered.
+            felt — and what gets remembered after the room empties.
           </p>
           <p className="t-lede text-muted-foreground">
-            Restraint is the loudest creative choice we make. The strongest
-            visual is rarely the loudest one, and the most cinematic frame is
-            usually the one we waited an hour longer for. We treat every
-            decision as an edit — what we leave out matters as much as what
-            we keep.
+            Restraint is the loudest creative choice we make — and the one
+            that survives the boardroom. The strongest visual is rarely the
+            loudest one. The frame your CMO actually remembers is usually the
+            one we waited an hour longer for, then cut everything else around.
           </p>
           <p className="t-lede text-muted-foreground">
             Altitude is a discipline. We started in Alberta, where the

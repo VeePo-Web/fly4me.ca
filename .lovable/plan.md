@@ -1,81 +1,66 @@
-# Copy refinement pass — start with Services, then About
+# Page 2 — About: targeted copy lifts
 
-The current language is already strong (editorial, restrained, perception-first). The biggest gain isn't a tonal change — it's **specificity for the ideal customer**. Right now most lines describe what the work *is*. They should describe what the work *does for a specific person staring at a brief at 11pm on a Tuesday*.
-
-I'll do this one page at a time, section by section, preserving every visual element. Starting with **Services** (biggest delta), then **About**, then Home/Work in later passes.
+Services is shipped. Now About. The page is already strong; this is a precision pass, not a rewrite. Three small surgical lifts, no layout changes.
 
 ---
 
-## Ideal customer (working hypothesis — confirm or correct before I rewrite)
+## Page-level theme
 
-The decisions are made by one of three people:
+About already has the strongest line on the site (*"We believe perspective changes everything."*). Everything below it should earn that promise — by **moving the camera off us and onto the moment the customer's brief lands differently than they expected.**
 
-1. **Tourism / destination marketing leads** at DMOs, lodges, ski resorts, parks — need footage that turns a place into longing without falling into the helicopter-shot-over-Banff cliché.
-2. **Brand & creative directors** at agencies and in-house teams — need an aerial partner who thinks in story arcs, not shot lists, and won't embarrass them in front of a client.
-3. **Property / development marketers** (luxury real estate, hospitality, large-scale infrastructure) — need cinematic that elevates the asset from "listing" to "destination."
-
-Across all three: **they're not buying drone footage. They're buying the look on their stakeholder's face when the cut comes back better than the brief.**
-
-Every line on Services should land somewhere on that emotional map.
+Right now the page is 90% about *our* discipline (we wait, we restrain, we listen). That's good — but we can make 30% of it about *their* relief, *their* stakeholder meeting, *their* fear that the cut won't land. That's the shift.
 
 ---
 
-## PAGE 1 — Services
+## Sections
 
-### Page-level theme (the narrative spine)
+### 1. Hero (`src/pages/About.tsx` lines 33–40)
+- **Eyebrow** "Studio — About" → keep, it's clean.
+- **H1** "We believe perspective changes everything." → **leave verbatim.** This is the sanctioned slogan placement and it's perfect.
 
-> *Most aerial work answers "what did you film?" Ours answers "what do you want them to feel?" These aren't deliverables. They're tools for shifting how a place, a property, or a brand is perceived.*
+No edits.
 
-Every service block becomes a perception transformation: **from how the subject is seen today → to how it's seen after we shoot it.** Same structure, eight times, so the page reads like a thesis instead of a menu.
+### 2. Philosophy block (`src/pages/About.tsx` lines 65–94)
+Three paragraphs today. The structure stays. The middle paragraph gets reworked to put the customer in frame.
 
-### Sections to rewrite
+- **¶1 (headline statement)** — keep the bones; tighten the second sentence so the rhythm punches harder.
+- **¶2 (restraint)** — currently all about *our* discipline. Rewrite so it's about what restraint *gives the client* — the shot that survives the boardroom, the frame the CMO actually remembers.
+- **¶3 (Alberta / patience)** — keep almost as-is; this is the founder-origin paragraph and its quietness is the point. Light polish only.
 
-**Hero (lines 82–95)**
-- Eyebrow: keep "Services"
-- H1: keep the visual rhythm; sharpen the line so it names the customer's stake, not ours
-- Lede: tighten — make the question feel like the question *they're already asking themselves*
+### 3. Process list (`src/components/fly4media/ProcessList.tsx` lines 3–8)
+Today each step explains what *we do*. Rewrite each `desc` so it names the **anxiety it removes** — the unspoken fear in the client's head at that stage.
 
-**8 service cards (SERVICES array, lines 14–71)**
-Each card gets:
-- Title — kept (visual layout depends on length parity)
-- Description — rewritten to a strict pattern: *one line of perception transformation + one line of proof or specificity.* No more generic "cinematic perspectives that change how a brand is experienced."
+- **01 Discovery** — currently "we listen first" → reframe as the moment they realise we actually got the brief, not just heard it.
+- **02 Creative Direction** — currently "every frame composed before the drone leaves the ground" → reframe as the certainty they can show the storyboard to a stakeholder without flinching.
+- **03 Production** — currently "patience to wait for the right light" → reframe as the absence of compromise on shoot day, even when weather goes sideways.
+- **04 Delivery** — currently "colour-graded master files… full archival" → reframe as the moment the cut lands and the room exhales.
 
-Specifics I'll add per service: a named situation (e.g., "shoulder-season campaigns," "pre-launch listings," "corporate ESG reports") so each card subtly addresses a different ideal-customer subtype.
+Headers (Discovery / Creative Direction / Production / Delivery) stay — they're scannable nouns and the layout depends on them.
 
-**Final CTA (lines 116–125)**
-- Heading already strong — may sharpen "from above" → something less literal so it lands as positioning, not product
+The section header "Four steps. Nothing wasted." also stays — it's already perfect.
 
-### Out of scope for this page
-- No layout/spacing/image changes
-- No new sections
-- Slogan stays sacred — referenced through perception language, not repeated
+### 4. Capabilities block (`src/components/fly4media/Capabilities.tsx` lines 3–10)
+6 list items today, all factual checkboxes. The block's job is **trust**, so most of it should stay factual. But all six reading like a spec sheet flattens the page. Lift two so the panel has a heartbeat.
 
----
+- Keep factual: "Transport Canada — Advanced RPAS", "Insured commercial operations", "Cinema-grade aerial drone systems", "Stabilised ground & gimbal workflows"
+- Lift with voice: "FPV cinematic platforms" → name what FPV unlocks for the brief, not what the gear is. "Alberta-based, available worldwide" → keep the geography but make it a stance, not a shipping note.
+- Section header "Built for productions that can't miss the shot." → keep, it's load-bearing.
 
-## PAGE 2 — About (next pass, after Services lands)
-
-Already very strong. Targeted lifts only:
-
-- **Hero H1** — keep verbatim ("We believe perspective changes everything.") This is one of the two sanctioned slogan placements.
-- **Philosophy block (lines 73–90)** — the three paragraphs read beautifully but talk about *us*. I'll rework one of the three to bring in the customer's perspective explicitly (the brief, the stakeholder, the moment the cut lands). Keeps the editorial voice; adds emotional skin in the game.
-- **Process steps (ProcessList)** — descriptions are functional. I'll lift each step's description to name the customer's anxiety it eliminates (e.g., Discovery isn't "we listen first," it's the line that quiets the fear of "do these guys actually get it").
-- **Capabilities block** — the 6 list items are factual checkboxes. I'll keep 5 of them factual (they earn trust) and rewrite 1–2 to carry a hint of voice so the panel doesn't read as a spec sheet.
-- **Final CTA heading** — already razor sharp; leave it.
+### 5. Final CTA (`src/pages/About.tsx` lines 48–58)
+- Eyebrow "Let's work together" → fine, but generic. Sharpen toward perception/positioning.
+- Heading "Built for brands that understand presentation is positioning." → already razor-sharp. **Leave verbatim.**
 
 ---
 
-## What I need from you before writing
+## Out of scope
 
-Two quick confirmations so the rewrite lands on the right person:
+- Page meta title (already strong)
+- Hero image, layout, spacing, any visual element
+- Adding new sections (no team bios, no timeline — the page's restraint is the point)
+- The slogan itself — used once, on the hero, exactly as planned
 
-1. **Ideal customer:** is the tourism/agency/property triangle right, or is one of those much more important than the others? (If tourism is 80% of revenue, the page tilts that way.)
-2. **One real proof point** I can weave in — even one number, one named place, or one client type ("worked with Travel Alberta," "shot for the Banff Centre," "300+ commercial flights logged"). Specificity is what separates excellent from generic; I don't want to invent it.
+---
 
-If you'd rather I just start and you'll edit, say "go" and I'll proceed with the hypothesis above and leave clear `[CONFIRM:]` brackets where invented specifics would live.
+## After this lands
 
-## Order of operations
-
-1. You confirm/correct customer + proof points (or say "go")
-2. I rewrite Services — hero, 8 cards, CTA — in one focused pass
-3. You review live in preview; we iterate
-4. Move to About with the same rhythm
+Recommended next page: **Home** (`/`). It's the front door and currently does the heaviest lift in fewest words — the biggest opportunity is sharpening Hero + the BrandStatement section so the perception thesis lands in 5 seconds.
