@@ -3,6 +3,10 @@ import csCanmore1 from "@/assets/cs-canmore-1.jpg";
 import csCanmore2 from "@/assets/cs-canmore-2.jpg";
 import work2 from "@/assets/work-02-architecture.jpg";
 
+import canmoreBarkMacro from "@/assets/cs/canmore/bark-macro.jpg";
+import canmoreListingFrame from "@/assets/cs/canmore/typical-listing-frame.jpg";
+import canmoreDuskTrack from "@/assets/cs/canmore/dusk-access-track.jpg";
+
 import csNorthernHero from "@/assets/cs-northern-roads-hero.jpg";
 import csNorthern1 from "@/assets/cs-northern-1.jpg";
 import csNorthern2 from "@/assets/cs-northern-2.jpg";
@@ -32,6 +36,30 @@ export interface GalleryItem {
   objectPosition?: string;
 }
 
+export type SupportingPlacement =
+  | "after-opportunity"
+  | "after-problem"
+  | "after-shift"
+  | "after-execution"
+  | "after-outcome";
+
+export interface SupportingImage {
+  src: string;
+  alt: string;
+  caption?: string;
+  ratio: "wide" | "portrait" | "square";
+  placement: SupportingPlacement;
+}
+
+export interface Narrative {
+  opportunity: { headline: string; body: string };
+  problem: { headline: string; body: string };
+  perspectiveShift: { headline: string; body: string };
+  execution: { headline: string; body: string };
+  outcome: { headline: string; body: string };
+  takeaway: string;
+}
+
 export interface Project {
   slug: string;
   number: string;
@@ -53,6 +81,9 @@ export interface Project {
   heroImage: string;
   heroVideoSources?: VideoSource[];
   gallery: GalleryItem[];
+  /** Optional editorial narrative — when present, CaseStudy renders the upgraded layout */
+  narrative?: Narrative;
+  supportingImages?: SupportingImage[];
 }
 
 const canmore1Mp4 = "/work/canmore/canmore-1.mp4";
@@ -98,6 +129,53 @@ export const projects: Project[] = [
         alt: "Low-altitude pass through a stand of pines on a private Canmore acreage at dusk",
         ratio: "portrait",
         videoSources: [{ src: canmore2Mp4, type: "video/mp4" }],
+      },
+    ],
+    narrative: {
+      opportunity: {
+        headline: "A Place, Not A Parcel.",
+        body: "A private acreage outside Canmore — pine, larch, snowline, and a long view across the Bow Valley. The brief wasn't to sell square footage. It was to make a buyer feel they'd already arrived.",
+      },
+      problem: {
+        headline: "What Listings Leave Out.",
+        body: "Surveys show shape. Listing photos show weather. Neither shows what it feels like to stand under the trees as the light drops. The property kept reading as a polygon — and the people who would actually fall in love with it were scrolling past.",
+      },
+      perspectiveShift: {
+        headline: "Two Frames. One Property.",
+        body: "We stopped framing acreage as inventory. One vantage from above the canopy, registering scale and snowline. One low pass through the trunks at human height, registering quiet. Together they give a buyer the feeling of the land before they ever drive in.",
+      },
+      execution: {
+        headline: "Held Long Enough To Notice.",
+        body: "A single early-spring evening. Two passes. No music swell, no quick cuts, no listing-video tricks. The camera holds long enough for the place to do the work — and the work, on a property like this, is mostly atmosphere.",
+      },
+      outcome: {
+        headline: "Buyers Stopped Asking About Lot Lines.",
+        body: "Qualified showings booked inside the first week. The conversation moved from acreage to atmosphere — from how big it is to what it feels like to be there.",
+      },
+      takeaway:
+        "A property is sold by the polygon. A place is sold by the feeling. We built the second.",
+    },
+    supportingImages: [
+      {
+        src: canmoreBarkMacro,
+        alt: "Editorial macro of weathered lodgepole pine bark with a single resin bead, soft natural light",
+        caption: "Detail study — pine bark, resin, light.",
+        ratio: "portrait",
+        placement: "after-opportunity",
+      },
+      {
+        src: canmoreListingFrame,
+        alt: "Generic ground-level real-estate frame of an Alberta acreage driveway under flat overcast light",
+        caption: "What every other frame of this property looked like.",
+        ratio: "wide",
+        placement: "after-problem",
+      },
+      {
+        src: canmoreDuskTrack,
+        alt: "Narrow gravel access track curving into pine and larch, blue-hour light, distant Bow Valley ridge",
+        caption: "Access track, blue hour — the property at the pace it actually lives at.",
+        ratio: "wide",
+        placement: "after-execution",
       },
     ],
   },

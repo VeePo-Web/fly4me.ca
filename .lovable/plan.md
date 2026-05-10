@@ -1,53 +1,106 @@
-## Add a fifth case study from the uploaded drone clip
+## Case Study 1 — *Among the Pines*: full editorial upgrade
 
-The upload is a 40s vertical 720×1280 H.264 clip (~15 MB) — a slow aerial chase of a pickup hauling a flatbed loaded with heavy equipment (skid steer) down a paved foothills road through aspen and pine in summer. It becomes project **05 — Hauling the Foothills**, a working-vehicle / industrial-on-the-move story. No existing card is replaced.
+Project 1 is the only one touched in this pass. The other four cases stay exactly as they are. Original media (`canmore-1.mp4`, `canmore-2.mp4`, posters) is preserved — every new visual is additive.
 
-### 1. Asset pipeline
+### 1. New narrative model on `Project` (additive, optional)
 
-Re-encode once, capture poster, output to `public/work/hauling/`:
+Extend `src/data/projects.ts` with optional fields so the new layout is opt-in per project. Existing projects without these fields continue to render with the current `CaseStudy.tsx` flow:
 
-- `hauling-1.mp4` — H.264 high, CRF 24, faststart, audio stripped, target ~5 MB
-- `hauling-1-poster.jpg` — frame at ~2s, quality 82, 720×1280
+```ts
+narrative?: {
+  opportunity: string;       // The Opportunity
+  problem: string;           // The Problem / Perception Gap
+  perspectiveShift: string;  // The Perspective Shift (signature)
+  execution: string;         // The Execution
+  outcome: string;           // The Outcome
+  takeaway: string;          // The Takeaway (closing insight)
+};
+supportingImages?: Array<{
+  src: string;               // imported asset
+  alt: string;
+  caption?: string;          // editorial micro-caption
+  ratio: "wide" | "portrait" | "square";
+  placement: "after-opportunity" | "after-problem" | "after-shift" | "after-execution" | "after-outcome";
+}>;
+heroEyebrow?: string;        // "01 — Real Estate · Canmore, Alberta"
+```
 
-Single clip is enough for card + hero + one gallery item (no second/third file uploaded). Gallery gets one wide tile reusing the same source — proven safe pattern; `IntersectionObserver` in `CinematicMedia` ensures only the in-view instance decodes.
+Populate only `Among the Pines` for now. Copy is rewritten in the Apple/Hormozi/Brunson register described — title-card headlines, no agency clichés, no slogan repetition.
 
-### 2. `src/data/projects.ts` — append project 05
+### 2. New page composition for project 1
 
-Append a new entry (do not touch existing four):
+Update `src/pages/CaseStudy.tsx` to render an enhanced flow when `project.narrative` exists, otherwise fall back to today's layout. New flow:
 
-- **slug:** `hauling-the-foothills`
-- **number:** `05`
-- **title:** `Hauling the Foothills`
-- **category:** `Commercial`
-- **client:** `Private commission`
-- **location:** `Foothills, Alberta`
-- **year:** `2026`
-- **services:** `Aerial Cinematography`, `Brand Films`, `Operations Storytelling`
-- **tagline:** *"A working day, framed at the scale of the country it moves through."*
-- **challenge / perspectiveShift / story / impact / outcome:** restrained editorial register matching Canmore + Field & Frequency. Theme: a single load on a single road becomes a portrait of capability, distance, and the country between job sites.
-- **cardImage / heroImage:** `/work/hauling/hauling-1-poster.jpg`
-- **cardVideoSources / heroVideoSources:** `[{ src: "/work/hauling/hauling-1.mp4", type: "video/mp4" }]`
-- **cardObjectPosition:** `"center"` (vertical footage already crops cleanly to the 4:5 card)
-- **gallery:** one wide tile — same poster + sources, ratio `"wide"`
+```text
+Hero (existing CaseStudyHero — unchanged)
+↓
+SnapshotMeta (existing CaseStudyMeta — Client / Location / Services / Year)
+↓
+NarrativeSection — "The Opportunity"          ← short lede
+   [supporting image: bark/needle texture, portrait]
+↓
+NarrativeSection — "What was missing"         ← Problem / Perception Gap
+   [supporting image: a typical real-estate-style ground frame, wide]
+↓
+PerspectiveShift — signature title-card section, oversized type
+   [original canmore-1 video — top-down canopy, full-bleed wide]
+↓
+Execution — two-column: copy + original canmore-2 video (low traverse)
+   [supporting image: gravel access track through pines at dusk, wide]
+↓
+Outcome — single-line oversized statement (Hormozi clarity), large whitespace
+↓
+Takeaway — closing insight, small editorial paragraph
+↓
+NextProject (existing — unchanged)
+```
 
-### 3. Layout arrays — extend by one entry each
+All new sections use the existing `.t-*` typography classes, `.py-section` rhythm, `useReveal` IntersectionObserver, and `media-frame` / `CinematicMedia` primitives. No new motion library, no extra runtime cost.
 
-Both `src/pages/Work.tsx` and `src/components/fly4media/FeaturedWork.tsx` ship a 4-entry `LAYOUTS` array. Without a fifth entry the new card falls back to `""` (full bleed). Append one asymmetric entry to each:
+### 3. New components (small, reusable across all 5 future passes)
 
-- `Work.tsx`: `"lg:col-span-6 lg:col-start-2 lg:mt-24"`
-- `FeaturedWork.tsx`: `"md:col-span-7 md:col-start-6 md:mt-16"`
+- `src/components/fly4media/CaseStudyNarrative.tsx` — generic beat renderer. Takes `eyebrow`, `headline`, `body`, optional `image` block. Two layout variants: `lede` (3/9 grid, restrained) and `statement` (oversized title-card).
+- `src/components/fly4media/CaseStudyPerspective.tsx` — the signature "Perspective Shift" section: full-bleed media (image *or* video via `CinematicMedia`), oversized headline overlaid below, single short paragraph.
+- `src/components/fly4media/CaseStudyTakeaway.tsx` — final insight: short editorial paragraph, generous whitespace, no CTA chrome.
 
-Keeps the editorial rhythm and prevents the new card from breaking the grid.
+These replace the current monolithic `CaseStudyStory` *only when* `project.narrative` is set. `CaseStudyStory` stays in the codebase for the four legacy projects.
 
-### 4. No component changes
+### 4. Supporting images — Nano Banana, project-specific, no people
 
-`CinematicMedia`, `FeaturedWork`, `Work`, `CaseStudyHero`, `CaseStudyGallery`, `CaseStudyStory`, `NextProject` already read everything we need. `getNextProject` cycles automatically — Field & Frequency now points to Hauling, Hauling points back to Among the Pines.
+Generate three images for *Among the Pines* via `imagegen--generate_image` (model `google/gemini-3.1-flash-image-preview`), saved under `src/assets/cs/canmore/`:
+
+1. `bark-macro.jpg` (portrait, 1024×1280) — *"Hyper-realistic editorial macro photograph of weathered lodgepole pine bark with a single fresh resin bead, soft natural diffused light, shallow depth of field, muted earthen palette, no people, no signage, no text, photographic, 35mm look, Canadian Rockies foothills."*
+2. `typical-listing-frame.jpg` (wide, 1920×1080) — *"Ordinary daytime ground-level real-estate photograph of an empty Alberta acreage driveway in flat overcast light, slightly clinical, accurate, neutral colors, no people, no cars, no text, no logos, photographic, 35mm look — feels generic and informational."* (Used in the "what was missing" beat to contrast against the cinematic frames.)
+3. `dusk-access-track.jpg` (wide, 1920×1080) — *"Cinematic editorial photograph of a narrow gravel access track curving into a stand of pine and larch on a private Canmore acreage, late blue-hour light, faint snow patches, soft ground mist, distant Bow Valley ridge silhouette, no people, no vehicles, no signage, no text, photographic, anamorphic feel, restrained and quiet."*
+
+All three: `transparent_background: false`, lazy-loaded, explicit width/height, `loading="lazy"`, `decoding="async"`, served via `<img>` (not videos) to keep payload small. Total added weight target: under 600 KB combined at JPG q82.
+
+### 5. Copy — *Among the Pines*
+
+Rewritten in title-card register. No "Perspective Changes Everything" verbatim — proven through structure:
+
+- **Eyebrow:** `01 — Real Estate · Canmore, Alberta · 2026`
+- **Tagline (hero, kept):** *"An Alberta acreage shown the way it actually feels — from above the canopy, and from inside the trees."*
+- **Opportunity headline:** *"A Place, Not A Parcel."*  Body: one short paragraph framing the property as a *place* a buyer walks into, not a polygon on a map.
+- **Problem headline:** *"What Listings Leave Out."*  Body: surveys show shape, listing photos show weather; neither shows what it feels like to stand under the pines.
+- **Perspective Shift headline (signature):** *"Two Frames. One Property."*  Body: one vantage from above the canopy registers scale and snowline; one low pass through the trunks registers quiet. Together they give a buyer the *feeling* of the land before they ever drive in.
+- **Execution headline:** *"Held Long Enough To Notice."*  Body: a single early-spring evening, two passes, no music swell, no quick cuts — the camera holds long enough for the place to do the work.
+- **Outcome headline:** *"Buyers Stopped Asking About Lot Lines."*  Body: showings booked inside the first week; the conversation moved from acreage to atmosphere.
+- **Takeaway:** *"A property is sold by the polygon. A place is sold by the feeling. We built the second."*
+
+### 6. Performance
+
+- Three new JPGs, lazy, with explicit dimensions → no CLS, no LCP impact (hero LCP unchanged).
+- No new fonts, no new dependencies, no new motion library.
+- `CinematicMedia` `IntersectionObserver` already pauses offscreen videos — adding a third on-page video instance is fine because still images, not videos, fill the new beats.
+- Existing `useReveal` shared observer covers new sections.
+
+### 7. Out of scope (case studies 2–5)
+
+Not touched in this pass. Their data, components, and pages remain unchanged. They'll be upgraded one at a time in subsequent passes using the same `narrative` + `supportingImages` model already in place — so future passes are pure data + asset additions.
 
 ### Verification
 
-- `/work` renders 5 cards in a coherent asymmetric grid; new card poster paints, video fades in once visible.
-- `/work/hauling-the-foothills` renders hero + story + 1 gallery tile + next-project link.
-- Home `FeaturedWork` shows the 5th tile without overlap.
-- Reduced-motion / Save-Data: poster only.
-- Network: single ~5 MB MP4; only in-view instance decodes.
-- Existing four projects untouched.
+- `/work/canmore-heights` shows: hero (existing video), meta strip, Opportunity + bark macro, Problem + listing-frame contrast, Perspective Shift signature with top-down canopy video, Execution with low-traverse video + dusk track image, Outcome statement, Takeaway, Next Project.
+- `/work/northern-roads`, `/work/above-the-lake`, `/work/field-and-frequency`, `/work/hauling-the-foothills` render exactly as today (legacy path).
+- Lighthouse: LCP unchanged, no new CLS, total transferred bytes for project 1 page +≤600 KB.
