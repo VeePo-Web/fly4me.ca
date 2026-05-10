@@ -7,6 +7,7 @@ import CTA from "@/components/fly4media/CTA";
 import { useReveal } from "@/components/fly4media/useReveal";
 import about from "@/assets/about-hero.jpg";
 import toby from "@/assets/toby-portrait.jpg";
+import tobyRidge from "@/assets/toby-ridge.jpg";
 
 export default function About() {
   useEffect(() => {
@@ -116,6 +117,23 @@ function Philosophy() {
             person. But the answer to your first email is
             still mine.
           </p>
+
+          <figure className="pt-6 lg:pt-10 max-w-md">
+            <div className="media-frame aspect-[4/5]">
+              <img
+                src={tobyRidge}
+                alt="Toby Rennick on a scree slope above a turquoise alpine lake in the Canadian Rockies"
+                width={1080}
+                height={1920}
+                loading="lazy"
+                decoding="async"
+                className="media-img object-[center_30%]"
+              />
+            </div>
+            <figcaption className="mt-4 t-eyebrow text-muted-foreground">
+              On location &mdash; Canadian Rockies
+            </figcaption>
+          </figure>
         </div>
       </div>
     </section>
