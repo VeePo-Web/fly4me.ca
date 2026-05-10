@@ -14,18 +14,18 @@ export default function FeaturedWork() {
   return (
     <section id="work" className="bg-background py-section">
       <div className="container-x">
-        <div ref={titleRef} className="reveal grid grid-cols-1 md:grid-cols-12 gap-y-10 mb-16 md:mb-24">
-          <p className="md:col-span-3 t-eyebrow text-muted-foreground">
+        <div ref={titleRef} className="reveal grid grid-cols-1 lg:grid-cols-12 gap-y-10 mb-16 md:mb-24">
+          <p className="lg:col-span-3 t-eyebrow text-muted-foreground">
             Featured Work
           </p>
-          <div className="md:col-span-6">
+          <div className="lg:col-span-6">
             <h2 className="t-headline-1 wrap-editorial">
               Proof,
               <br />
               not portfolio.
             </h2>
           </div>
-          <div className="md:col-span-3 md:flex md:items-end md:justify-end">
+          <div className="lg:col-span-3 lg:flex lg:items-end lg:justify-end">
             <Link
               to="/work"
               data-cursor="hover"
@@ -67,7 +67,7 @@ function ProjectCard({ project, className }: { project: Project; className: stri
           className="media-img"
         />
       </div>
-      <div className="media-meta mt-5 flex items-baseline justify-between gap-6">
+      <div className="media-meta mt-6 lg:mt-8 flex items-baseline justify-between gap-6">
         <div>
           <p className="t-eyebrow text-muted-foreground mb-1.5">
             {project.number} — {project.category}

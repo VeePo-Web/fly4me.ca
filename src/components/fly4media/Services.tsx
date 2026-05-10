@@ -14,18 +14,18 @@ export default function Services() {
   return (
     <section id="services" className="bg-foreground text-background py-section">
       <div className="container-x">
-        <div ref={headRef} className="reveal grid grid-cols-1 md:grid-cols-12 gap-y-10 mb-16 md:mb-24">
-          <p className="md:col-span-3 t-eyebrow text-background/50">
+        <div ref={headRef} className="reveal grid grid-cols-1 lg:grid-cols-12 gap-y-10 mb-16 md:mb-24">
+          <p className="lg:col-span-3 t-eyebrow text-background/50">
             What we do
           </p>
-          <div className="md:col-span-6">
+          <div className="lg:col-span-6">
             <h2 className="t-headline-1 wrap-editorial">
               Tools for shifting
               <br />
               perception.
             </h2>
           </div>
-          <div className="md:col-span-3 md:flex md:items-end md:justify-end">
+          <div className="lg:col-span-3 lg:flex lg:items-end lg:justify-end">
             <Link
               to="/services"
               className="group inline-flex items-center gap-2 t-nav text-background link-underline"
@@ -51,7 +51,7 @@ function ServiceRow({ n, title, desc }: { n: string; title: string; desc: string
   return (
     <li
       ref={ref}
-      className="reveal group border-b border-background/15 py-7 md:py-8 grid grid-cols-12 gap-6 items-baseline transition-colors hover:bg-background/[0.04]"
+      className="reveal group border-b border-background/15 py-7 md:py-8 lg:py-10 grid grid-cols-12 gap-6 items-baseline transition-colors hover:bg-background/[0.04]"
     >
       <span className="col-span-2 md:col-span-1 t-micro text-background/50">
         {n}

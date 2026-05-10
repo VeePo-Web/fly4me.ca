@@ -1,82 +1,79 @@
-# Branded Fly4MEdia email templates
+# Home page — precision formatting pass
 
-Right now the contact form sends one functional but unstyled HTML email to Toby. After this change, every contact submission will fire **two** branded emails — one to the submitter (a calm, editorial confirmation) and one to Toby (a fast-scan internal brief). Both share a single design system that mirrors the site: white background, near-black type, Inter/system sans, oversized restrained headlines, generous whitespace, hairline rules, and the slogan **"Perspective Changes Everything"** as the footer signature.
+The hero already breathes correctly (viewport-locked, fluid type, optical pacing). The issue across the rest of the page is **horizontal restraint** and **measure control on large displays**. On 1440 → 1920+, content currently stretches edge-to-edge inside `.container-x`, so headlines run wider than they should, services rows feel laterally stretched, and the page reads as "wider" rather than "more spacious." That's the single biggest gap between the hero and everything below it.
 
-Same architectural pattern the reference projects use: a single `_shared/email-templates.ts` module owning brand constants + composable HTML pieces, then `send-contact` just composes content and sends.
-
----
-
-## Files
-
-### 1. `supabase/functions/_shared/email-templates.ts` *(new)*
-
-Single source of truth. Exports:
-
-- `BRAND` — colors (`bg #ffffff`, `fg #0a0a0a`, `muted #6b6b6b`, `border #ececec`), `name: "Fly4MEdia"`, `slogan: "Perspective Changes Everything."`, `email`, `phone`, `phoneTel`, `website`, `fontStack` (Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif).
-- `escapeHtml(str)` — XSS-safe escaping.
-- `nl2br(str)` — preserves project-description line breaks.
-- `emailWrapper(content, preheaderText)` — full DOCTYPE wrapper, hidden preheader, outer table on `#ffffff`, 600px max-width container, 48px outer padding, MSO-friendly.
-- `emailHeader({ eyebrow })` — small uppercase wordmark `FLY4MEDIA` in tracked-out caps (top-left, no logo image, keeps it pure-typographic like the site) + an eyebrow line (e.g., `New enquiry` or `Thanks for reaching out`).
-- `displayHeading(text)` — large 32–36px, weight 500, tight tracking, near-black.
-- `bodyText(text)` — 15px, line-height 1.65, `#3a3a3a`.
-- `metaRow(label, value, opts?)` — labelled detail row used for Email/Phone (uppercase 11px label, 14px value, hairline border-bottom).
-- `quoteBlock(text)` — used in Toby's email for the project description: small "Project" eyebrow + preserved-newline body inside a 24px-padded block with a 1px top rule.
-- `divider()` — 1px hairline `#ececec` with 32px vertical room.
-- `ctaButton(label, href)` — outlined button (1px `#0a0a0a` border, 14px tracked uppercase label) — used in the submitter email to link back to `/work`.
-- `emailFooter()` — closes every email with the slogan as a centered, lightly-tracked statement, then a small line of contact details (email + phone) and the year. Renders the slogan in the same display weight used on-site so it reads as the brand sign-off, not a tagline.
-
-All values inline-styled. No external CSS, no `<style>` blocks beyond the MSO conditional. Background is white only — no dark variants.
-
-### 2. `supabase/functions/send-contact/index.ts` *(refactor)*
-
-Keep the existing validation, insert, CORS, error handling, and the `onboarding@resend.dev` sender (per memory — root domain isn't verified in Resend yet). Changes:
-
-- Import from `../_shared/email-templates.ts`.
-- Build **two** HTML payloads via the shared composers:
-  - **Internal notification → `tobyrennick@gmail.com`**
-    - Subject: `New enquiry — {name}`
-    - Eyebrow: `New enquiry`
-    - Heading: `{name} wants to start a project.`
-    - Meta rows: Email (mailto), Phone (tel, only if provided)
-    - `quoteBlock` with the project description
-    - `reply_to: email` so Toby hits Reply and lands in the submitter's inbox
-  - **Submitter confirmation → `email`**
-    - Subject: `We've got your note — Fly4MEdia`
-    - Eyebrow: `Thanks for reaching out`
-    - Heading: `Your note landed with us, {firstName}.`
-    - Two short body paragraphs, in the studio voice:
-      1. Acknowledges the message arrived; says Toby will personally read it and reply within one business day.
-      2. Frames the wait as part of the craft — "We're probably out waiting for the right light. We'll be back at a screen soon." Closes by inviting them to browse recent work.
-    - `ctaButton("See recent work", "https://fly4me.ca/work")`
-    - `reply_to: "tobyrennick@gmail.com"` so any reply routes to Toby
-- Send both via `Promise.allSettled` so one failure doesn't block the other; log failures, still return `{ ok: true }` to the client (insert already succeeded).
-- Preheader text on each email (hidden inbox-preview line) — internal: "New enquiry from {name}"; submitter: "Toby will reply personally within one business day."
-
-### 3. No client-side changes
-
-The contact modal already POSTs name/email/phone/project. No schema changes, no migrations, no new secrets — `RESEND_API_KEY` is already configured.
+This pass is surgical: 7 files, no redesign, no new sections, no new dependencies. Same DOM, same tokens — refined containment and rhythm.
 
 ---
 
-## Visual direction (so it actually looks like Fly4MEdia)
+## The five changes that do 80% of the work
 
-- **Type lockup**: wordmark `FLY4MEDIA` in 11px tracked uppercase (`letter-spacing: 0.32em`) sitting alone at the top-left of the canvas — same restraint as the site header.
-- **Heading**: 32–36px, weight 500, tracking `-0.02em`, color `#0a0a0a`. One line of breathing room below it.
-- **Body**: 15px / 1.65 line-height, `#3a3a3a`. Muted detail labels at 11px uppercase, `letter-spacing: 0.18em`, color `#8a8a8a`.
-- **Rules**: 1px `#ececec`. Used to separate the meta block, the project quote, and the footer.
-- **Footer slogan**: centered, 16px, weight 500, tracking `-0.01em`, near-black — followed by a single 11px tracked line: `Fly4MEdia · Alberta, Canada · tobyrennick@gmail.com · 403 818 9686 · © {year}`.
-- **No logo image, no gradients, no colored buttons.** Pure typographic system. Renders identically in Gmail/Outlook/Apple Mail.
+### 1. Add a true global content ceiling
+The hero is allowed to be edge-to-edge because it's a cinematic plate. Every other section should sit inside a controlled editorial canvas. I'll add a max-width to `.container-x` so 1920px feels luxurious, not stretched.
+
+- `.container-x` → keep current padding (`px-6 md:px-10 lg:px-16`), add `max-w-[1680px] mx-auto`.
+- Result: at 1920, sections gain ~120px of architectural side margin automatically. At 1440 and below, no visible change.
+
+### 2. Headline measure control — kill the run-on display lines
+- **`BrandStatement`** is the worst offender: `t-headline-1` runs the full 9-column track. At 1600+ it wraps as a long stretched paragraph. Cap it with `max-w-[20ch] lg:max-w-[22ch]` and apply `wrap-editorial` with intentional `<br />` after "what it's worth." so the statement composes in two deliberate lines.
+- **`Services` headline** ("Tools for shifting / perception.") already uses `wrap-editorial` — leave alone.
+- **`FeaturedWork` headline** ("Proof, / not portfolio.") — leave alone, already restrained.
+- **`CTA` headline** — tighten `max-w-5xl` → `max-w-4xl` so the line break feels designed rather than incidental.
+
+### 3. Section rhythm — normalize to tokens, vary by intent
+Current rhythm is mostly correct. Two normalizations:
+- `CaseStudyTeaser` uses bespoke `py-24 md:py-40`. Switch to `py-section-lg` (already a fluid token, matches the cinematic moment).
+- `BrandStatement` stays `py-section-lg` (philosophical pause between Featured Work and Services — correct).
+- `FeaturedWork`, `Services` stay `py-section`.
+- `Divider` stays cinematic full-bleed (60vh / 85vh).
+- `CTA` stays `py-section-lg`.
+
+Result: the rhythm reads as `cinematic → editorial → pause → editorial → cinematic → editorial → pause`. Same intentional pacing as a film cut.
+
+### 4. Tablet (768–1023) — gate the 12-col splits at `lg`, not `md`
+Current grids flip to 12-col at `md:` (768px). On tablet portrait that means the 3/6/3 eyebrow/heading/link split pinches the heading to ~45% of available width — feels cramped. Fix by promoting the 12-col split to `lg:` (1024px) for all three section heads (`FeaturedWork`, `Services`), and let tablet portrait stack the eyebrow → heading → link with stronger vertical rhythm.
+
+- `FeaturedWork` heading grid: `md:grid-cols-12` → `lg:grid-cols-12` (and `md:col-span-*` → `lg:col-span-*`).
+- `Services` heading grid: same change.
+- `Services` row grid stays `md:grid-cols-12` (the row layout works at 768).
+- Tablet portrait result: heading gets full width with confident vertical pacing; tablet landscape (1024+) keeps the editorial 3-column split.
+
+### 5. Cardwork polish — the small ones that compound
+- **`FeaturedWork` cards**: `media-meta mt-5` → `mt-6 lg:mt-8`. The current 5-unit gap is too tight under a cinematic 4:5 plate.
+- **`FeaturedWork` cards**: confirm `gap-y-20 md:gap-y-32` stays — that vertical gap between staggered cards is correct.
+- **`CaseStudyTeaser` metadata**: `mt-10` → `mt-8 lg:mt-12` (tighter on tablet, more breath on desktop).
+- **`CaseStudyTeaser` headline**: add `text-balance max-w-3xl` so a long project title doesn't run wide on 1920.
+- **`Services` rows**: `py-7 md:py-8` → `py-7 md:py-8 lg:py-10` so each row breathes more on desktop.
+- **`CTA` button block**: `mt-14` → `mt-12 lg:mt-16`.
 
 ---
 
-## What I will *not* do
+## Files touched (7)
 
-- No new edge functions, no Lovable Email infra setup, no domain swap. We continue with the existing Resend path (already wired, sender stays `onboarding@resend.dev` until `fly4me.ca` is verified — which is a separate decision for you).
-- No DB schema changes.
-- No design changes anywhere on the site itself.
+1. `src/index.css` — add `max-w-[1680px] mx-auto` to `.container-x`. (1 line edit.)
+2. `src/components/fly4media/BrandStatement.tsx` — measure-cap the headline, add intentional `<br />`, keep `py-section-lg`.
+3. `src/components/fly4media/FeaturedWork.tsx` — promote heading grid to `lg:grid-cols-12`, bump card meta gap.
+4. `src/components/fly4media/Services.tsx` — promote heading grid to `lg:grid-cols-12`, bump row padding at `lg`.
+5. `src/components/fly4media/CaseStudyTeaser.tsx` — switch to `py-section-lg`, tighten meta gap, balance headline.
+6. `src/components/fly4media/CTA.tsx` — `max-w-5xl` → `max-w-4xl`, tune `mt-14` → `mt-12 lg:mt-16`.
+7. (No change needed to `Divider`, `Hero`, `Footer`, `Header` for this pass — hero is the benchmark, header/footer are out of scope.)
 
 ---
 
-## Open question (non-blocking — I'll proceed with sensible defaults if you don't answer)
+## Verification before I claim it's done
 
-The submitter email currently routes replies to `tobyrennick@gmail.com`. If you'd rather replies bounce back to a no-reply address until the Resend domain is verified, say so. Otherwise I'll keep the routing above.
+After edits I will:
+1. View the home page at 1920×1080 — confirm side margins, headline wrap on BrandStatement, card stagger.
+2. View at 1280×720 (laptop) — confirm nothing collapsed.
+3. View at 820×1180 (tablet portrait) — confirm heading grids stack instead of pinching.
+4. View at 1024×768 (tablet landscape) — confirm 12-col splits engage cleanly.
+
+---
+
+## What I'm explicitly *not* touching
+
+- Hero (benchmark, untouched).
+- Header, Footer, ContactModal, floating button, Intro veil, Cursor, scroll-velocity system.
+- Mobile (<768) — out of scope for this pass per the brief.
+- Other pages (`/work`, `/work/:slug`, `/services`, `/about`) — separate passes when you say go.
+- Any visual style: colors, type roles, fonts, animation, the design system itself. This is layout discipline only.
