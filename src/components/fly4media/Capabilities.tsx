@@ -19,7 +19,7 @@ export default function Capabilities() {
             Capabilities
           </p>
           <h2 className="t-headline-2">
-            Built for productions that can&rsquo;t miss the shot.
+            Built for the projects you can&rsquo;t afford to look ordinary.
           </h2>
         </div>
         <ul className="md:col-span-8 md:pl-10 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">

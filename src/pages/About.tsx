@@ -6,6 +6,7 @@ import Capabilities from "@/components/fly4media/Capabilities";
 import CTA from "@/components/fly4media/CTA";
 import { useReveal } from "@/components/fly4media/useReveal";
 import about from "@/assets/about-hero.jpg";
+import toby from "@/assets/toby-portrait.jpg";
 
 export default function About() {
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function About() {
             />
             <div className="relative container-x pt-32 md:pt-40 pb-12 md:pb-16 min-h-[80dvh] md:min-h-[100dvh] flex flex-col justify-end">
               <p className="t-eyebrow text-background/80 mb-6">
-                Studio &mdash; About
+                A note from Toby &mdash; founder, Fly4MEdia
               </p>
               <h1 className="t-display-1 wrap-editorial text-background max-w-5xl animate-fade-up">
                 We believe perspective
@@ -47,12 +48,12 @@ export default function About() {
 
           <CTA
             onContact={openContact}
-            eyebrow="Reframe what you're showing the world"
+            eyebrow="If you've read this far —"
             heading={
               <>
-                Built for brands that understand
+                Let&rsquo;s talk about what
                 <br />
-                presentation is positioning.
+                you&rsquo;re trying to be seen as.
               </>
             }
           />
@@ -67,25 +68,51 @@ function Philosophy() {
   return (
     <section className="bg-background py-section">
       <div ref={ref} className="reveal container-x grid grid-cols-1 md:grid-cols-12 gap-10">
-        <p className="md:col-span-3 t-eyebrow text-muted-foreground">
-          Philosophy
-        </p>
+        <div className="md:col-span-3">
+          <p className="t-eyebrow text-muted-foreground mb-6">A letter</p>
+          <figure className="max-w-[280px]">
+            <img
+              src={toby}
+              alt="Toby Rennick, founder of Fly4MEdia, on a ridge above an alpine lake in the Canadian Rockies"
+              width={1080}
+              height={1440}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-auto object-cover aspect-[3/4] bg-secondary"
+            />
+            <figcaption className="mt-4">
+              <span className="t-meta block">Toby Rennick</span>
+              <span className="t-eyebrow text-muted-foreground">
+                Founder &amp; Director, Fly4MEdia
+              </span>
+            </figcaption>
+          </figure>
+        </div>
         <div className="md:col-span-9 max-w-3xl space-y-8">
           <p className="t-headline-2">
-            Perception precedes value. How something is seen decides how it is
-            felt — and what gets remembered after the room empties.
+            You didn&rsquo;t spend a decade building this thing
+            just to watch it get flattened by another
+            forgettable drone reel. The way you&rsquo;re seen
+            <em> is</em> the position you hold.
           </p>
           <p className="t-lede text-muted-foreground">
-            Restraint is the loudest creative choice we make — and the one
-            that survives the boardroom. The strongest visual is rarely the
-            loudest one. The frame your CMO actually remembers is usually the
-            one we waited an hour longer for, then cut everything else around.
+            I didn&rsquo;t start Fly4MEdia to be a drone guy.
+            I started it because I kept watching beautiful
+            places and serious brands get handed footage that
+            made them look like everyone else &mdash; and I
+            knew the frame could do more. So I picked up the
+            camera, learned to fly, and stopped accepting
+            &ldquo;fine.&rdquo;
           </p>
           <p className="t-lede text-muted-foreground">
-            Altitude is a discipline. We started in Alberta, where the
-            landscape teaches you to wait — for light, for weather, for the
-            right line. That patience travels with us into every brief, every
-            client, every frame.
+            I learned to wait in the mountains. For light.
+            For weather. For the line that actually means
+            something. That patience is the discipline I
+            built the studio around &mdash; which is why,
+            everywhere else on this site, you&rsquo;ll hear
+            <em> we</em>. The standard is bigger than one
+            person. But the answer to your first email is
+            still mine.
           </p>
         </div>
       </div>
