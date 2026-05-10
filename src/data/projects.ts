@@ -131,6 +131,53 @@ export const projects: Project[] = [
         videoSources: [{ src: canmore2Mp4, type: "video/mp4" }],
       },
     ],
+    narrative: {
+      opportunity: {
+        headline: "A Place, Not A Parcel.",
+        body: "A private acreage outside Canmore — pine, larch, snowline, and a long view across the Bow Valley. The brief wasn't to sell square footage. It was to make a buyer feel they'd already arrived.",
+      },
+      problem: {
+        headline: "What Listings Leave Out.",
+        body: "Surveys show shape. Listing photos show weather. Neither shows what it feels like to stand under the trees as the light drops. The property kept reading as a polygon — and the people who would actually fall in love with it were scrolling past.",
+      },
+      perspectiveShift: {
+        headline: "Two Frames. One Property.",
+        body: "We stopped framing acreage as inventory. One vantage from above the canopy, registering scale and snowline. One low pass through the trunks at human height, registering quiet. Together they give a buyer the feeling of the land before they ever drive in.",
+      },
+      execution: {
+        headline: "Held Long Enough To Notice.",
+        body: "A single early-spring evening. Two passes. No music swell, no quick cuts, no listing-video tricks. The camera holds long enough for the place to do the work — and the work, on a property like this, is mostly atmosphere.",
+      },
+      outcome: {
+        headline: "Buyers Stopped Asking About Lot Lines.",
+        body: "Qualified showings booked inside the first week. The conversation moved from acreage to atmosphere — from how big it is to what it feels like to be there.",
+      },
+      takeaway:
+        "A property is sold by the polygon. A place is sold by the feeling. We built the second.",
+    },
+    supportingImages: [
+      {
+        src: canmoreBarkMacro,
+        alt: "Editorial macro of weathered lodgepole pine bark with a single resin bead, soft natural light",
+        caption: "Detail study — pine bark, resin, light.",
+        ratio: "portrait",
+        placement: "after-opportunity",
+      },
+      {
+        src: canmoreListingFrame,
+        alt: "Generic ground-level real-estate frame of an Alberta acreage driveway under flat overcast light",
+        caption: "What every other frame of this property looked like.",
+        ratio: "wide",
+        placement: "after-problem",
+      },
+      {
+        src: canmoreDuskTrack,
+        alt: "Narrow gravel access track curving into pine and larch, blue-hour light, distant Bow Valley ridge",
+        caption: "Access track, blue hour — the property at the pace it actually lives at.",
+        ratio: "wide",
+        placement: "after-execution",
+      },
+    ],
   },
   {
     slug: "northern-roads",
