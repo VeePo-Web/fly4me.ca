@@ -79,16 +79,16 @@ export default function Services() {
     <PageShell>
       {({ openContact }: { openContact: () => void }) => (
         <>
-          <section className="pt-36 md:pt-48 pb-section-sm container-x">
-            <p className="t-eyebrow text-muted-foreground mb-6">
+          <section className="pt-36 md:pt-48 lg:pt-56 pb-section-sm container-x">
+            <p className="t-eyebrow text-muted-foreground mb-6 lg:mb-8">
               Services
             </p>
-            <h1 className="t-display-2 wrap-editorial wrap-editorial-mobile-off max-w-5xl animate-fade-up">
+            <h1 className="t-display-2 wrap-editorial wrap-editorial-mobile-off max-w-4xl animate-fade-up">
               Not deliverables.
               <br />
               Tools for shifting perception.
             </h1>
-            <p className="t-lede mt-10 max-w-xl text-muted-foreground">
+            <p className="t-lede mt-10 lg:mt-12 max-w-xl text-muted-foreground">
               Every brief starts in the same place — the question you're already
               asking yourself: what should this be perceived as?
             </p>
@@ -99,7 +99,7 @@ export default function Services() {
           ))}
 
           {/* Visual strip */}
-          <section className="bg-background py-20 md:py-32">
+          <section className="bg-background py-section">
             <div className="w-full h-[50vh] md:h-[70vh] overflow-hidden bg-secondary">
               <img
                 src={strip}

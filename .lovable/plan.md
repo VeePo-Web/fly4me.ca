@@ -1,63 +1,55 @@
-# /work — precision formatting pass
+# /services — precision formatting pass
 
-The Work page has the right bones (editorial intro → asymmetric project grid → CTA). The page-level issues match the home page: at 1440 → 1920 the headline runs too wide, and at 768 → 1023 (tablet portrait) the 12-column asymmetric grid puts feature cards side-by-side at ~50% width — they read cramped, not editorial. The `.container-x` ceiling I just added will already handle the lateral stretch on large displays; this pass tightens the rest.
+The Services page is structured well (intro → 8 alternating ServiceFeature blocks → cinematic strip → CTA). The same two issues from home and `/work` apply: large-desktop measure isn't capped (already partly handled by the global `1680px` ceiling on `.container-x`), and the alternating two-column layout engages at `md:` (768), so tablet portrait shows a cramped 50/50 split. This pass normalizes both, plus tightens the rhythm tokens.
 
-Same surgical contract as home: 1 file, no redesign, no new sections, same DOM, no design-system changes.
+Same surgical contract: 2 files, no redesign, no new sections.
 
 ---
 
 ## Changes
 
-### 1. Intro section — title rhythm and measure
-- `pt-36 md:pt-48` → `pt-36 md:pt-48 lg:pt-56` so the title has more breath above on large desktop (it's the page's anchor moment).
-- Headline `max-w-5xl` → `max-w-4xl`. With the existing `wrap-editorial` the line break ("Perspective, / in motion.") then composes against a controlled measure on every screen above 1280.
-- Eyebrow `mb-6` → `mb-6 lg:mb-8` for a touch more space before the display headline at desktop.
-- Keep `pb-section-sm` as the gap to the grid (correct token).
+### 1. Intro section — `src/pages/Services.tsx`
+- `pt-36 md:pt-48` → `pt-36 md:pt-48 lg:pt-56` (matches the `/work` intro rhythm).
+- Eyebrow `mb-6` → `mb-6 lg:mb-8`.
+- Headline `max-w-5xl` → `max-w-4xl` so "Not deliverables. / Tools for shifting perception." holds a controlled measure on 1440+ instead of running wide.
+- Lede `mt-10 max-w-xl` → `mt-10 lg:mt-12 max-w-xl` (a touch more breath on desktop between display and lede).
 
-### 2. Project grid — gate asymmetry to `lg:`, breathe more between rows
-The asymmetric `LAYOUTS` array currently engages at `md:` (768). On tablet portrait the 7/5 stagger compresses the cards. Promote to `lg:`:
+### 2. Service feature blocks — `src/components/fly4media/ServiceFeature.tsx`
+This is the structural fix. Currently every alternating row activates at `md:` and uses bespoke `py-16 md:py-28` padding. Promote the two-column composition to `lg:` and use the section tokens.
 
-- `LAYOUTS` array updated to `lg:col-span-*` / `lg:col-start-*` / `lg:mt-32`.
-- Outer grid `md:grid-cols-12` → `lg:grid-cols-12`.
-- Vertical gap `gap-y-24 md:gap-y-40` → `gap-y-24 lg:gap-y-40` (matches the breakpoint that activates the stagger).
-- Section bottom `pb-32 md:pb-48` → `pb-section` (token consistency with the rest of the site; the value lands close to current).
+- Outer article: `py-16 md:py-28` → `py-section-sm lg:py-section` (token consistency, slightly more breath on desktop).
+- Inner grid: `md:grid-cols-12 gap-10 md:gap-16` → `lg:grid-cols-12 gap-12 lg:gap-20` (wider gutter between image and copy at desktop sizes — feels more editorial, less template).
+- Reverse swap: `md:[&>*:first-child]:order-last` → `lg:[&>*:first-child]:order-last` (matches the breakpoint where columns engage).
+- Image cell: `md:col-span-6` → `lg:col-span-6`.
+- Image frame: `aspect-[4/5] md:aspect-[5/6]` → `aspect-[4/5] lg:aspect-[5/6]`. Also swap the wrapper from raw `overflow-hidden bg-secondary` to `media-frame`, and drop `w-full h-full object-cover` on the `<img>` in favor of `media-img` so hover behavior matches the rest of the site (FeaturedWork, Work index).
+- Copy cell: `md:col-span-6` → `lg:col-span-6`.
+- Eyebrow `mb-5` → `mb-4 lg:mb-5` (tighter optical link to the number).
+- Title `t-headline-1 mb-6` → `t-headline-1 mb-6 max-w-[16ch]` so an 8-row sequence of titles holds a consistent silhouette on desktop instead of some titles running 1-line and others 2-line wildly.
+- Lede `t-lede text-muted-foreground max-w-md` → `t-lede text-muted-foreground max-w-md lg:max-w-lg` for a slightly more comfortable measure on 1440+.
 
-Result: tablet portrait becomes a single elegant column of full-width 4:5 plates with generous vertical rhythm. Tablet landscape and up engage the cinematic asymmetric editorial gallery.
+Result on tablet portrait (768–1023): each row stacks to a single column — large 4:5 image plate, then number / large title / lede stacked beneath with full-width measure. No more pinched 50/50. At `lg` and up the alternating editorial layout engages with a wider central gutter.
 
-### 3. Card polish — match the FeaturedWork hover language
-The Work cards currently use `img-zoom` while FeaturedWork uses `media-frame` + `media-img`. Both work, but the visual language should match. Switch to `media-frame` + `media-img` so hover behavior, framing, and crop are identical between the home Featured Work block and the full Work index. Add `link-underline` to the project title, matching FeaturedWork.
+### 3. Cinematic strip — `src/pages/Services.tsx`
+- Section padding `py-20 md:py-32` → `py-section` (token consistency; the strip stays intentionally full-bleed — that's part of its cinematic role).
+- No other changes — full-bleed is correct.
 
-- `<div className="overflow-hidden bg-secondary aspect-[4/5]">` → `<div className="media-frame aspect-[4/5]">`
-- `<img ... className="img-zoom w-full h-full object-cover" />` → `<img ... className="media-img" />`
-- `<h2 className="t-headline-3">{title}</h2>` → `<h2 className="t-headline-3"><span className="link-underline">{title}</span></h2>`
-- Add `<span className="link-arrow">` wrapper around the `↗` so it inherits the same micro-motion as FeaturedWork (parent already has `group`).
-- Add `data-cursor="hover"` for cursor parity with FeaturedWork cards.
-
-### 4. Eyebrow tightening
-Card eyebrow `mb-2` → `mb-1.5` to match FeaturedWork (the only spacing inconsistency between the two card components).
+### 4. CTA
+Untouched (already refined in the home pass).
 
 ---
 
-## Files touched (1)
+## Files touched (2)
 
-1. `src/pages/Work.tsx` — all of the above.
+1. `src/pages/Services.tsx` — intro measure, lede rhythm, strip padding.
+2. `src/components/fly4media/ServiceFeature.tsx` — `lg:` gating, gutter, media-frame adoption, title measure.
 
-No changes to `PageShell`, `CTA`, `Header`, `Footer`, `data/projects`, or `index.css` (the home pass already added the `1680px` content ceiling on `.container-x`, which Work inherits automatically).
+No changes to `index.css`, `PageShell`, `CTA`, or any data file.
 
 ---
 
 ## Verification before claiming done
 
-- 1920×1080 — confirm side margins, headline measure, asymmetric stagger.
-- 1280×720 — confirm asymmetric grid still composes.
-- 1024×768 (tablet landscape) — confirm `lg:` stagger engages cleanly at exactly 1024.
-- 820×1180 (tablet portrait) — confirm grid stacks to single column with strong vertical rhythm.
-
----
-
-## What I'm explicitly *not* touching
-
-- Project data, image crops, slugs, copy.
-- Card aspect ratio (4:5 stays — it's the right cinematic vertical for this brand).
-- The shared CTA component (already refined in the home pass).
-- Case study detail pages (`/work/:slug`) — separate pass when you say go.
+- 1920×1080 — confirm intro measure, alternating gutter, image silhouettes consistent across all 8 rows.
+- 1280×720 — confirm 6/6 split still composes with the wider gutter.
+- 1024×768 (tablet landscape) — confirm `lg:` columns engage cleanly at exactly 1024.
+- 820×1180 (tablet portrait) — confirm rows stack to single column with full-width image and copy.
