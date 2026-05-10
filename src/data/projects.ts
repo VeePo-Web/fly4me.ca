@@ -410,10 +410,10 @@ export const projects: Project[] = [
       },
       outcome: {
         headline: "From Infrastructure To Place.",
-        body: "The same site that read as infrastructure on a survey began reading as place on a screen. Carried into the brand's 2026 internal and partner-facing reporting — and quietly changed how the team itself describes the work.",
+        body: "The same site that read as infrastructure on a survey began reading as place on a screen. The team started describing the work differently. Carried into the brand's 2026 internal and partner-facing reporting.",
       },
       takeaway:
-        "Compliance documents a site. Cinema gives it standing. The difference shows up in how people talk about the work afterward.",
+        "Compliance documents a site. Cinema gives it standing — and standing is what gets quoted, shared, and remembered.",
     },
     supportingImages: [
       {
@@ -465,12 +465,60 @@ export const projects: Project[] = [
     cardObjectPosition: "center",
     heroImage: "/work/hauling/hauling-1-poster.jpg",
     heroVideoSources: [{ src: "/work/hauling/hauling-1.mp4", type: "video/mp4" }],
+    perspectiveImage: haulingFoothillsHorizon,
     gallery: [
       {
         src: "/work/hauling/hauling-1-poster.jpg",
         alt: "Aerial follow of a pickup hauling a flatbed-loaded skid steer down a foothills two-lane",
         ratio: "wide",
         videoSources: [{ src: "/work/hauling/hauling-1.mp4", type: "video/mp4" }],
+      },
+    ],
+    narrative: {
+      opportunity: {
+        headline: "A Working Day.",
+        body: "Pickup, flatbed, skid steer. A foothills two-lane between job sites. The job is real, repeatable, and entirely ordinary — and the country it moves through is half the brand.",
+      },
+      problem: {
+        headline: "Operations Lives On A Phone.",
+        body: "Quick clips from the cab. Load arrives, load leaves, dust settles. The work gets logged. The country, the craft, the standard the operator holds themselves to — those disappear with the dust.",
+      },
+      perspectiveShift: {
+        headline: "A Small Deliberate Thing In A Very Large Place.",
+        body: "Hold altitude long enough for the road to read as terrain and the load to read as intent. The truck stops being a vehicle. It becomes a decision moving across country — and the country becomes proof of the decision.",
+      },
+      execution: {
+        headline: "One Morning. One Line.",
+        body: "A single summer morning along a foothills two-lane. One slow aerial follow at the pace of the load — pickup, flatbed, skid steer — threading aspen and pine. No cuts. No music swell. The road, the weight on the deck, and the country opening on either side.",
+      },
+      outcome: {
+        headline: "From Logistics To Craft.",
+        body: "What read as logistics on a schedule began reading as craft on a road. Folded into the operator's 2026 brand and recruitment storytelling — and quietly raised the bar for what their team thinks the work is worth.",
+      },
+      takeaway:
+        "Anyone can move a load. The footage decides whether moving it looks like work or looks like a standard.",
+    },
+    supportingImages: [
+      {
+        src: haulingFlatbedDeck,
+        alt: "Editorial detail of a weathered steel flatbed deck with a heavy chain tie-down and rust patina under overcast morning light",
+        caption: "The deck, the chain, the weight — the human scale before we go aerial.",
+        ratio: "portrait",
+        placement: "after-opportunity",
+      },
+      {
+        src: haulingTwoLaneAspen,
+        alt: "Empty foothills two-lane asphalt road curving through aspen and lodgepole pine at golden first light, no vehicles",
+        caption: "The country a phone clip never has time for.",
+        ratio: "wide",
+        placement: "after-problem",
+      },
+      {
+        src: haulingFoothillsHorizon,
+        alt: "Wide empty Alberta foothills horizon at summer dawn with rolling grass, distant Rocky Mountain front range, and a single thread of two-lane road disappearing into terrain",
+        caption: "A small deliberate thing in a very large place.",
+        ratio: "wide",
+        placement: "after-execution",
       },
     ],
   },
