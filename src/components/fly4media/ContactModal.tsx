@@ -69,9 +69,9 @@ export default function ContactModal({ open, onClose }: Props) {
 
       {/* Modal — fullscreen split */}
       <div className="relative h-full w-full overflow-y-auto animate-modal-panel-in">
-        <div className="min-h-full grid grid-cols-1 md:grid-cols-2">
+        <div className="min-h-full grid grid-cols-1 lg:grid-cols-2">
           {/* LEFT — Brand panel */}
-          <aside className="relative isolate overflow-hidden bg-foreground text-background h-[34vh] min-h-[220px] max-h-[280px] md:h-auto md:min-h-screen md:max-h-none">
+          <aside className="relative isolate overflow-hidden bg-foreground text-background h-[34vh] min-h-[220px] max-h-[280px] lg:h-auto lg:min-h-screen lg:max-h-none">
             <img
               src={heroImage}
               alt=""
@@ -92,39 +92,39 @@ export default function ContactModal({ open, onClose }: Props) {
               }}
             />
 
-            {/* Mobile-only close */}
+            {/* Mobile/tablet-only close */}
             <button
               onClick={onClose}
               aria-label="Close"
-              className="md:hidden absolute top-4 right-4 z-10 p-2 text-background/80 hover:text-background transition-colors"
+              className="lg:hidden absolute top-4 right-4 z-10 p-2 text-background/80 hover:text-background transition-colors"
             >
               <X className="size-5" strokeWidth={1.25} />
             </button>
 
-            <div className="relative h-full flex flex-col justify-between p-6 md:p-14 lg:p-20 md:min-h-screen">
-              <div className="hidden md:flex items-center gap-3">
+            <div className="relative h-full flex flex-col justify-between p-8 lg:p-16 xl:p-20 lg:min-h-screen">
+              <div className="hidden lg:flex items-center gap-3">
                 <span className="t-eyebrow text-background/70">
                   Fly4MEdia
                 </span>
               </div>
 
               <div className="max-w-md mt-auto">
-                <p className="t-eyebrow text-background/70 md:text-background/60 mb-3 md:mb-8">
+                <p className="t-eyebrow text-background/70 lg:text-background/60 mb-3 lg:mb-8">
                   Fly4MEdia · A private consultation
                 </p>
                 <h2
                   id="contact-title"
-                  className="t-headline-1"
+                  className="t-headline-1 max-w-[14ch]"
                 >
                   Let's create something worth looking up at.
                 </h2>
-                <p className="hidden md:block t-lede mt-8 text-background/70 max-w-sm">
+                <p className="hidden lg:block t-lede mt-8 text-background/70 max-w-sm">
                   Fly4MEdia partners with brands, creators, tourism campaigns, and
                   studios to craft visually immersive aerial storytelling.
                 </p>
               </div>
 
-              <div className="hidden md:flex flex-col gap-1 t-meta text-background/60">
+              <div className="hidden lg:flex flex-col gap-1 t-meta text-background/60">
                 <a href="mailto:tobyrennick@gmail.com" className="hover:text-background transition-colors">tobyrennick@gmail.com</a>
                 <a href="tel:+14038189686" className="hover:text-background transition-colors">403&nbsp;818&nbsp;9686</a>
                 <span>Alberta, Canada</span>
@@ -133,20 +133,20 @@ export default function ContactModal({ open, onClose }: Props) {
           </aside>
 
           {/* RIGHT — Form panel */}
-          <section className="relative bg-background text-foreground flex items-center md:min-h-screen">
+          <section className="relative bg-background text-foreground flex items-center lg:min-h-screen">
             <button
               onClick={onClose}
               aria-label="Close"
-              className="hidden md:block absolute top-5 right-5 md:top-8 md:right-8 p-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="hidden lg:block absolute lg:top-8 lg:right-8 p-2 text-muted-foreground hover:text-foreground transition-colors"
             >
               <X className="size-5" strokeWidth={1.25} />
             </button>
 
-            <div className="w-full max-w-xl mx-auto px-6 md:px-14 lg:px-20 py-10 md:py-20">
-              <p className="t-eyebrow text-muted-foreground mb-4 md:mb-5">
+            <div className="w-full max-w-xl mx-auto px-8 lg:px-16 xl:px-20 py-14 lg:py-20">
+              <p className="t-eyebrow text-muted-foreground mb-4 lg:mb-6">
                 Begin a collaboration
               </p>
-              <h3 className="t-headline-2 mb-8 md:mb-14">
+              <h3 className="t-headline-2 mb-8 lg:mb-14 max-w-[18ch]">
                 Tell us what deserves a new perspective.
               </h3>
 
@@ -255,7 +255,7 @@ export default function ContactModal({ open, onClose }: Props) {
               )}
 
               {/* Mobile-only footer info */}
-              <div className="md:hidden mt-10 pt-6 border-t border-border t-meta text-muted-foreground">
+              <div className="lg:hidden mt-10 pt-6 border-t border-border t-meta text-muted-foreground">
                 tobyrennick@gmail.com · 403 818 9686 · Alberta, Canada
               </div>
             </div>
@@ -297,7 +297,7 @@ const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
     <div className="field group relative">
       <label
         htmlFor={id}
-        className="field-label block t-micro text-muted-foreground mb-2 md:mb-3"
+        className="field-label block t-micro text-muted-foreground mb-2 lg:mb-3"
       >
         {label}
       </label>
