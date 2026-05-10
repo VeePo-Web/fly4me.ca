@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
 
-const SESSION_KEY = "f4m:intro:v1";
-const HOLD_MS = 1700;
-const FADE_MS = 500;
+const SESSION_KEY = "f4m:intro:v2";
+const HOLD_MS = 2050;
+const FADE_MS = 550;
 
 const Intro = () => {
   const [mounted, setMounted] = useState(() => {
