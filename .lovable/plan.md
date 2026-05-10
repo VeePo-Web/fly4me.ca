@@ -1,72 +1,42 @@
-## Two parts: media-dedupe fix (CS1 + CS2) + Case Study 3 upgrade (*Above the Lake*)
+## Case Study 4 — *Field & Frequency* — full editorial upgrade
 
----
+CS4 has three real drone clips (field-1/2/3). Hero already uses field-1. Gallery has field-2 + field-3. No duplication in the originals — but the new `perspectiveImage` slot lets us place each clip in its strongest narrative role and dedupe naturally.
 
-### Part A — Stop the hero from appearing twice/three times
+### 1. Three Nano Banana supporting images → `src/assets/cs/field/`
 
-**Root cause:** `CaseStudyPerspective` (the signature middle title-card) reuses `project.heroImage` + `project.heroVideoSources`. CS1's gallery also still contains `canmore1` (same as the hero). Result on CS1: hero video plays at the top, again as the perspective shift, and again in the gallery — three times. CS2: hero photo appears as hero and again in the perspective shift section.
+All hyper-realistic, no people, no faces, no readable signage/text. Southern Alberta industrial estate in winter, restrained palette consistent with the existing field-1/2/3 aerials.
 
-**Fix (data-driven, no new components):**
+1. `seam-in-snow.jpg` (wide, 1920×1080) — *"Hyper-realistic editorial top-down photograph of a long straight tire-track seam pressed into fresh snow over hard prairie ground at first light, faint blue-grey shadow, restrained monochromatic palette, no people, no vehicles, no signage, no text, photographic 35mm look, low contrast."*
+2. `weathered-steel.jpg` (portrait, 1024×1280) — *"Cinematic editorial detail of weathered galvanised steel cladding on a southern Alberta industrial outbuilding under flat winter overcast light, faint dusting of snow, no people, no signage, no text, no logos, restrained palette, photographic 50mm look, shallow depth of field."*
+3. `prairie-horizon.jpg` (wide, 1920×1080) — *"Hyper-realistic editorial photograph of a vast empty southern Alberta prairie horizon in winter at first light, distant Rocky Mountain foothills silhouette, snow-dusted stubble field, no people, no buildings, no signage, no text, restrained cool palette, photographic 35mm look."*
 
-1. Extend `Project` in `src/data/projects.ts` with optional fields:
-   ```ts
-   perspectiveImage?: string;
-   perspectiveVideoSources?: VideoSource[];
-   perspectiveObjectPosition?: string;
-   ```
-2. Update `CaseStudyPerspective` consumer in `src/pages/CaseStudy.tsx` to prefer `project.perspectiveImage` / `perspectiveVideoSources` and fall back to hero only when not provided.
-3. Update `CaseStudyGallery` to **auto-dedupe**: filter out gallery items whose `src` matches `project.heroImage` or `project.perspectiveImage`. Pure presentation logic; no data churn.
-4. Wire bespoke perspective assets:
-   - **CS1 (Among the Pines)** — perspective uses the second pass: `canmore2Poster` + `canmore2Mp4` (the slow, low traverse through the trunks — actually a stronger "perspective shift" beat than the top-down hero). Gallery then auto-dedupes both → empty gallery section, which is correct (only two clips exist; both are now placed intentionally).
-   - **CS2 (Northern Roads)** — perspective uses `csNorthern1` (single vehicle on the snow road — the "road as protagonist" moment). Hero stays `csNorthernHero`. Gallery dedupes `csNorthern1`, leaves `csNorthern2` (glacial lake) as the single closing gallery beat.
+### 2. `src/data/projects.ts` — extend `field-and-frequency`
 
-After this, every original asset appears exactly once per page, in its strongest narrative slot.
+Originals untouched. Add `perspectiveImage` + `perspectiveVideoSources` pointing to **field-2** (the wider mid-altitude pass — the cleanest "perspective shift" beat), so the gallery auto-dedupes to **field-3** (the low traverse) as the closing visual proof.
 
----
-
-### Part B — Case Study 3: *Above the Lake* — full editorial upgrade
-
-Same pattern as CS1/CS2: bespoke `narrative` block + 3 hyper-realistic Nano Banana supporting images, all originals preserved.
-
-#### B1. Three Nano Banana images → `src/assets/cs/lake/`
-
-All hyper-realistic, no people, no faces, no text. Lake Minnewanka / Canadian Rockies alpine-lake universe at first light.
-
-1. `water-surface.jpg` (wide, 1920×1080) — *"Hyper-realistic editorial photograph of a glass-still alpine lake surface at first light, faint concentric ripples from a single drop, soft pastel reflection of distant mountains, no people, no boats, no signage, restrained palette, photographic 35mm look, low contrast."*
-2. `dock-detail.jpg` (portrait, 1024×1280) — *"Cinematic editorial detail of weathered cedar dock planks meeting still emerald alpine lake water at dawn, light morning mist, no people, no boats, no text, soft cool light, restrained composition, photographic look, shallow depth of field."*
-3. `shoreline-pines.jpg` (wide, 1920×1080) — *"Hyper-realistic editorial photograph of an empty pebble shoreline at a glacial alpine lake in the Canadian Rockies at dawn, dark pine treeline, faint mist on the water, distant ridge, no people, no boats, no signage, restrained pastel palette, photographic 35mm look."*
-
-#### B2. `src/data/projects.ts` — add narrative + supportingImages + perspective wiring to `above-the-lake`
-
-Originals preserved (`csLakeHero`, `csLake1`, `csLake2`).
-
-- **Opportunity** — *"A Morning, Not A Campaign."* — Mountain Co. had compelling product but visuals that looked like every other outdoor brand. The brief: tell the truth about a quiet morning on the water — and let truth do the marketing.
-- **Problem** — *"Outdoor Brands All Look The Same."* — Same hero shots, same action sequences, same energy. The category had compressed into a single visual language. Standing inside the convention meant disappearing.
-- **Perspective Shift** *(signature)* — *"Remove The Action. Keep The Atmosphere."* — Held the camera still long enough for stillness itself to become the subject. The water did the work. The brand stopped competing on energy and started competing on calm.
-- **Execution** — *"One FPV Pass. One Held Frame."* — A single FPV opener and a series of top-down stills shot in the first hour of light. No music swell, no athlete heroics — the morning at the pace of the morning.
-- **Outcome** — *"The Brand That Feels Different."* — Customers started describing the company as the one that "feels different" — without being able to say why. Anthology series picked up by three regional outfitters.
-- **Takeaway** — *"In a category sold on action, restraint is the loudest thing on the page."*
+- **Opportunity** — *"A Working Landscape."* — A southern Alberta industrial estate that mattered to the people who built it but read as infrastructure to everyone else. The brief: show the site at the scale it actually operates at.
+- **Problem** — *"Compliance Looks Like Compliance."* — Industrial sites get documented for regulators — flat, top-down, evidentiary. The land disappears. The decisions disappear. The pride disappears with them.
+- **Perspective Shift** *(signature)* — *"Terrain, Not Inventory."* — We stopped framing the site as assets on a parcel and started framing it as terrain shaped by intent. Geometry from above. Texture from below. The rhythm between the two becomes the argument.
+- **Execution** — *"One Morning. Three Passes."* — A single winter morning. One high and slow for the pattern of the work against the prairie. Two lower traverses for surface — seams in the snow, lines in the dirt, the quiet repetition of something built to last decades.
+- **Outcome** — *"From Infrastructure To Place."* — The same site that read as infrastructure on a survey began reading as place on a screen. Carried into the brand's 2026 internal and partner-facing reporting — and changed how the team itself describes the work.
+- **Takeaway** — *"Compliance documents a site. Cinema gives it standing. The difference shows up in how people talk about the work afterward."*
 
 Supporting image placement:
-- `dock-detail.jpg` → `after-opportunity` *(intimate first frame — sets the calm)*
-- `water-surface.jpg` → `after-problem` *(visual proof of "what every other brand isn't doing")*
-- `shoreline-pines.jpg` → `after-execution` *(atmospheric closer before the outcome statement)*
+- `weathered-steel.jpg` → `after-opportunity` *(intimate detail study — the human-scale texture before we go aerial)*
+- `seam-in-snow.jpg` → `after-problem` *(top-down silence — what compliance frames look like, stripped of context)*
+- `prairie-horizon.jpg` → `after-execution` *(the country the site sits in — proof of "terrain, not inventory")*
 
-Perspective Shift section uses bespoke perspective asset: `csLake1` (the kayaker top-down — the literal "removed action / held frame"). Hero stays `csLakeHero`. Gallery auto-dedupes `csLake1`, leaves `csLake2` (dock) as the closing beat.
+### 3. No component changes
 
-#### B3. No component changes beyond Part A
-
-Once the data is added, `/work/above-the-lake` automatically renders the full enhanced flow.
-
----
+`Project.perspectiveImage` + `CaseStudyGallery` dedupe already shipped. Once the data is added, `/work/field-and-frequency` automatically renders Hero (field-1) → Meta → Opportunity (steel) → Perception Gap (seam in snow, flipped) → Perspective Shift (full-bleed field-2 video) → Execution (prairie horizon) → Outcome statement → Takeaway → Gallery (field-3 only) → Next Project.
 
 ### Out of scope
 
-CS4 (Field & Frequency) and CS5 (Hauling the Foothills) untouched in this pass.
+CS5 (Hauling the Foothills) untouched in this pass.
 
 ### Verification
 
-- `/work/canmore-heights` — hero (canmore1) appears once; perspective (canmore2) appears once; gallery dedupes both → no repeats.
-- `/work/northern-roads` — hero (csNorthernHero) once; perspective (csNorthern1) once; gallery shows csNorthern2 only.
-- `/work/above-the-lake` — full enhanced narrative; hero (csLakeHero) once; perspective (csLake1) once; gallery shows csLake2 only; three new supporting images render lazily with explicit dimensions.
-- LCP unchanged on all three. No CLS regressions.
+- `/work/field-and-frequency` renders the full enhanced flow.
+- Each of the three real clips (field-1, field-2, field-3) appears exactly once, in its strongest narrative slot.
+- Three new lazy-loaded supporting JPGs with explicit dimensions; no CLS, LCP unchanged.
+- CS1, CS2, CS3 unaffected.
