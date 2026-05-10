@@ -194,6 +194,41 @@ export const projects: Project[] = [
       },
     ],
   },
+  {
+    slug: "hauling-the-foothills",
+    number: "05",
+    title: "Hauling the Foothills",
+    category: "Commercial",
+    client: "Private commission",
+    location: "Foothills, Alberta",
+    year: "2026",
+    services: ["Aerial Cinematography", "Brand Films", "Operations Storytelling"],
+    tagline:
+      "A working day, framed at the scale of the country it moves through.",
+    challenge:
+      "Operations footage usually lives on a phone — a quick clip from the cab, the load arriving, the load leaving. The work gets documented; the country between job sites disappears.",
+    perspectiveShift:
+      "We held altitude long enough for the road to register as terrain and the load to register as intent. The truck stops being a vehicle and becomes a small, deliberate thing moving through a very large place.",
+    story:
+      "A single summer morning along a foothills two-lane. One slow aerial follow at the pace of the load — pickup, flatbed, skid steer — threading aspen and pine. No cuts, no music swell. Just the line of the road, the weight on the deck, and the country opening on either side.",
+    impact:
+      "What read as logistics on a schedule began reading as craft on a road.",
+    outcome:
+      "Folded into the operator's 2026 brand and recruitment storytelling.",
+    cardImage: "/work/hauling/hauling-1-poster.jpg",
+    cardVideoSources: [{ src: "/work/hauling/hauling-1.mp4", type: "video/mp4" }],
+    cardObjectPosition: "center",
+    heroImage: "/work/hauling/hauling-1-poster.jpg",
+    heroVideoSources: [{ src: "/work/hauling/hauling-1.mp4", type: "video/mp4" }],
+    gallery: [
+      {
+        src: "/work/hauling/hauling-1-poster.jpg",
+        alt: "Aerial follow of a pickup hauling a flatbed-loaded skid steer down a foothills two-lane",
+        ratio: "wide",
+        videoSources: [{ src: "/work/hauling/hauling-1.mp4", type: "video/mp4" }],
+      },
+    ],
+  },
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
