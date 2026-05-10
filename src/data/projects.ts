@@ -25,6 +25,10 @@ import lakeWaterSurface from "@/assets/cs/lake/water-surface.jpg";
 import lakeDockDetail from "@/assets/cs/lake/dock-detail.jpg";
 import lakeShorelinePines from "@/assets/cs/lake/shoreline-pines.jpg";
 
+import fieldSeamInSnow from "@/assets/cs/field/seam-in-snow.jpg";
+import fieldWeatheredSteel from "@/assets/cs/field/weathered-steel.jpg";
+import fieldPrairieHorizon from "@/assets/cs/field/prairie-horizon.jpg";
+
 import csFieldHero from "@/assets/cs-field-frequency-hero.jpg";
 import csField1 from "@/assets/cs-field-1.jpg";
 import csField2 from "@/assets/cs-field-2.jpg";
@@ -367,6 +371,8 @@ export const projects: Project[] = [
     cardObjectPosition: "center",
     heroImage: "/work/field/field-1-poster.jpg",
     heroVideoSources: [{ src: "/work/field/field-1.mp4", type: "video/mp4" }],
+    perspectiveImage: "/work/field/field-2-poster.jpg",
+    perspectiveVideoSources: [{ src: "/work/field/field-2.mp4", type: "video/mp4" }],
     gallery: [
       {
         src: "/work/field/field-2-poster.jpg",
@@ -379,6 +385,53 @@ export const projects: Project[] = [
         alt: "Low-altitude traverse across the surface of a southern Alberta industrial estate",
         ratio: "portrait",
         videoSources: [{ src: "/work/field/field-3.mp4", type: "video/mp4" }],
+      },
+    ],
+    narrative: {
+      opportunity: {
+        headline: "A Working Landscape.",
+        body: "A southern Alberta industrial estate that mattered to the people who built it but read as infrastructure to everyone else. The brief wasn't to document the site. It was to show it at the scale it actually operates at.",
+      },
+      problem: {
+        headline: "Compliance Looks Like Compliance.",
+        body: "Industrial sites get documented for regulators — flat, top-down, evidentiary. The land disappears. The decisions disappear. The pride of the people who built it disappears with them.",
+      },
+      perspectiveShift: {
+        headline: "Terrain, Not Inventory.",
+        body: "We stopped framing the site as assets on a parcel and started framing it as terrain shaped by intent. Geometry from above. Texture from below. The rhythm between the two becomes the argument.",
+      },
+      execution: {
+        headline: "One Morning. Three Passes.",
+        body: "A single winter morning. One high and slow for the pattern of the work against the prairie. Two lower traverses for surface — seams in the snow, lines in the dirt, the quiet repetition of something built to last decades.",
+      },
+      outcome: {
+        headline: "From Infrastructure To Place.",
+        body: "The same site that read as infrastructure on a survey began reading as place on a screen. Carried into the brand's 2026 internal and partner-facing reporting — and quietly changed how the team itself describes the work.",
+      },
+      takeaway:
+        "Compliance documents a site. Cinema gives it standing. The difference shows up in how people talk about the work afterward.",
+    },
+    supportingImages: [
+      {
+        src: fieldWeatheredSteel,
+        alt: "Editorial detail of weathered galvanised steel cladding on a southern Alberta industrial outbuilding under winter overcast light",
+        caption: "Detail study — steel, snow, the human scale before we go aerial.",
+        ratio: "portrait",
+        placement: "after-opportunity",
+      },
+      {
+        src: fieldSeamInSnow,
+        alt: "Top-down photograph of a single tire-track seam pressed into fresh snow over hard prairie ground at first light",
+        caption: "What a compliance frame looks like, stripped of context.",
+        ratio: "wide",
+        placement: "after-problem",
+      },
+      {
+        src: fieldPrairieHorizon,
+        alt: "Vast empty southern Alberta prairie horizon in winter at first light with distant Rocky Mountain foothills",
+        caption: "The country the site sits in — terrain, not inventory.",
+        ratio: "wide",
+        placement: "after-execution",
       },
     ],
   },
