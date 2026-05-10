@@ -1,111 +1,82 @@
-ns: # About page rewrite — Toby in the first person
+# Branded Fly4MEdia email templates
 
-## The thesis of this page
-Right now the About page is the studio talking *about* a philosophy. After this rewrite, it's **Toby talking to one person** — the founder, marketer, or destination lead who's about to hire someone to point a camera at the thing they've spent years building.
+Right now the contact form sends one functional but unstyled HTML email to Toby. After this change, every contact submission will fire **two** branded emails — one to the submitter (a calm, editorial confirmation) and one to Toby (a fast-scan internal brief). Both share a single design system that mirrors the site: white background, near-black type, Inter/system sans, oversized restrained headlines, generous whitespace, hairline rules, and the slogan **"Perspective Changes Everything"** as the footer signature.
 
-The arc is **"I" that becomes "we."** The page opens as a personal letter from Toby, earns trust through story and stance, then widens into the studio at the bottom — so the rest of the site (which stays "we") feels like a natural continuation, not a different brand.
-
-Voice is **50/50 Hormozi × editorial**: short hook lines that name the reader's real problem, then one cinematic line that earns the silence around it. Punchy, but never loud. Persuasive, but never salesy. The slogan — *Perspective changes everything* — is the spine, never the chorus.
+Same architectural pattern the reference projects use: a single `_shared/email-templates.ts` module owning brand constants + composable HTML pieces, then `send-contact` just composes content and sends.
 
 ---
 
-## Page structure (no layout changes)
+## Files
 
-The existing five blocks stay in the same order. Only copy changes, plus **one new element**: Toby's portrait + name caption inside the Philosophy section.
+### 1. `supabase/functions/_shared/email-templates.ts` *(new)*
 
-```
-1. Hero            (existing)   — slogan stays, eyebrow + framing tightened
-2. Philosophy      (existing)   — REWRITTEN as Toby's letter, portrait added
-3. Process         (existing)   — rewritten in first person ("here's how I work")
-4. Capabilities    (existing)   — kept factual, one line of Toby's voice on top
-5. CTA             (existing)   — eyebrow + heading retuned to a personal close
-```
+Single source of truth. Exports:
 
-No new sections. No new components. No layout shifts. The portrait slots into the existing 12-column Philosophy grid where the eyebrow currently sits — it doesn't push anything else around.
+- `BRAND` — colors (`bg #ffffff`, `fg #0a0a0a`, `muted #6b6b6b`, `border #ececec`), `name: "Fly4MEdia"`, `slogan: "Perspective Changes Everything."`, `email`, `phone`, `phoneTel`, `website`, `fontStack` (Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif).
+- `escapeHtml(str)` — XSS-safe escaping.
+- `nl2br(str)` — preserves project-description line breaks.
+- `emailWrapper(content, preheaderText)` — full DOCTYPE wrapper, hidden preheader, outer table on `#ffffff`, 600px max-width container, 48px outer padding, MSO-friendly.
+- `emailHeader({ eyebrow })` — small uppercase wordmark `FLY4MEDIA` in tracked-out caps (top-left, no logo image, keeps it pure-typographic like the site) + an eyebrow line (e.g., `New enquiry` or `Thanks for reaching out`).
+- `displayHeading(text)` — large 32–36px, weight 500, tight tracking, near-black.
+- `bodyText(text)` — 15px, line-height 1.65, `#3a3a3a`.
+- `metaRow(label, value, opts?)` — labelled detail row used for Email/Phone (uppercase 11px label, 14px value, hairline border-bottom).
+- `quoteBlock(text)` — used in Toby's email for the project description: small "Project" eyebrow + preserved-newline body inside a 24px-padded block with a 1px top rule.
+- `divider()` — 1px hairline `#ececec` with 32px vertical room.
+- `ctaButton(label, href)` — outlined button (1px `#0a0a0a` border, 14px tracked uppercase label) — used in the submitter email to link back to `/work`.
+- `emailFooter()` — closes every email with the slogan as a centered, lightly-tracked statement, then a small line of contact details (email + phone) and the year. Renders the slogan in the same display weight used on-site so it reads as the brand sign-off, not a tagline.
 
----
+All values inline-styled. No external CSS, no `<style>` blocks beyond the MSO conditional. Background is white only — no dark variants.
 
-## Section 1 — Hero
+### 2. `supabase/functions/send-contact/index.ts` *(refactor)*
 
-**Keep:** background image, gradient, layout, the slogan as H1.
-**Change:** eyebrow only.
+Keep the existing validation, insert, CORS, error handling, and the `onboarding@resend.dev` sender (per memory — root domain isn't verified in Resend yet). Changes:
 
-- Eyebrow: `Studio — About` → **`A note from Toby — founder, Fly4MEdia`**
-- H1 stays: *We believe perspective changes everything.*
+- Import from `../_shared/email-templates.ts`.
+- Build **two** HTML payloads via the shared composers:
+  - **Internal notification → `tobyrennick@gmail.com`**
+    - Subject: `New enquiry — {name}`
+    - Eyebrow: `New enquiry`
+    - Heading: `{name} wants to start a project.`
+    - Meta rows: Email (mailto), Phone (tel, only if provided)
+    - `quoteBlock` with the project description
+    - `reply_to: email` so Toby hits Reply and lands in the submitter's inbox
+  - **Submitter confirmation → `email`**
+    - Subject: `We've got your note — Fly4MEdia`
+    - Eyebrow: `Thanks for reaching out`
+    - Heading: `Your note landed with us, {firstName}.`
+    - Two short body paragraphs, in the studio voice:
+      1. Acknowledges the message arrived; says Toby will personally read it and reply within one business day.
+      2. Frames the wait as part of the craft — "We're probably out waiting for the right light. We'll be back at a screen soon." Closes by inviting them to browse recent work.
+    - `ctaButton("See recent work", "https://fly4me.ca/work")`
+    - `reply_to: "tobyrennick@gmail.com"` so any reply routes to Toby
+- Send both via `Promise.allSettled` so one failure doesn't block the other; log failures, still return `{ ok: true }` to the client (insert already succeeded).
+- Preheader text on each email (hidden inbox-preview line) — internal: "New enquiry from {name}"; submitter: "Toby will reply personally within one business day."
 
-Why: signals the shift to first person before they scroll. The slogan stays as the studio's collective belief — which is the bridge from "I" to "we."
+### 3. No client-side changes
 
----
-
-## Section 2 — Philosophy (the heart of the rewrite)
-
-This is the section that does the work. Same grid, same type scale. Three changes:
-
-**A. Eyebrow column** becomes a **portrait + caption block** (replaces the current `Philosophy` eyebrow).
-- Square/portrait crop of the uploaded photo of Toby in the Rockies.
-- Below the image: `Toby Rennick` (t-meta) / `Founder & Director, Fly4MEdia` (t-eyebrow muted).
-- Image lazy-loaded, explicit width/height, semantic tokens only.
-
-**B. Body copy** rewrites from third-person philosophy → first-person letter. Three beats, matching the existing three-paragraph rhythm so nothing about the layout changes:
-
-1. **Hook + reframe** (replaces the current t-headline-2 paragraph)
-   A short, Hormozi-style opener that names the buyer's real fear: that the thing they built deserves better than how it's currently being shown. Lands on the reframe: *the way you're seen is the position you hold.*
-
-2. **Origin** (replaces the current first t-lede)
-   *[ORIGIN — needs 2–3 sentences from you. Send me the truest version of why you started flying / why the camera, and I'll write the paragraph around it. Until then I'll draft a placeholder that says: I didn't start this to be a drone guy. I started it because I kept watching beautiful places and beautiful brands get flattened by lazy footage — and I knew the frame could do more.]*
-
-3. **Stance + the turn from "I" to "we"** (replaces the current second t-lede)
-   The Alberta-patience line stays in spirit but reframed personally: I learned to wait in the mountains. That's the discipline I built the studio around. Closes on the pivot: *That's why Fly4MEdia exists — and why everywhere else on this site you'll hear "we."*
-
-**C. Section eyebrow** above all of it (small, optional, only if the portrait replacing the eyebrow column feels too quiet): `A letter` in `t-eyebrow text-muted-foreground`, sitting above the portrait.
-
----
-
-## Section 3 — Process (`ProcessList.tsx`)
-
-Same four steps, same numbers, same headings. Descriptions rewritten in first person — Toby walking the client through how he actually works. Keep them tight (one to two sentences) so the rhythm of the existing list doesn't break.
-
-- **01 Discovery** — "The first call isn't a sales call. I'm listening for the thing under the brief — the reason you actually picked up the phone."
-- **02 Creative Direction** — "Before anything flies, you see the film on paper. Storyboards, shot lists, references. Nothing leaves the ground until you've nodded."
-- **03 Production** — "Licensed, insured, cinema-grade. And patient. I'd rather lose a day to weather than hand you a shot we both know is *fine*."
-- **04 Delivery** — "Master files, channel-ready cuts, and the version your team will actually use on Monday. The job isn't done until the room goes quiet when it plays."
-
-Section H2 stays: *Four steps. Nothing wasted.*
+The contact modal already POSTs name/email/phone/project. No schema changes, no migrations, no new secrets — `RESEND_API_KEY` is already configured.
 
 ---
 
-## Section 4 — Capabilities (`Capabilities.tsx`)
+## Visual direction (so it actually looks like Fly4MEdia)
 
-Stays mostly factual — this is the trust block. Two micro-edits:
-
-- Section H2: *Built for productions that can't miss the shot.* → **`Built for the projects you can't afford to look ordinary.`**
-- Keep the six list items as-is. They're already tuned.
-
----
-
-## Section 5 — Final CTA
-
-Retune the eyebrow + heading to close the letter, not pitch a service.
-
-- Eyebrow: `Reframe what you're showing the world` → **`If you've read this far —`**
-- Heading: *Built for brands that understand presentation is positioning.* → **`Let's talk about what you're trying to be seen as.`**
-
-The CTA button copy itself (handled in `CTA.tsx`) is untouched.
+- **Type lockup**: wordmark `FLY4MEDIA` in 11px tracked uppercase (`letter-spacing: 0.32em`) sitting alone at the top-left of the canvas — same restraint as the site header.
+- **Heading**: 32–36px, weight 500, tracking `-0.02em`, color `#0a0a0a`. One line of breathing room below it.
+- **Body**: 15px / 1.65 line-height, `#3a3a3a`. Muted detail labels at 11px uppercase, `letter-spacing: 0.18em`, color `#8a8a8a`.
+- **Rules**: 1px `#ececec`. Used to separate the meta block, the project quote, and the footer.
+- **Footer slogan**: centered, 16px, weight 500, tracking `-0.01em`, near-black — followed by a single 11px tracked line: `Fly4MEdia · Alberta, Canada · tobyrennick@gmail.com · 403 818 9686 · © {year}`.
+- **No logo image, no gradients, no colored buttons.** Pure typographic system. Renders identically in Gmail/Outlook/Apple Mail.
 
 ---
 
-## What I need from you before I implement
+## What I will *not* do
 
-1. **The origin paragraph** — 2–3 honest sentences about why you started. Doesn't have to be polished; I'll shape it. Without this, paragraph 2 of Philosophy stays as a placeholder.
-2. **Confirmation on the portrait crop** — the uploaded photo is vertical with you on the right and Grassi/Rockies on the left. I'll crop to a tight portrait (you + the rock face), but if you'd rather I keep more of the lake/mountain in frame, say so.
+- No new edge functions, no Lovable Email infra setup, no domain swap. We continue with the existing Resend path (already wired, sender stays `onboarding@resend.dev` until `fly4me.ca` is verified — which is a separate decision for you).
+- No DB schema changes.
+- No design changes anywhere on the site itself.
 
 ---
 
-## Technical notes (for the build step)
+## Open question (non-blocking — I'll proceed with sensible defaults if you don't answer)
 
-- Copy uploaded photo to `src/assets/toby-portrait.jpg`, import as ES6 module, lazy-load, explicit width/height.
-- Portrait sits in `md:col-span-3` column of the existing Philosophy grid; on mobile it stacks above the text. No new grid, no new section.
-- All typography via existing `.t-*` classes. No raw Tailwind type utilities.
-- All colors via semantic tokens (`text-muted-foreground`, `bg-background`, etc.).
-- No new dependencies. No layout, spacing, or color changes anywhere.
-- Update `mem://brand/perspective-slogan.md` only if the slogan's role meaningfully shifts — it doesn't here, so no memory write needed.
+The submitter email currently routes replies to `tobyrennick@gmail.com`. If you'd rather replies bounce back to a no-reply address until the Resend domain is verified, say so. Otherwise I'll keep the routing above.
