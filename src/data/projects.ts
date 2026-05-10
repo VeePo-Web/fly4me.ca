@@ -84,6 +84,10 @@ export interface Project {
   cardObjectPosition?: string;
   heroImage: string;
   heroVideoSources?: VideoSource[];
+  /** Optional bespoke asset for the Perspective Shift section (avoids reusing the hero) */
+  perspectiveImage?: string;
+  perspectiveVideoSources?: VideoSource[];
+  perspectiveObjectPosition?: string;
   gallery: GalleryItem[];
   /** Optional editorial narrative — when present, CaseStudy renders the upgraded layout */
   narrative?: Narrative;
