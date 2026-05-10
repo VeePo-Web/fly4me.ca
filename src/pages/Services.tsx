@@ -119,7 +119,7 @@ export default function Services() {
               <>
                 Some stories deserve
                 <br />
-                to be seen from above.
+                a different angle.
               </>
             }
           />
