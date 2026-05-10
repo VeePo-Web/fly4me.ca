@@ -1,60 +1,57 @@
-# /about — precision formatting pass
+# /contact modal — precision formatting pass
 
-Same surgical contract as `/work` and `/services`. The About hero is already at the brand benchmark, so the work is below the fold: the Philosophy letter, the Process list, and the Capabilities block all gate their two-column compositions at `md:` (768) — at tablet portrait that produces pinched 22%/70% and 33%/67% splits that don't respect the editorial aesthetic. Promote everything to `lg:`, normalize tokens, cap measures.
+The Contact modal is the only "page" left. The split engages at `md:` (768), which forces a cramped 50/50 between 768–1023 — a narrow brand panel running `t-headline-1` and a narrow form panel running `t-headline-2` plus four stacked fields. This is exactly the same pinch we already fixed on `/work`, `/services`, and `/about`. The fix is identical: **promote the entire split from `md:` to `lg:` (1024)** and let tablet inherit the polished single-column treatment that already exists for mobile, with calmer padding and rhythm.
 
-4 files. No redesign, no new sections, no copy changes, no design-token changes.
-
----
-
-## Changes
-
-### 1. About hero — `src/pages/About.tsx`
-Tiny touch only — the hero is the reference standard.
-- Headline `max-w-5xl` → `max-w-4xl` so "We believe perspective / changes everything." holds the same controlled measure as `/work` and `/services` heroes on 1440+.
-
-### 2. Philosophy letter — `src/pages/About.tsx` (`<Philosophy />`)
-- Outer grid `md:grid-cols-12 gap-10` → `lg:grid-cols-12 gap-10 lg:gap-16` (gate to laptop, widen the gutter on desktop).
-- Portrait column `md:col-span-3` → `lg:col-span-3`.
-- Copy column `md:col-span-9 max-w-3xl` → `lg:col-span-9 max-w-3xl`.
-- Portrait wrapper `max-w-[280px]` → `max-w-[280px] lg:max-w-[320px]` (a hair more presence at desktop without dominating).
-- Portrait image: swap raw `aspect-[3/4] bg-secondary` markup to `media-frame` + `media-img` for hover language consistency with the rest of the site.
-- Lead paragraph `t-headline-2` — add `max-w-[24ch]` at tablet stacked so the manifesto sentence doesn't run full width when it stacks above the lede paragraphs. (Removed at `lg:` where the column already constrains it.)
-
-Result on tablet portrait (768–1023): portrait sits at top at full ~280px width with caption, then the manifesto headline + two lede paragraphs flow underneath in a controlled measure column. No more 22% portrait.
-
-### 3. Process list — `src/components/fly4media/ProcessList.tsx`
-- Header grid `md:grid-cols-12 ... mb-16 md:mb-24` → `lg:grid-cols-12 ... mb-16 lg:mb-24`.
-- Header eyebrow `md:col-span-3` → `lg:col-span-3`. Headline `md:col-span-9` → `lg:col-span-9`.
-- Row grid: still 12-col base, but promote the inner split: `col-span-2 md:col-span-1` → `col-span-2 lg:col-span-1` (number), `col-span-10 md:col-span-4` → `col-span-10 lg:col-span-4` (title), `col-span-12 md:col-span-7` → `col-span-12 lg:col-span-7` (desc).
-- Row padding `py-8 md:py-10` → `py-8 lg:py-10`.
-
-Result on tablet portrait: each step is number+title on row 1, full-width body copy on row 2 — generous and readable. No more `t-headline-3` pinched into a 230px column.
-
-### 4. Capabilities — `src/components/fly4media/Capabilities.tsx`
-- Outer grid `md:grid-cols-12 gap-10` → `lg:grid-cols-12 gap-10 lg:gap-16`.
-- Heading column `md:col-span-4` → `lg:col-span-4`.
-- List column `md:col-span-8 md:pl-10` → `lg:col-span-8 lg:pl-10`.
-- Eyebrow `mb-6` → `mb-6 lg:mb-8`.
-- Heading: add `max-w-md` so on `lg` and up the headline holds a manifesto measure instead of stretching to fit the 4-col cell.
-
-Result on tablet portrait: full-width heading with editorial measure, then the 6-item list in a clean 2-column sub-grid below at full width — much more breathing room than the current 33/67 with 2-col list squeezed into the right side.
+No copy changes, no logic changes, no design-token changes, no submit-flow changes. One file.
 
 ---
 
-## Files touched (4)
+## Changes — `src/components/fly4media/ContactModal.tsx`
 
-1. `src/pages/About.tsx` — hero measure, Philosophy gating + portrait polish.
-2. `src/components/fly4media/ProcessList.tsx` — `lg:` gating throughout.
-3. `src/components/fly4media/Capabilities.tsx` — `lg:` gating, gutter, heading measure.
-4. (CTA untouched — already refined.)
+### 1. Layout gating: md → lg (everywhere)
+- `md:grid-cols-2` → `lg:grid-cols-2`.
+- Brand `<aside>` strip mode → desktop split: `md:h-auto md:min-h-screen md:max-h-none` → `lg:h-auto lg:min-h-screen lg:max-h-none`. Strip cap `h-[34vh] min-h-[220px] max-h-[280px]` stays for <1024.
+- Right `<section>` `md:min-h-screen` → `lg:min-h-screen`.
+- Brand-panel inner stack `md:p-14 lg:p-20 md:min-h-screen` → `p-8 lg:p-16 xl:p-20 lg:min-h-screen`.
+- Mobile-only X button `md:hidden` → `lg:hidden`.
+- Desktop X button `hidden md:block ... md:top-8 md:right-8` → `hidden lg:block lg:top-8 lg:right-8`.
+- Brand top "Fly4MEdia" eyebrow `hidden md:flex` → `hidden lg:flex`.
+- Brand lede paragraph `hidden md:block` → `hidden lg:block`.
+- Brand contact footer `hidden md:flex` → `hidden lg:flex`.
+- Mobile-footer contact line `md:hidden` → `lg:hidden`.
+- All inner spacing tokens that toggle at `md:` (`mb-3 md:mb-8`, `mb-4 md:mb-5`, `mb-8 md:mb-14`, `py-10 md:py-20`, `px-6 md:px-14 lg:px-20`, `mb-2 md:mb-3` on field labels) re-gated to `lg:`.
 
-No changes to `index.css`, `PageShell`, copy, data, or design tokens.
+### 2. Tablet posture (768–1023, now stacked)
+- Image strip cap stays at `max-h-[280px]` so it reads as a cinematic banner, not a hero.
+- Form column gets generous padding: `px-8 py-14` (matches rest-of-site editorial gutters), so on tablet portrait the form has the same calm rhythm as the `/services` and `/about` stacked sections.
+- Brand contact info (email/phone/Alberta) appears once — in the mobile-footer line under the form on <1024, in the brand footer on ≥1024. No duplication.
+
+### 3. Desktop polish (≥1024)
+- Brand panel padding `p-8 lg:p-16 xl:p-20` — at 1920 we get a generous 80px gutter, at 1024 a tighter 64px; replaces the current `p-14 lg:p-20` jump.
+- Brand h2 (`t-headline-1`) gets `max-w-[14ch]` so the line breaks like "Let's create / something worth / looking up at." instead of stretching to the column edge.
+- Form h3 (`t-headline-2`) gets `max-w-[18ch]` for the same reason.
+- Form max-width stays `max-w-xl` and stays centered in the right column — already correct.
+
+### 4. Field hygiene
+- Label spacing `mb-2 md:mb-3` → `mb-2 lg:mb-3`.
+- Form vertical rhythm (`space-y-9`) untouched — reads correctly at all sizes.
+
+---
+
+## What does NOT change
+
+- Submit flow, validation, success/error states.
+- Animations (`animate-modal-overlay-in`, `animate-modal-panel-in`, `motion-safe:animate-kenburns`, field underline).
+- Image asset, ken-burns wash, grain overlay, gradient.
+- Copy.
+- The `Field` component contract.
+- `index.css`, `PageShell`, design tokens.
 
 ---
 
 ## Verification before claiming done
 
-- 1920×1080 — confirm hero measure, Philosophy gutter, Capabilities heading measure.
-- 1280×720 — confirm 12-col splits compose with new gutters.
-- 1024×768 (tablet landscape) — confirm `lg:` columns engage cleanly at exactly 1024.
-- 820×1180 (tablet portrait) — confirm Philosophy stacks (portrait first, then letter), Process rows have full-width body, Capabilities heading + list stack with full breathing room.
+- 1920×1080 — brand h2 wraps over 3 lines, form headline wraps over 2, generous gutters both sides.
+- 1280×720 — split engages cleanly at exactly 1024+, no overlap with X button.
+- 1024×768 (tablet landscape) — split engages, both columns breathe.
+- 820×1180 (tablet portrait) — strip banner on top (cap 280px), form below with `px-8 py-14`, mobile-footer contact line visible at bottom.
