@@ -1,42 +1,47 @@
-## Case Study 4 — *Field & Frequency* — full editorial upgrade
+## Audit — Case Study 4 (Field & Frequency)
 
-CS4 has three real drone clips (field-1/2/3). Hero already uses field-1. Gallery has field-2 + field-3. No duplication in the originals — but the new `perspectiveImage` slot lets us place each clip in its strongest narrative role and dedupe naturally.
+CS4 already ships the full upgraded structure: `perspectiveImage`/`perspectiveVideoSources` on `field-2`, full 6-beat `narrative` (opportunity → problem → perspective shift → execution → outcome → takeaway), 3 supporting Nano Banana stills (`weathered-steel`, `seam-in-snow`, `prairie-horizon`) placed after opportunity / problem / execution, and the gallery auto-dedupes to `field-3` only. No duplication, all 3 real drone clips appear exactly once in their strongest narrative slot.
 
-### 1. Three Nano Banana supporting images → `src/assets/cs/field/`
+**Spot fixes for CS4** (Hormozi-clarity pass, copy-only):
+- Tighten the **takeaway** line so the value lands harder: "Compliance documents a site. Cinema gives it standing — and standing is what gets quoted, shared, and remembered."
+- Sharpen **outcome** body to lead with the perception shift before the deliverable note (no structural change).
 
-All hyper-realistic, no people, no faces, no readable signage/text. Southern Alberta industrial estate in winter, restrained palette consistent with the existing field-1/2/3 aerials.
+That's it for CS4. No new assets, no component changes.
 
-1. `seam-in-snow.jpg` (wide, 1920×1080) — *"Hyper-realistic editorial top-down photograph of a long straight tire-track seam pressed into fresh snow over hard prairie ground at first light, faint blue-grey shadow, restrained monochromatic palette, no people, no vehicles, no signage, no text, photographic 35mm look, low contrast."*
-2. `weathered-steel.jpg` (portrait, 1024×1280) — *"Cinematic editorial detail of weathered galvanised steel cladding on a southern Alberta industrial outbuilding under flat winter overcast light, faint dusting of snow, no people, no signage, no text, no logos, restrained palette, photographic 50mm look, shallow depth of field."*
-3. `prairie-horizon.jpg` (wide, 1920×1080) — *"Hyper-realistic editorial photograph of a vast empty southern Alberta prairie horizon in winter at first light, distant Rocky Mountain foothills silhouette, snow-dusted stubble field, no people, no buildings, no signage, no text, restrained cool palette, photographic 35mm look."*
+## Case Study 5 — Hauling the Foothills
 
-### 2. `src/data/projects.ts` — extend `field-and-frequency`
+Currently the thinnest case study on the site: one hero clip (`hauling-1.mp4`), short copy, no narrative block, no perspective image, no supporting stills. We bring it up to CS1–CS4 parity.
 
-Originals untouched. Add `perspectiveImage` + `perspectiveVideoSources` pointing to **field-2** (the wider mid-altitude pass — the cleanest "perspective shift" beat), so the gallery auto-dedupes to **field-3** (the low traverse) as the closing visual proof.
+### 1. Three Nano Banana supporting images → `src/assets/cs/hauling/`
 
-- **Opportunity** — *"A Working Landscape."* — A southern Alberta industrial estate that mattered to the people who built it but read as infrastructure to everyone else. The brief: show the site at the scale it actually operates at.
-- **Problem** — *"Compliance Looks Like Compliance."* — Industrial sites get documented for regulators — flat, top-down, evidentiary. The land disappears. The decisions disappear. The pride disappears with them.
-- **Perspective Shift** *(signature)* — *"Terrain, Not Inventory."* — We stopped framing the site as assets on a parcel and started framing it as terrain shaped by intent. Geometry from above. Texture from below. The rhythm between the two becomes the argument.
-- **Execution** — *"One Morning. Three Passes."* — A single winter morning. One high and slow for the pattern of the work against the prairie. Two lower traverses for surface — seams in the snow, lines in the dirt, the quiet repetition of something built to last decades.
-- **Outcome** — *"From Infrastructure To Place."* — The same site that read as infrastructure on a survey began reading as place on a screen. Carried into the brand's 2026 internal and partner-facing reporting — and changed how the team itself describes the work.
-- **Takeaway** — *"Compliance documents a site. Cinema gives it standing. The difference shows up in how people talk about the work afterward."*
+All hyper-realistic, no people, no faces, no logos, no readable text, foothills/Rocky Mountain front-range environment, summer morning light to match `hauling-1`.
 
-Supporting image placement:
-- `weathered-steel.jpg` → `after-opportunity` *(intimate detail study — the human-scale texture before we go aerial)*
-- `seam-in-snow.jpg` → `after-problem` *(top-down silence — what compliance frames look like, stripped of context)*
-- `prairie-horizon.jpg` → `after-execution` *(the country the site sits in — proof of "terrain, not inventory")*
+- **`two-lane-aspen.jpg`** (1920×1080) — empty foothills two-lane asphalt road curving through aspen and lodgepole pine at golden first light, no vehicles, no signage, soft haze, editorial documentary realism.
+- **`flatbed-deck-detail.jpg`** (1024×1280, portrait) — tight editorial detail of a weathered steel flatbed deck with chain tie-down, rust patina, gravel dust, shallow depth of field, overcast diffused light, no logos, no people, no text.
+- **`foothills-horizon.jpg`** (1920×1080) — wide empty Alberta foothills horizon at summer dawn with rolling grass, distant Rocky Mountain front range, single thread of two-lane road disappearing into terrain, no vehicles, no people, no signage.
+
+### 2. `src/data/projects.ts` — extend `hauling-the-foothills`
+
+Single real clip (`hauling-1`) is the hero. Since there is only one drone asset, we keep `perspectiveImage` pointing at the **`foothills-horizon` Nano Banana still** so the Perspective Shift section gets its own visual moment without re-using the hero video. Gallery stays empty of duplicates — the auto-dedupe already filters the hero out, and the supporting stills carry the visual rhythm.
+
+Narrative beats (Apple restraint + Hormozi clarity + Brunson arc):
+
+- **Opportunity** — *"A Working Day."* The job is real: pickup, flatbed, skid steer, a foothills two-lane between sites. The country it moves through is the brand.
+- **Problem** — *"Operations Lives On A Phone."* Quick cab clips. Load arrives, load leaves. The work gets logged; the country, the craft, the standard — they disappear with the dust.
+- **Perspective Shift** — *"A Small Deliberate Thing In A Very Large Place."* Hold altitude long enough for the road to register as terrain and the load to register as intent. The truck stops being a vehicle. It becomes a decision moving across country.
+- **Execution** — *"One Morning. One Line."* A single summer morning along a foothills two-lane. One slow aerial follow at the pace of the load — pickup, flatbed, skid steer — threading aspen and pine. No cuts. No music swell. The road. The weight. The country opening on either side.
+- **Outcome** — *"From Logistics To Craft."* What read as logistics on a schedule began reading as craft on a road. Folded into the operator's 2026 brand and recruitment storytelling — and quietly raised the bar for what their team thinks the work is worth.
+- **Takeaway** — *"Anyone can move a load. The footage decides whether moving it looks like work or looks like a standard."*
+
+`supportingImages` placement:
+- `flatbed-deck-detail` — `after-opportunity` (portrait, the human-scale detail before we go aerial)
+- `two-lane-aspen` — `after-problem` (wide, the country that disappears in a phone clip)
+- `foothills-horizon` — wired as `perspectiveImage` (full-bleed, carries the Perspective Shift section)
 
 ### 3. No component changes
 
-`Project.perspectiveImage` + `CaseStudyGallery` dedupe already shipped. Once the data is added, `/work/field-and-frequency` automatically renders Hero (field-1) → Meta → Opportunity (steel) → Perception Gap (seam in snow, flipped) → Perspective Shift (full-bleed field-2 video) → Execution (prairie horizon) → Outcome statement → Takeaway → Gallery (field-3 only) → Next Project.
+`Project.perspectiveImage`, `narrative`, `supportingImages`, and `CaseStudyGallery` auto-dedupe already shipped with CS3. Once data lands, `/work/hauling-the-foothills` automatically renders the same Apple-clean editorial rhythm as CS1–CS4: Hero (hauling-1) → Meta → Opportunity (flatbed deck) → Perception Gap (two-lane aspen) → Perspective Shift (foothills-horizon, full-bleed) → Execution → Outcome → Takeaway → Next Project.
 
-### Out of scope
+### 4. Out of scope
 
-CS5 (Hauling the Foothills) untouched in this pass.
-
-### Verification
-
-- `/work/field-and-frequency` renders the full enhanced flow.
-- Each of the three real clips (field-1, field-2, field-3) appears exactly once, in its strongest narrative slot.
-- Three new lazy-loaded supporting JPGs with explicit dimensions; no CLS, LCP unchanged.
-- CS1, CS2, CS3 unaffected.
+CS1, CS2, CS3 untouched. CS4 gets a 2-line copy polish in the same `src/data/projects.ts` edit. No new components, no new routes, no new dependencies.
