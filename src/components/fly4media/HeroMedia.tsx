@@ -12,6 +12,8 @@ interface Props {
   /** Single src (legacy) — use `sources` for multi-format / responsive */
   videoSrc?: string;
   sources?: VideoSource[];
+  /** Optional second clip — first clip plays once, then this takes over and loops */
+  nextSources?: VideoSource[];
   className?: string;
   priority?: boolean;
   width?: number;
@@ -23,13 +25,14 @@ interface Props {
  * - Poster paints first (acts as LCP), video fades in on `canplay`
  * - Pauses when offscreen (battery/GPU)
  * - Honors prefers-reduced-motion + Save-Data
- * - Order <source> by preference: WebM → MP4, mobile media-query first
+ * - Optional `nextSources`: plays first clip once, then hands off to second clip on loop
  */
 export default function HeroMedia({
   image,
   alt,
   videoSrc,
   sources,
+  nextSources,
   className = "",
   priority = false,
   width = 1920,
@@ -38,13 +41,18 @@ export default function HeroMedia({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [ready, setReady] = useState(false);
   const [enabled, setEnabled] = useState(true);
+  const [phase, setPhase] = useState<"first" | "next">("first");
 
-  const allSources: VideoSource[] =
+  const firstSources: VideoSource[] =
     sources && sources.length > 0
       ? sources
       : videoSrc
         ? [{ src: videoSrc, type: "video/mp4" }]
         : [];
+
+  const hasSequence = !!(nextSources && nextSources.length > 0);
+  const activeSources = phase === "next" && hasSequence ? nextSources! : firstSources;
+  const shouldLoop = phase === "next" || !hasSequence;
 
   // Respect reduced motion + save-data
   useEffect(() => {
@@ -72,9 +80,16 @@ export default function HeroMedia({
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [enabled]);
+  }, [enabled, phase]);
 
-  const showVideo = enabled && allSources.length > 0;
+  const showVideo = enabled && activeSources.length > 0;
+
+  const handleEnded = () => {
+    if (phase === "first" && hasSequence) {
+      setReady(false);
+      setPhase("next");
+    }
+  };
 
   return (
     <>
@@ -91,17 +106,19 @@ export default function HeroMedia({
       />
       {showVideo && (
         <video
+          key={phase}
           ref={videoRef}
           poster={image}
           autoPlay
           muted
-          loop
+          loop={shouldLoop}
           playsInline
           preload="metadata"
           disableRemotePlayback
           disablePictureInPicture
           aria-hidden="true"
           onCanPlay={() => setReady(true)}
+          onEnded={handleEnded}
           className={`absolute inset-0 w-full h-full object-cover ${className}`}
           style={{
             opacity: ready ? 1 : 0,
@@ -110,7 +127,7 @@ export default function HeroMedia({
             willChange: "opacity",
           }}
         >
-          {allSources.map((s) => (
+          {activeSources.map((s) => (
             <source key={s.src} src={s.src} type={s.type} media={s.media} />
           ))}
         </video>
