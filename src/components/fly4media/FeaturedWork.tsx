@@ -20,9 +20,9 @@ export default function FeaturedWork() {
           </p>
           <div className="md:col-span-6">
             <h2 className="t-headline-1 wrap-editorial">
-              Visual stories
+              Proof,
               <br />
-              from above.
+              not portfolio.
             </h2>
           </div>
           <div className="md:col-span-3 md:flex md:items-end md:justify-end">

@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import { useReveal, useRevealStagger } from "./useReveal";
 
 const SERVICES = [
-  { n: "01", title: "Aerial Cinematography", desc: "Cinematic perspectives that elevate how a brand is experienced." },
-  { n: "02", title: "FPV Drone Filming", desc: "Immersive movement that turns a moment into a memory." },
-  { n: "03", title: "Aerial Photography", desc: "Single frames that reposition a place in a viewer's mind." },
-  { n: "04", title: "Real Estate Media", desc: "Visual storytelling that turns properties into destinations." },
-  { n: "05", title: "Tourism & Lifestyle", desc: "Films that translate a landscape into longing." },
+  { n: "01", title: "Aerial Cinematography", desc: "For the brand that's tired of looking like every other drone reel." },
+  { n: "02", title: "FPV Drone Filming", desc: "Movement the cut can't fake. The shot people rewind." },
+  { n: "03", title: "Aerial Photography", desc: "One frame that repositions a place — and the deck it lives in." },
+  { n: "04", title: "Real Estate Media", desc: "When the listing has to feel like the destination, not the address." },
+  { n: "05", title: "Tourism & Lifestyle", desc: "Films that turn a landscape into a reason to book the flight." },
 ];
 
 export default function Services() {

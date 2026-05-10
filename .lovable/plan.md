@@ -1,66 +1,66 @@
-# Page 2 — About: targeted copy lifts
+## Home page — copy upgrade plan
 
-Services is shipped. Now About. The page is already strong; this is a precision pass, not a rewrite. Three small surgical lifts, no layout changes.
+**Page-level theme:** The Home page is the 5-second proof of the perception thesis. By the time a CMO, founder, or DMO director scrolls past the fold, they should feel: *this studio thinks about my brand the way I do, not the way a vendor does.* Every block reinforces a single idea — **how something is seen decides what it's worth** — without ever saying it twice the same way.
 
----
-
-## Page-level theme
-
-About already has the strongest line on the site (*"We believe perspective changes everything."*). Everything below it should earn that promise — by **moving the camera off us and onto the moment the customer's brief lands differently than they expected.**
-
-Right now the page is 90% about *our* discipline (we wait, we restrain, we listen). That's good — but we can make 30% of it about *their* relief, *their* stakeholder meeting, *their* fear that the cut won't land. That's the shift.
+Surgical copy edits only. No design, layout, or component structure changes.
 
 ---
 
-## Sections
+### 1. `Hero.tsx` (lines 32–46)
 
-### 1. Hero (`src/pages/About.tsx` lines 33–40)
-- **Eyebrow** "Studio — About" → keep, it's clean.
-- **H1** "We believe perspective changes everything." → **leave verbatim.** This is the sanctioned slogan placement and it's perfect.
+- **Eyebrow** (l.32–34): keep "A cinematic perspective studio" — it's the one place this label belongs.
+- **H1** (l.35–41): tighten from a list of three nouns to a sharper claim aimed at decision-makers.
+  - Current: "We make brands, places, and stories worth looking up at."
+  - Proposed: "We make the brands, places, and stories the world actually looks up at."
+  - (One word shift — "actually" — names the unspoken anxiety: *most aerial work doesn't get looked at twice.*)
+- **Lede** (l.43–46): rewrite to speak to the buyer's reality, not describe the service.
+  - Current: "Aerial cinematography for the brands and destinations that understand presentation is positioning."
+  - Proposed: "For the founders, marketers, and destinations who already know — the way you're presented is the position you hold. We just make sure the frame deserves it."
 
-No edits.
+### 2. `BrandStatement.tsx` (lines 8–15)
 
-### 2. Philosophy block (`src/pages/About.tsx` lines 65–94)
-Three paragraphs today. The structure stays. The middle paragraph gets reworked to put the customer in frame.
+- **Eyebrow**: keep "Studio — Philosophy".
+- **Statement** (l.12–15): currently good but a touch corporate ("we build the perspective"). Tighten to make the slogan feel earned rather than stated.
+  - Current: "How something is seen changes how it is valued. We build the perspective that changes the perception."
+  - Proposed: "How something is seen decides what it's worth. Our work is the difference between being shown and being remembered."
 
-- **¶1 (headline statement)** — keep the bones; tighten the second sentence so the rhythm punches harder.
-- **¶2 (restraint)** — currently all about *our* discipline. Rewrite so it's about what restraint *gives the client* — the shot that survives the boardroom, the frame the CMO actually remembers.
-- **¶3 (Alberta / patience)** — keep almost as-is; this is the founder-origin paragraph and its quietness is the point. Light polish only.
+### 3. `FeaturedWork.tsx` (lines 22–26)
 
-### 3. Process list (`src/components/fly4media/ProcessList.tsx` lines 3–8)
-Today each step explains what *we do*. Rewrite each `desc` so it names the **anxiety it removes** — the unspoken fear in the client's head at that stage.
+- **H2**: lift from descriptive to thesis.
+  - Current: "Visual stories from above."
+  - Proposed: "Proof, not portfolio."
+  - Eyebrow stays "Featured Work"; CTA stays "View all projects".
 
-- **01 Discovery** — currently "we listen first" → reframe as the moment they realise we actually got the brief, not just heard it.
-- **02 Creative Direction** — currently "every frame composed before the drone leaves the ground" → reframe as the certainty they can show the storyboard to a stakeholder without flinching.
-- **03 Production** — currently "patience to wait for the right light" → reframe as the absence of compromise on shoot day, even when weather goes sideways.
-- **04 Delivery** — currently "colour-graded master files… full archival" → reframe as the moment the cut lands and the room exhales.
+### 4. `Services.tsx` (Home block — lines 22–26)
 
-Headers (Discovery / Creative Direction / Production / Delivery) stay — they're scannable nouns and the layout depends on them.
+- **H2** is already strong ("Tools for shifting perception."). Leave it.
+- **Service descriptions** (l.5–10): tighten for the Home preview — these are different from the full Services page cards. Make each row name a *use-case anxiety* in one breath.
+  - 01 Aerial Cinematography → "For the brand that's tired of looking like every other drone reel."
+  - 02 FPV Drone Filming → "Movement the cut can't fake. The shot people rewind."
+  - 03 Aerial Photography → "One frame that repositions a place — and the deck it lives in."
+  - 04 Real Estate Media → "When the listing has to feel like the destination, not the address."
+  - 05 Tourism & Lifestyle → "Films that turn a landscape into a reason to book the flight."
 
-The section header "Four steps. Nothing wasted." also stays — it's already perfect.
+### 5. `CaseStudyTeaser.tsx` (line 11)
 
-### 4. Capabilities block (`src/components/fly4media/Capabilities.tsx` lines 3–10)
-6 list items today, all factual checkboxes. The block's job is **trust**, so most of it should stay factual. But all six reading like a spec sheet flattens the page. Lift two so the panel has a heartbeat.
+- **Eyebrow**: change "Featured Case Study" → "Proof of perspective." (Reinforces the thesis without naming the slogan.)
+- Title and tagline are pulled from `projects.ts` — leave dynamic content alone.
 
-- Keep factual: "Transport Canada — Advanced RPAS", "Insured commercial operations", "Cinema-grade aerial drone systems", "Stabilised ground & gimbal workflows"
-- Lift with voice: "FPV cinematic platforms" → name what FPV unlocks for the brief, not what the gear is. "Alberta-based, available worldwide" → keep the geography but make it a stance, not a shipping note.
-- Section header "Built for productions that can't miss the shot." → keep, it's load-bearing.
+### 6. `CTA.tsx` (Home default — lines 27–31)
 
-### 5. Final CTA (`src/pages/About.tsx` lines 48–58)
-- Eyebrow "Let's work together" → fine, but generic. Sharpen toward perception/positioning.
-- Heading "Built for brands that understand presentation is positioning." → already razor-sharp. **Leave verbatim.**
+- **Eyebrow** (l.13 default): change "Start a project" → "Before the brief".
+- **Heading**: keep "Some stories deserve / to be seen from above." — it's the right closing note for Home and the only place this exact metaphor lands.
+- **CTA button** (l.15 default): keep "Begin a conversation".
 
 ---
 
-## Out of scope
+### Out of scope
 
-- Page meta title (already strong)
-- Hero image, layout, spacing, any visual element
-- Adding new sections (no team bios, no timeline — the page's restraint is the point)
-- The slogan itself — used once, on the hero, exactly as planned
+- No edits to `Intro` veil (slogan placement is sanctioned there).
+- No edits to `Header`, `Footer`, `ContactModal`, floating button, project data, or images.
+- No layout, spacing, color, type-scale, or component-prop changes.
+- Other pages (Work index, Case Study, Services page body, About) untouched in this pass.
 
----
+### Recommended next pass after Home
 
-## After this lands
-
-Recommended next page: **Home** (`/`). It's the front door and currently does the heaviest lift in fewest words — the biggest opportunity is sharpening Hero + the BrandStatement section so the perception thesis lands in 5 seconds.
+`FeaturedWork` card data in `src/data/projects.ts` (taglines + categories) — the one place Home/Work/Case Study all pull from. A single sweep there sharpens three pages at once.
