@@ -9,6 +9,7 @@ export default function CaseStudyHero({ project }: { project: Project }) {
         image={project.heroImage}
         alt={`${project.title} — hero image`}
         priority
+        sources={project.heroVideoSources}
       />
       <div
         className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/15 to-foreground/30"

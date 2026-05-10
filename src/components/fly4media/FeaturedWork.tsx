@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useReveal } from "./useReveal";
+import CinematicMedia from "./CinematicMedia";
 import { projects, type Project } from "@/data/projects";
 
 const LAYOUTS = [
@@ -57,14 +58,13 @@ function ProjectCard({ project, className }: { project: Project; className: stri
       className={`reveal group block transition-transform duration-500 ease-[var(--ease-out-soft)] hover:-translate-y-1 ${className}`}
     >
       <div className="media-frame aspect-[4/5]">
-        <img
-          src={project.cardImage}
+        <CinematicMedia
+          image={project.cardImage}
           alt={project.title}
-          loading="lazy"
-          decoding="async"
+          sources={project.cardVideoSources}
+          objectPosition={project.cardObjectPosition}
           width={1280}
           height={1600}
-          className="media-img"
         />
       </div>
       <div className="media-meta mt-6 lg:mt-8 flex items-baseline justify-between gap-6">
