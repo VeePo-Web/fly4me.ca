@@ -29,6 +29,10 @@ import fieldSeamInSnow from "@/assets/cs/field/seam-in-snow.jpg";
 import fieldWeatheredSteel from "@/assets/cs/field/weathered-steel.jpg";
 import fieldPrairieHorizon from "@/assets/cs/field/prairie-horizon.jpg";
 
+import haulingTwoLaneAspen from "@/assets/cs/hauling/two-lane-aspen.jpg";
+import haulingFlatbedDeck from "@/assets/cs/hauling/flatbed-deck-detail.jpg";
+import haulingFoothillsHorizon from "@/assets/cs/hauling/foothills-horizon.jpg";
+
 import csFieldHero from "@/assets/cs-field-frequency-hero.jpg";
 import csField1 from "@/assets/cs-field-1.jpg";
 import csField2 from "@/assets/cs-field-2.jpg";
