@@ -11,6 +11,7 @@ const LAYOUTS = [
   "lg:col-span-5 lg:col-start-8 lg:mt-32",
   "lg:col-span-6 lg:col-start-2",
   "lg:col-span-5 lg:col-start-8",
+  "lg:col-span-6 lg:col-start-2 lg:mt-24",
 ];
 
 export default function Work() {

@@ -8,6 +8,7 @@ const LAYOUTS = [
   "md:col-span-5 md:col-start-8 md:mt-24",
   "md:col-span-6 md:col-start-2",
   "md:col-span-5 md:col-start-8",
+  "md:col-span-7 md:col-start-6 md:mt-16",
 ];
 
 export default function FeaturedWork() {
