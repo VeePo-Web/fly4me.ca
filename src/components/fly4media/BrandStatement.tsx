@@ -10,8 +10,8 @@ export default function BrandStatement() {
         </p>
         <div className="md:col-span-9">
           <p className="t-headline-1">
-            How something is seen changes how it is valued. We build the
-            perspective that changes the perception.
+            How something is seen decides what it's worth. Our work is the
+            difference between being shown and being remembered.
           </p>
         </div>
       </div>

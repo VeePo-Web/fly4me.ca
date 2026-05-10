@@ -9,7 +9,7 @@ export default function CaseStudyTeaser() {
     <section className="bg-background py-24 md:py-40">
       <div ref={ref} className="reveal container-x">
         <p className="t-eyebrow text-muted-foreground mb-8">
-          Featured Case Study
+          Proof of perspective
         </p>
 
         <Link to={`/work/${featured.slug}`} data-cursor="hover" className="group block">

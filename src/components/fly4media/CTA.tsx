@@ -10,7 +10,7 @@ interface Props {
 
 export default function CTA({
   onContact,
-  eyebrow = "Start a project",
+  eyebrow = "Before the brief",
   heading,
   cta = "Begin a conversation",
 }: Props) {

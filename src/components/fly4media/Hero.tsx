@@ -33,16 +33,17 @@ export default function Hero({ onContact }: Props) {
             A cinematic perspective studio
           </p>
           <h1 className="hero-display wrap-editorial text-foreground t-reveal-track">
-            We make brands,
+            We make the brands,
             <br />
             places, and stories
             <br />
-            worth looking up at.
+            the world actually looks up at.
           </h1>
 
           <p className="hero-lede hero-gap-lede max-w-md text-foreground/70 measure">
-            Aerial cinematography for the brands and destinations that
-            understand presentation is positioning.
+            For the founders, marketers, and destinations who already know — the
+            way you're presented is the position you hold. We just make sure the
+            frame deserves it.
           </p>
 
           <div className="hero-gap-cta flex items-center gap-6 flex-wrap">
