@@ -63,9 +63,9 @@ function EnhancedNarrative({ project }: { project: Project }) {
         eyebrow="The Perspective Shift"
         headline={n.perspectiveShift.headline}
         body={n.perspectiveShift.body}
-        image={project.heroImage}
+        image={project.perspectiveImage ?? project.heroImage}
         alt={`${project.title} — perspective shift`}
-        videoSources={project.heroVideoSources}
+        videoSources={project.perspectiveVideoSources ?? (project.perspectiveImage ? undefined : project.heroVideoSources)}
       />
       <CaseStudyNarrative
         eyebrow="The Execution"
