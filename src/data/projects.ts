@@ -21,6 +21,10 @@ import csLake1 from "@/assets/cs-lake-1.jpg";
 import csLake2 from "@/assets/cs-lake-2.jpg";
 import work3 from "@/assets/work-03-lake-boat.jpg";
 
+import lakeWaterSurface from "@/assets/cs/lake/water-surface.jpg";
+import lakeDockDetail from "@/assets/cs/lake/dock-detail.jpg";
+import lakeShorelinePines from "@/assets/cs/lake/shoreline-pines.jpg";
+
 import csFieldHero from "@/assets/cs-field-frequency-hero.jpg";
 import csField1 from "@/assets/cs-field-1.jpg";
 import csField2 from "@/assets/cs-field-2.jpg";
@@ -125,6 +129,8 @@ export const projects: Project[] = [
     cardObjectPosition: "center",
     heroImage: canmore1Poster,
     heroVideoSources: [{ src: canmore1Mp4, type: "video/mp4" }],
+    perspectiveImage: canmore2Poster,
+    perspectiveVideoSources: [{ src: canmore2Mp4, type: "video/mp4" }],
     gallery: [
       {
         src: canmore1Poster,
@@ -208,6 +214,7 @@ export const projects: Project[] = [
     outcome: "Featured across the 2025 destination campaign and short-film circuit.",
     cardImage: work1,
     heroImage: csNorthernHero,
+    perspectiveImage: csNorthern1,
     gallery: [
       { src: csNorthern1, alt: "Aerial shot of a single vehicle on a snow-covered road", ratio: "wide" },
       { src: csNorthern2, alt: "Aerial of turquoise glacial lake with ice floes", ratio: "portrait" },
