@@ -6,7 +6,7 @@ export default function CaseStudyTeaser() {
   const featured = projects[0];
   const ref = useReveal<HTMLDivElement>();
   return (
-    <section className="bg-background py-24 md:py-40">
+    <section className="bg-background py-section-lg">
       <div ref={ref} className="reveal container-x">
         <p className="t-eyebrow text-muted-foreground mb-8">
           Proof of perspective
@@ -25,9 +25,9 @@ export default function CaseStudyTeaser() {
             />
           </div>
 
-          <div className="media-meta mt-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
+          <div className="media-meta mt-8 lg:mt-12 grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
             <div className="md:col-span-7">
-              <h3 className="t-headline-2">
+              <h3 className="t-headline-2 text-balance max-w-3xl">
                 {featured.title}
               </h3>
               <p className="t-lede mt-4 text-muted-foreground max-w-xl">

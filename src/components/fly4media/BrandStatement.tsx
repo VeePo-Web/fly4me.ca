@@ -9,9 +9,16 @@ export default function BrandStatement() {
           Studio — Philosophy
         </p>
         <div className="md:col-span-9">
-          <p className="t-headline-1">
-            How something is seen decides what it's worth. Our work is the
-            difference between being shown and being remembered.
+          <p className="t-headline-1 wrap-editorial max-w-[20ch] lg:max-w-[22ch]">
+            How something is seen
+            <br />
+            decides what it's worth.
+            <br />
+            Our work is the difference
+            <br />
+            between being shown
+            <br />
+            and being remembered.
           </p>
         </div>
       </div>

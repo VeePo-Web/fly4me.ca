@@ -406,7 +406,8 @@
 
   /* ---------- Container ---------- */
   .container-x {
-    @apply px-6 md:px-10 lg:px-16;
+    @apply px-6 md:px-10 lg:px-16 mx-auto;
+    max-width: 1680px;
   }
 
   /* ---------- Tactile global polish ---------- */

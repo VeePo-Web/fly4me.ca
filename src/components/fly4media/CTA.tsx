@@ -21,7 +21,7 @@ export default function CTA({
         <p className="t-eyebrow text-muted-foreground mb-8">
           {eyebrow}
         </p>
-        <h2 className="t-headline-1 wrap-editorial max-w-5xl mx-auto">
+        <h2 className="t-headline-1 wrap-editorial max-w-4xl mx-auto">
           {heading ?? (
             <>
               Some stories deserve
@@ -30,7 +30,7 @@ export default function CTA({
             </>
           )}
         </h2>
-        <div className="mt-14 inline-flex">
+        <div className="mt-12 lg:mt-16 inline-flex">
           <Button onClick={onContact}>{cta}</Button>
         </div>
       </div>
