@@ -355,6 +355,33 @@
   .pb-section-sm { padding-bottom: var(--space-section-sm); }
   .pt-section-lg { padding-top: var(--space-section-lg); }
   .pb-section-lg { padding-bottom: var(--space-section-lg); }
+
+  /* Hero — viewport-locked, scales on the shorter axis so it always fits one screen */
+  .hero-display {
+    font-size: clamp(40px, min(8.2vw, 11vh), 104px);
+    line-height: 1.02;
+    letter-spacing: var(--track-display);
+    font-weight: 500;
+    text-wrap: balance;
+    font-feature-settings: "ss01", "ss02", "cv11", "case", "kern";
+    font-variant-numeric: lining-nums proportional-nums;
+    font-optical-sizing: auto;
+    text-rendering: geometricPrecision;
+  }
+  .hero-eyebrow {
+    font-size: clamp(10px, 1.1vh, 12px);
+  }
+  .hero-lede {
+    font-size: clamp(15px, 1.6vh, 20px);
+    line-height: var(--lh-prose);
+    letter-spacing: var(--track-base);
+    font-weight: 400;
+    text-wrap: pretty;
+  }
+  .hero-gap-lede { margin-top: clamp(14px, 2.2vh, 32px); }
+  .hero-gap-cta  { margin-top: clamp(20px, 3vh, 40px); }
+  .hero-pt       { padding-top: max(96px, 12vh); }
+  .hero-pb       { padding-bottom: max(20px, 4vh); }
 }
 
 @layer utilities {
