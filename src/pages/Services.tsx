@@ -99,7 +99,7 @@ export default function Services() {
           ))}
 
           {/* Visual strip */}
-          <section className="bg-background py-20 md:py-32">
+          <section className="bg-background py-section">
             <div className="w-full h-[50vh] md:h-[70vh] overflow-hidden bg-secondary">
               <img
                 src={strip}
