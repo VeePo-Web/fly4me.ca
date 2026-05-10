@@ -288,9 +288,57 @@ export const projects: Project[] = [
     outcome: "Anthology series picked up by three regional outfitters.",
     cardImage: work3,
     heroImage: csLakeHero,
+    perspectiveImage: csLake1,
     gallery: [
       { src: csLake1, alt: "Aerial of a single kayaker on emerald water", ratio: "wide" },
       { src: csLake2, alt: "Person standing on a wooden dock at a still alpine lake", ratio: "portrait" },
+    ],
+    narrative: {
+      opportunity: {
+        headline: "A Morning, Not A Campaign.",
+        body: "Mountain Co. had compelling product and a brand that kept disappearing into the category around it. The brief wasn't another lifestyle shoot. It was to tell the truth about a quiet morning on the water — and let the truth do the marketing.",
+      },
+      problem: {
+        headline: "Outdoor Brands All Look The Same.",
+        body: "Same hero shots. Same action sequences. Same energy. The category had compressed into a single visual language, and standing inside the convention meant disappearing inside it.",
+      },
+      perspectiveShift: {
+        headline: "Remove The Action. Keep The Atmosphere.",
+        body: "We held the camera still long enough for stillness itself to become the subject. The water did the work. The brand stopped competing on energy and started competing on calm — a category of one.",
+      },
+      execution: {
+        headline: "One FPV Pass. One Held Frame.",
+        body: "A single FPV opener and a series of top-down stills shot in the first hour of light. No music swell, no athlete heroics — the morning at the pace of the morning, and a film that asks nothing of the viewer except attention.",
+      },
+      outcome: {
+        headline: "The Brand That Feels Different.",
+        body: "Customers began describing the company as the one that 'feels different' — without being able to say why. The anthology was picked up by three regional outfitters and re-anchored the brand around restraint.",
+      },
+      takeaway:
+        "In a category sold on action, restraint is the loudest thing on the page.",
+    },
+    supportingImages: [
+      {
+        src: lakeDockDetail,
+        alt: "Editorial detail of weathered cedar dock planks meeting still emerald alpine lake water at dawn with light morning mist",
+        caption: "First frame — cedar, mist, water meeting wood.",
+        ratio: "portrait",
+        placement: "after-opportunity",
+      },
+      {
+        src: lakeWaterSurface,
+        alt: "Glass-still alpine lake at first light with concentric ripples and pastel mountain reflection",
+        caption: "What every other outdoor brand isn't shooting.",
+        ratio: "wide",
+        placement: "after-problem",
+      },
+      {
+        src: lakeShorelinePines,
+        alt: "Empty pebble shoreline at a glacial alpine lake in the Canadian Rockies at dawn with mist on the water",
+        caption: "Pebble shoreline at dawn — atmosphere as the subject.",
+        ratio: "wide",
+        placement: "after-execution",
+      },
     ],
   },
   {
