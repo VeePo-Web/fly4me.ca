@@ -1,64 +1,93 @@
-# Cinematic Intro v2 — Apple-Level Reveal
+# Hero — One‑Screen, Every Device
 
-The current `Intro` component already nails the atmosphere (vignette, fog drift, grain, sweep) but the sequence is inverted from the brief: the eyebrow "Fly4MEdia" appears at the top before the slogan, there's no proper brand stack, no cinematic pause, and the brand never settles below the thesis. We restage the reveal into a true 4-phase sequence under the 2.2s ceiling.
+The current hero uses `min-h-[100dvh]` with fixed top padding (`pt-32 md:pt-40`), `justify-between`, and a `t-display-1` headline that scales only on viewport **width** (`clamp(48px, 9.4vw, 112px)`). On a short laptop (≈928×672) the headline alone consumes ~270px, plus eyebrow + lede + CTAs + the bottom meta row exceed available height — content overflows and the page feels janky.
 
-## Sequence (total ~2150ms)
+## Goal
 
-```
-0ms     Black + vignette paints instantly (no flash, no FOUC)
-0–300   Atmospheric layers fade in: fog drift + grain + faint radial glow
-300–1100 Slogan reveal — "Perspective Changes Everything."
-        Soft upward fade, tracking settles 0.40em → 0.16em, blur 6px → 0
-1100–1500 Cinematic pause (slogan held, faint sweep crosses behind)
-1500–2050 Brand stack rises beneath slogan:
-          • slim hairline (scaleX 0 → 1)
-          • Fly4MEdia wordmark (fade + 6px lift)
-          • "A cinematic perspective studio" descriptor (delayed 120ms)
-          • single restrained light-sweep across the wordmark
-2050–2150 Hairline contracts, veil dissolves (550ms opacity-only fade)
-          Homepage Hero is already painted underneath → continuity
-```
+The hero **always** fits exactly one viewport, top to bottom, on phone, tablet, laptop and 4K — without scroll, without the bottom meta row colliding with the CTAs, and without the headline truncating.
 
-Skip on first user input (already implemented). Honors `prefers-reduced-motion`. Runs once per session via `sessionStorage`. Home route only.
+## Approach
 
-## Layout
+Three coordinated moves, all CSS/markup only — no business logic.
 
-Centered column, generous vertical rhythm:
+### 1. Viewport unit that respects mobile chrome
+
+Switch the section from `min-h-[100dvh]` to a true lock:
 
 ```text
-                  Perspective Changes Everything.        ← t-headline-1, max 22ch
-
-                          —— hairline ——
-
-                            Fly4MEdia                    ← t-headline-3
-                  A cinematic perspective studio         ← t-micro, white/55
+h-[100svh]          → guarantees one screen on iOS/Android (no URL-bar jump)
+md:h-[100dvh]       → desktop uses dynamic vh
+max-h-[100dvh]      → never taller than the window
 ```
 
-Eyebrow at top is removed — the brand becomes the resolution beat, not the opener. Slogan upgraded from `t-headline-2` → `t-headline-1` for the launch-card scale called for in the brief.
+Add `overflow-hidden` (already there) so video crop stays clean.
 
-## Motion language
+### 2. Headline that scales on the *shorter* axis
 
-- Single shared easing: `var(--ease-out-soft)` (already in tokens) — no Framer Motion
-- All transforms GPU-only (translate, scale, opacity, filter:blur, letter-spacing)
-- `will-change: opacity, transform` on animated nodes only
-- Veil out is opacity-only 550ms → no layout shift, Hero paints through
-- Body scroll locked during intro, restored on dissolve
+The root cause of the laptop jank is a width-only clamp. Replace the headline's font-size driver so it shrinks when the **window is short**, not just narrow:
 
-## Files touched
+```text
+font-size: clamp(40px, min(8.2vw, 11vh), 104px);
+line-height: 1.02;
+```
 
-1. `src/components/fly4media/Intro.tsx` — restructure DOM (slogan first, brand stack after, descriptor added), retime via new class names, total HOLD raised to ~2050ms
-2. `src/index.css` (intro section, lines 658–697) — add `intro-brand`, `intro-descriptor`, `intro-hairline-out` keyframes; retime existing `intro-word`, `intro-hairline`, `intro-sweep`, drop `intro-eyebrow` (no longer used)
+Apply via a new utility on the hero headline only (don't touch the global `--fs-display-1` token — other pages depend on it). Pair with `letter-spacing` already on `t-display-1`.
+
+Lede + eyebrow get a parallel, lighter clamp:
+
+```text
+eyebrow: clamp(10px, 1.1vh, 12px)
+lede:    clamp(15px, 1.6vh, 20px)
+gap-lede shrinks: clamp(14px, 2.2vh, 32px)
+```
+
+### 3. Layout that breathes with the viewport
+
+Replace the fixed top/bottom paddings with a vertical rhythm tied to viewport height, and turn the bottom meta row into a true footer that never overlaps:
+
+```text
+<section h-[100svh] overflow-hidden>
+  HeroMedia + gradient (unchanged)
+
+  <div class="container-x relative h-full
+              pt-[max(96px,12vh)] pb-[max(20px,4vh)]
+              flex flex-col">
+    <div class="flex-1 min-h-0 flex flex-col justify-center max-w-3xl">
+      eyebrow
+      h1   ← new fluid clamp
+      lede ← shrinks on short screens
+      CTA row (mt: clamp(20px, 3vh, 40px))
+    </div>
+
+    <div class="hidden md:flex justify-between t-micro shrink-0">
+      Fly4MEdia / 2026   ·   Alberta, Canada / Available worldwide
+    </div>
+  </div>
+</section>
+```
+
+Key mechanics:
+
+- `h-full` + `flex-col` + `flex-1 min-h-0` on the content block → headline+lede+CTAs vertically center in the available space, meta row pinned to the bottom edge
+- Top padding is the larger of the header height (96px) or 12vh — preserves breathing room on tall screens, tightens on short ones
+- `min-h-0` on the centering block prevents flex-overflow on short laptops
+- Mobile keeps a single column without the meta row (already hidden via `md:flex`)
+
+### Files touched
+
+1. `src/components/fly4media/Hero.tsx` — restructure container, swap classes per above. Headline gets a new utility class (e.g. `hero-display`) instead of `t-display-1`.
+2. `src/index.css` — add `.hero-display` utility (the `min(vw, vh)` clamp) plus the eyebrow/lede viewport-height clamps. No global token changes.
 
 ## Out of scope
 
-- Logo morph into navbar position (called "optional advanced behavior" in brief — adds complexity for marginal gain; can land in a follow-up)
-- Drone SVG icon (no asset exists yet; wordmark-only stack is more restrained anyway)
-- Replacing CSS with Framer Motion or canvas
+- Changing copy
+- Touching `HeroMedia` (video pipeline already correct)
+- Other pages' display sizing
+- Removing the meta row (it just stops overlapping)
 
 ## Verification
 
-- Watch full sequence at desktop 1440 + mobile 390
-- Confirm total length ~2.1s, no jank, slogan held visibly before brand reveal
-- Refresh same tab → intro skipped (sessionStorage)
-- Add `?nointro` query → intro skipped
-- DevTools throttle to 4× CPU → still 60fps (CSS only)
+- Resize from 320×568 up through 928×672, 1280×720, 1440×900, 1920×1080 — headline, lede, CTAs and meta row all visible, no scroll inside the hero
+- iOS Safari (URL bar visible vs. hidden) — no layout shift thanks to `svh`
+- Reduced-motion + Save-Data still get poster-only hero
+- No console warnings introduced
