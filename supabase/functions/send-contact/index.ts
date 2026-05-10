@@ -1,4 +1,16 @@
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import {
+  BRAND,
+  bodyText,
+  ctaButton,
+  displayHeading,
+  emailFooter,
+  emailHeader,
+  emailWrapper,
+  metaBlock,
+  quoteBlock,
+  spacer,
+} from "../_shared/email-templates.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -21,13 +33,80 @@ function isEmail(v: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 }
 
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+function firstName(name: string): string {
+  return name.split(/\s+/)[0] || name;
+}
+
+function buildInternalEmail(
+  name: string,
+  email: string,
+  phone: string,
+  project: string,
+): string {
+  const rows: { label: string; value: string; href?: string }[] = [
+    { label: "Email", value: email, href: `mailto:${email}` },
+  ];
+  if (phone) {
+    rows.push({ label: "Phone", value: phone, href: `tel:${phone}` });
+  }
+  rows.push({ label: "Source", value: "fly4me.ca · contact modal" });
+
+  const content = [
+    emailHeader("New enquiry"),
+    displayHeading(`${name} wants to start a project.`),
+    bodyText(
+      "A new enquiry just landed through the site. Details below — reply directly to this email and you'll land in their inbox.",
+    ),
+    metaBlock(rows),
+    quoteBlock("Project", project),
+    spacer(8),
+    emailFooter(),
+  ].join("");
+
+  return emailWrapper(content, `New enquiry from ${name}`);
+}
+
+function buildSubmitterEmail(name: string): string {
+  const fname = firstName(name);
+  const content = [
+    emailHeader("Thanks for reaching out"),
+    displayHeading(`Your note landed with us, ${fname}.`),
+    bodyText(
+      "I read every enquiry personally — usually within one business day. If your project has a deadline or a sensitivity to it, mention it in your reply and I'll prioritise.",
+    ),
+    bodyText(
+      "If we're slow to respond, we're probably out waiting on light or weather somewhere in the Rockies. We'll be back at a screen soon. In the meantime, here's some recent work to sit with.",
+    ),
+    ctaButton("See recent work", BRAND.workUrl),
+    spacer(16),
+    bodyText("— Toby Rennick, Founder · Fly4MEdia"),
+    emailFooter(),
+  ].join("");
+
+  return emailWrapper(
+    content,
+    "Toby will reply personally within one business day.",
+  );
+}
+
+async function sendViaResend(
+  resendKey: string,
+  payload: Record<string, unknown>,
+  label: string,
+): Promise<void> {
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${resendKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    console.error(`[send-contact] resend ${label} failed`, res.status, text);
+    throw new Error(`Resend ${label} failed: ${res.status}`);
+  }
 }
 
 Deno.serve(async (req) => {
@@ -44,13 +123,10 @@ Deno.serve(async (req) => {
     const project = asString(body.project, 2000);
 
     if (!name || !email || !project || !isEmail(email)) {
-      return new Response(
-        JSON.stringify({ error: "Invalid input" }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        },
-      );
+      return new Response(JSON.stringify({ error: "Invalid input" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -72,43 +148,45 @@ Deno.serve(async (req) => {
       console.error("[send-contact] insert failed", insertError);
     }
 
-    // Email delivery via Resend
     if (resendKey) {
-      const html = `
-        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif; color:#111; max-width:560px; margin:0 auto; padding:32px 24px;">
-          <p style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#888; margin:0 0 24px;">New enquiry · Fly4MEdia</p>
-          <h1 style="font-size:22px; font-weight:500; margin:0 0 24px; line-height:1.3;">${escapeHtml(name)} wants to start a project.</h1>
-          <table style="width:100%; border-collapse:collapse; font-size:14px; line-height:1.6;">
-            <tr><td style="padding:8px 0; color:#888; width:90px;">Email</td><td style="padding:8px 0;"><a href="mailto:${escapeHtml(email)}" style="color:#111;">${escapeHtml(email)}</a></td></tr>
-            ${phone ? `<tr><td style="padding:8px 0; color:#888;">Phone</td><td style="padding:8px 0;"><a href="tel:${escapeHtml(phone)}" style="color:#111;">${escapeHtml(phone)}</a></td></tr>` : ""}
-          </table>
-          <div style="margin-top:32px; padding-top:24px; border-top:1px solid #eee;">
-            <p style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#888; margin:0 0 12px;">Project</p>
-            <p style="font-size:15px; line-height:1.65; white-space:pre-wrap; margin:0;">${escapeHtml(project)}</p>
-          </div>
-          <p style="margin-top:40px; font-size:12px; color:#888;">Reply directly to this email to respond.</p>
-        </div>
-      `;
+      const sender = "Fly4MEdia <onboarding@resend.dev>";
 
-      const resendRes = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${resendKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: "Fly4MEdia <onboarding@resend.dev>",
-          to: ["tobyrennick@gmail.com"],
-          reply_to: email,
-          subject: `New enquiry from ${name}`,
-          html,
-        }),
+      const internalHtml = buildInternalEmail(name, email, phone, project);
+      const submitterHtml = buildSubmitterEmail(name);
+
+      const results = await Promise.allSettled([
+        sendViaResend(
+          resendKey,
+          {
+            from: sender,
+            to: ["tobyrennick@gmail.com"],
+            reply_to: email,
+            subject: `New enquiry — ${name}`,
+            html: internalHtml,
+          },
+          "internal",
+        ),
+        sendViaResend(
+          resendKey,
+          {
+            from: sender,
+            to: [email],
+            reply_to: "tobyrennick@gmail.com",
+            subject: "We've got your note — Fly4MEdia",
+            html: submitterHtml,
+          },
+          "submitter",
+        ),
+      ]);
+
+      results.forEach((r, i) => {
+        if (r.status === "rejected") {
+          console.error(
+            `[send-contact] email ${i === 0 ? "internal" : "submitter"} rejected`,
+            r.reason,
+          );
+        }
       });
-
-      if (!resendRes.ok) {
-        const text = await resendRes.text();
-        console.error("[send-contact] resend failed", resendRes.status, text);
-      }
     } else {
       console.warn("[send-contact] RESEND_API_KEY missing, skipping email");
     }
