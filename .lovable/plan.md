@@ -1,46 +1,72 @@
-## Case Study 2 — *Northern Roads*: editorial upgrade
+## Two parts: media-dedupe fix (CS1 + CS2) + Case Study 3 upgrade (*Above the Lake*)
 
-Project 1's narrative model and components (`CaseStudyNarrative`, `CaseStudyPerspective`, `CaseStudyTakeaway`, `OutcomeStatement`) are already shipped. This pass is **purely additive data + 3 generated images** — no new components, no `CaseStudy.tsx` changes.
+---
 
-### 1. Three Nano Banana supporting images → `src/assets/cs/northern/`
+### Part A — Stop the hero from appearing twice/three times
 
-All hyper-realistic, no people, no signage with text, project-specific to the Icefields Parkway in late-winter pre-dawn light. Generated via `imagegen--generate_image` (model `standard`):
+**Root cause:** `CaseStudyPerspective` (the signature middle title-card) reuses `project.heroImage` + `project.heroVideoSources`. CS1's gallery also still contains `canmore1` (same as the hero). Result on CS1: hero video plays at the top, again as the perspective shift, and again in the gallery — three times. CS2: hero photo appears as hero and again in the perspective shift section.
 
-1. `mile-marker.jpg` (portrait, 1024×1280) — *"Hyper-realistic editorial photograph of a frosted, plain unbranded green metal road sign post on the Icefields Parkway in Alberta at first light, snow on the ground, no text, no logos, no people, no vehicles, soft pre-dawn diffused light, distant pine silhouettes, muted blue-grey palette, photographic 35mm look."*
-2. `empty-shoulder.jpg` (wide, 1920×1080) — *"Cinematic editorial photograph of an empty Icefields Parkway shoulder before sunrise in early spring, fresh tire tracks in light snow on black asphalt curving toward distant Canadian Rockies, no people, no vehicles, no signage, soft cool blue-grey light, restrained composition, photographic anamorphic feel."*
-3. `glacial-reflection.jpg` (wide, 1920×1080) — *"Hyper-realistic editorial photograph of a still turquoise glacial lake at dawn in the Canadian Rockies, faint ice floes near the shoreline, mountain reflection in the water, no people, no boats, no signage, no text, soft pastel pre-sunrise light, restrained palette, photographic 35mm look."*
+**Fix (data-driven, no new components):**
 
-Lazy-loaded, explicit width/height, served via `<img>`. Combined target ≤600 KB.
+1. Extend `Project` in `src/data/projects.ts` with optional fields:
+   ```ts
+   perspectiveImage?: string;
+   perspectiveVideoSources?: VideoSource[];
+   perspectiveObjectPosition?: string;
+   ```
+2. Update `CaseStudyPerspective` consumer in `src/pages/CaseStudy.tsx` to prefer `project.perspectiveImage` / `perspectiveVideoSources` and fall back to hero only when not provided.
+3. Update `CaseStudyGallery` to **auto-dedupe**: filter out gallery items whose `src` matches `project.heroImage` or `project.perspectiveImage`. Pure presentation logic; no data churn.
+4. Wire bespoke perspective assets:
+   - **CS1 (Among the Pines)** — perspective uses the second pass: `canmore2Poster` + `canmore2Mp4` (the slow, low traverse through the trunks — actually a stronger "perspective shift" beat than the top-down hero). Gallery then auto-dedupes both → empty gallery section, which is correct (only two clips exist; both are now placed intentionally).
+   - **CS2 (Northern Roads)** — perspective uses `csNorthern1` (single vehicle on the snow road — the "road as protagonist" moment). Hero stays `csNorthernHero`. Gallery dedupes `csNorthern1`, leaves `csNorthern2` (glacial lake) as the single closing gallery beat.
 
-### 2. `src/data/projects.ts` — add `narrative` + `supportingImages` to project 02
+After this, every original asset appears exactly once per page, in its strongest narrative slot.
 
-Append after the existing `gallery` array on `northern-roads`. Original media (`csNorthernHero`, `csNorthern1`, `csNorthern2`) untouched.
+---
 
-- **Opportunity** — *"A Road, Not A Postcard."* — Travel Alberta wanted a tourism film that didn't oversell. The Icefields Parkway already sells itself; the work was to honor it.
-- **Problem** — *"Tourism Films Got Loud."* — Quick cuts, hero music, postcards in motion. Audiences had stopped trusting the genre. The parkway deserved quieter.
-- **Perspective Shift** *(signature)* — *"The Road As The Protagonist."* — One vehicle. One line of light. Two pre-dawn shoots. The destination becomes the country between the destinations.
-- **Execution** — *"No Music Swell. No Hard Sell."* — Lake Louise to Jasper, single vehicle, single line. Held altitude, held pace, held silence — the film became a meditation, not a brochure.
-- **Outcome** — *"Conversation Changed From Place To Feeling."* — The parkway started reading less like a place to visit and more like a feeling people wanted to chase. Featured across the 2025 destination campaign and short-film circuit.
-- **Takeaway** — *"Tourism is sold by spectacle. Travel is sold by atmosphere. We chose the second — and so did the audience."*
+### Part B — Case Study 3: *Above the Lake* — full editorial upgrade
+
+Same pattern as CS1/CS2: bespoke `narrative` block + 3 hyper-realistic Nano Banana supporting images, all originals preserved.
+
+#### B1. Three Nano Banana images → `src/assets/cs/lake/`
+
+All hyper-realistic, no people, no faces, no text. Lake Minnewanka / Canadian Rockies alpine-lake universe at first light.
+
+1. `water-surface.jpg` (wide, 1920×1080) — *"Hyper-realistic editorial photograph of a glass-still alpine lake surface at first light, faint concentric ripples from a single drop, soft pastel reflection of distant mountains, no people, no boats, no signage, restrained palette, photographic 35mm look, low contrast."*
+2. `dock-detail.jpg` (portrait, 1024×1280) — *"Cinematic editorial detail of weathered cedar dock planks meeting still emerald alpine lake water at dawn, light morning mist, no people, no boats, no text, soft cool light, restrained composition, photographic look, shallow depth of field."*
+3. `shoreline-pines.jpg` (wide, 1920×1080) — *"Hyper-realistic editorial photograph of an empty pebble shoreline at a glacial alpine lake in the Canadian Rockies at dawn, dark pine treeline, faint mist on the water, distant ridge, no people, no boats, no signage, restrained pastel palette, photographic 35mm look."*
+
+#### B2. `src/data/projects.ts` — add narrative + supportingImages + perspective wiring to `above-the-lake`
+
+Originals preserved (`csLakeHero`, `csLake1`, `csLake2`).
+
+- **Opportunity** — *"A Morning, Not A Campaign."* — Mountain Co. had compelling product but visuals that looked like every other outdoor brand. The brief: tell the truth about a quiet morning on the water — and let truth do the marketing.
+- **Problem** — *"Outdoor Brands All Look The Same."* — Same hero shots, same action sequences, same energy. The category had compressed into a single visual language. Standing inside the convention meant disappearing.
+- **Perspective Shift** *(signature)* — *"Remove The Action. Keep The Atmosphere."* — Held the camera still long enough for stillness itself to become the subject. The water did the work. The brand stopped competing on energy and started competing on calm.
+- **Execution** — *"One FPV Pass. One Held Frame."* — A single FPV opener and a series of top-down stills shot in the first hour of light. No music swell, no athlete heroics — the morning at the pace of the morning.
+- **Outcome** — *"The Brand That Feels Different."* — Customers started describing the company as the one that "feels different" — without being able to say why. Anthology series picked up by three regional outfitters.
+- **Takeaway** — *"In a category sold on action, restraint is the loudest thing on the page."*
 
 Supporting image placement:
-- `mile-marker.jpg` → `after-opportunity` *(detail study, sets the tone — frost, quiet, scale)*
-- `empty-shoulder.jpg` → `after-problem` *(the road without a campaign on top of it — what the genre forgot)*
-- `glacial-reflection.jpg` → `after-execution` *(the country between destinations — proof of the "atmosphere over spectacle" thesis)*
+- `dock-detail.jpg` → `after-opportunity` *(intimate first frame — sets the calm)*
+- `water-surface.jpg` → `after-problem` *(visual proof of "what every other brand isn't doing")*
+- `shoreline-pines.jpg` → `after-execution` *(atmospheric closer before the outcome statement)*
 
-Perspective Shift section reuses `project.heroImage` (`csNorthernHero`) full-bleed — original media, no replacement.
+Perspective Shift section uses bespoke perspective asset: `csLake1` (the kayaker top-down — the literal "removed action / held frame"). Hero stays `csLakeHero`. Gallery auto-dedupes `csLake1`, leaves `csLake2` (dock) as the closing beat.
 
-### 3. No component / page changes
+#### B3. No component changes beyond Part A
 
-`CaseStudy.tsx` already branches on `project.narrative`. Once the data is added, `/work/northern-roads` automatically renders Hero → Meta → Opportunity (mile-marker) → Perception Gap (empty shoulder, flipped) → Perspective Shift (full-bleed hero) → Execution (glacial reflection) → Outcome statement → Takeaway → Gallery (originals preserved) → Next Project.
+Once the data is added, `/work/above-the-lake` automatically renders the full enhanced flow.
 
-### 4. Out of scope
+---
 
-Cases 03, 04, 05 untouched. Project 01 untouched.
+### Out of scope
+
+CS4 (Field & Frequency) and CS5 (Hauling the Foothills) untouched in this pass.
 
 ### Verification
 
-- `/work/northern-roads` renders the full enhanced flow with three new images and rewritten copy.
-- `/work/canmore-heights` unchanged from previous pass.
-- `/work/above-the-lake`, `/work/field-and-frequency`, `/work/hauling-the-foothills` still on legacy layout.
-- LCP unchanged (hero is the original `csNorthernHero`); new JPGs lazy-loaded with explicit dimensions → no CLS.
+- `/work/canmore-heights` — hero (canmore1) appears once; perspective (canmore2) appears once; gallery dedupes both → no repeats.
+- `/work/northern-roads` — hero (csNorthernHero) once; perspective (csNorthern1) once; gallery shows csNorthern2 only.
+- `/work/above-the-lake` — full enhanced narrative; hero (csLakeHero) once; perspective (csLake1) once; gallery shows csLake2 only; three new supporting images render lazily with explicit dimensions.
+- LCP unchanged on all three. No CLS regressions.

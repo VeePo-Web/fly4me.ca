@@ -21,6 +21,10 @@ import csLake1 from "@/assets/cs-lake-1.jpg";
 import csLake2 from "@/assets/cs-lake-2.jpg";
 import work3 from "@/assets/work-03-lake-boat.jpg";
 
+import lakeWaterSurface from "@/assets/cs/lake/water-surface.jpg";
+import lakeDockDetail from "@/assets/cs/lake/dock-detail.jpg";
+import lakeShorelinePines from "@/assets/cs/lake/shoreline-pines.jpg";
+
 import csFieldHero from "@/assets/cs-field-frequency-hero.jpg";
 import csField1 from "@/assets/cs-field-1.jpg";
 import csField2 from "@/assets/cs-field-2.jpg";
@@ -84,6 +88,10 @@ export interface Project {
   cardObjectPosition?: string;
   heroImage: string;
   heroVideoSources?: VideoSource[];
+  /** Optional bespoke asset for the Perspective Shift section (avoids reusing the hero) */
+  perspectiveImage?: string;
+  perspectiveVideoSources?: VideoSource[];
+  perspectiveObjectPosition?: string;
   gallery: GalleryItem[];
   /** Optional editorial narrative — when present, CaseStudy renders the upgraded layout */
   narrative?: Narrative;
@@ -121,6 +129,8 @@ export const projects: Project[] = [
     cardObjectPosition: "center",
     heroImage: canmore1Poster,
     heroVideoSources: [{ src: canmore1Mp4, type: "video/mp4" }],
+    perspectiveImage: canmore2Poster,
+    perspectiveVideoSources: [{ src: canmore2Mp4, type: "video/mp4" }],
     gallery: [
       {
         src: canmore1Poster,
@@ -204,6 +214,7 @@ export const projects: Project[] = [
     outcome: "Featured across the 2025 destination campaign and short-film circuit.",
     cardImage: work1,
     heroImage: csNorthernHero,
+    perspectiveImage: csNorthern1,
     gallery: [
       { src: csNorthern1, alt: "Aerial shot of a single vehicle on a snow-covered road", ratio: "wide" },
       { src: csNorthern2, alt: "Aerial of turquoise glacial lake with ice floes", ratio: "portrait" },
@@ -277,9 +288,57 @@ export const projects: Project[] = [
     outcome: "Anthology series picked up by three regional outfitters.",
     cardImage: work3,
     heroImage: csLakeHero,
+    perspectiveImage: csLake1,
     gallery: [
       { src: csLake1, alt: "Aerial of a single kayaker on emerald water", ratio: "wide" },
       { src: csLake2, alt: "Person standing on a wooden dock at a still alpine lake", ratio: "portrait" },
+    ],
+    narrative: {
+      opportunity: {
+        headline: "A Morning, Not A Campaign.",
+        body: "Mountain Co. had compelling product and a brand that kept disappearing into the category around it. The brief wasn't another lifestyle shoot. It was to tell the truth about a quiet morning on the water — and let the truth do the marketing.",
+      },
+      problem: {
+        headline: "Outdoor Brands All Look The Same.",
+        body: "Same hero shots. Same action sequences. Same energy. The category had compressed into a single visual language, and standing inside the convention meant disappearing inside it.",
+      },
+      perspectiveShift: {
+        headline: "Remove The Action. Keep The Atmosphere.",
+        body: "We held the camera still long enough for stillness itself to become the subject. The water did the work. The brand stopped competing on energy and started competing on calm — a category of one.",
+      },
+      execution: {
+        headline: "One FPV Pass. One Held Frame.",
+        body: "A single FPV opener and a series of top-down stills shot in the first hour of light. No music swell, no athlete heroics — the morning at the pace of the morning, and a film that asks nothing of the viewer except attention.",
+      },
+      outcome: {
+        headline: "The Brand That Feels Different.",
+        body: "Customers began describing the company as the one that 'feels different' — without being able to say why. The anthology was picked up by three regional outfitters and re-anchored the brand around restraint.",
+      },
+      takeaway:
+        "In a category sold on action, restraint is the loudest thing on the page.",
+    },
+    supportingImages: [
+      {
+        src: lakeDockDetail,
+        alt: "Editorial detail of weathered cedar dock planks meeting still emerald alpine lake water at dawn with light morning mist",
+        caption: "First frame — cedar, mist, water meeting wood.",
+        ratio: "portrait",
+        placement: "after-opportunity",
+      },
+      {
+        src: lakeWaterSurface,
+        alt: "Glass-still alpine lake at first light with concentric ripples and pastel mountain reflection",
+        caption: "What every other outdoor brand isn't shooting.",
+        ratio: "wide",
+        placement: "after-problem",
+      },
+      {
+        src: lakeShorelinePines,
+        alt: "Empty pebble shoreline at a glacial alpine lake in the Canadian Rockies at dawn with mist on the water",
+        caption: "Pebble shoreline at dawn — atmosphere as the subject.",
+        ratio: "wide",
+        placement: "after-execution",
+      },
     ],
   },
   {

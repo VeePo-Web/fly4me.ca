@@ -3,10 +3,13 @@ import CinematicMedia from "./CinematicMedia";
 import type { Project, GalleryItem } from "@/data/projects";
 
 export default function CaseStudyGallery({ project }: { project: Project }) {
+  const used = new Set([project.heroImage, project.perspectiveImage].filter(Boolean) as string[]);
+  const items = project.gallery.filter((g) => !used.has(g.src));
+  if (items.length === 0) return null;
   return (
     <section className="bg-background pb-24 md:pb-40">
       <div className="container-x grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-y-32">
-        {project.gallery.map((item, i) => (
+        {items.map((item, i) => (
           <GalleryTile key={i} item={item} index={i} />
         ))}
       </div>
