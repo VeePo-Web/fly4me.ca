@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import heroImage from "@/assets/cs-canmore-hero.jpg";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Props {
   open: boolean;
@@ -11,6 +12,7 @@ export default function ContactModal({ open, onClose }: Props) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [project, setProject] = useState("");
   const firstFieldRef = useRef<HTMLInputElement>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);
@@ -34,13 +36,18 @@ export default function ContactModal({ open, onClose }: Props) {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (status === "sending") return;
     setStatus("sending");
     try {
-      const subject = encodeURIComponent(`New project enquiry from ${name}`);
-      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${project}`);
-      window.location.href = `mailto:hello@fly4media.com?subject=${subject}&body=${body}`;
-      setTimeout(() => setStatus("sent"), 400);
-    } catch {
+      const { data, error } = await supabase.functions.invoke("send-contact", {
+        body: { name, email, phone, project },
+      });
+      if (error || (data && (data as { error?: string }).error)) {
+        throw error ?? new Error("Submission failed");
+      }
+      setStatus("sent");
+    } catch (err) {
+      console.error("[contact] submit failed", err);
       setStatus("error");
     }
   };
@@ -118,7 +125,8 @@ export default function ContactModal({ open, onClose }: Props) {
               </div>
 
               <div className="hidden md:flex flex-col gap-1 t-meta text-background/60">
-                <span>hello@fly4media.com</span>
+                <a href="mailto:tobyrennick@gmail.com" className="hover:text-background transition-colors">tobyrennick@gmail.com</a>
+                <a href="tel:+14038189686" className="hover:text-background transition-colors">403&nbsp;818&nbsp;9686</a>
                 <span>Alberta, Canada</span>
               </div>
             </div>
@@ -148,13 +156,20 @@ export default function ContactModal({ open, onClose }: Props) {
                     In motion.
                   </p>
                   <p className="t-meta text-muted-foreground">
-                    We'll respond within one business day. Your email client should
-                    have opened — if not, write to{" "}
+                    Your message just landed with us — we'll respond within one
+                    business day. If it's urgent, call{" "}
                     <a
-                      href="mailto:hello@fly4media.com"
+                      href="tel:+14038189686"
                       className="text-foreground underline underline-offset-4"
                     >
-                      hello@fly4media.com
+                      403&nbsp;818&nbsp;9686
+                    </a>{" "}
+                    or write to{" "}
+                    <a
+                      href="mailto:tobyrennick@gmail.com"
+                      className="text-foreground underline underline-offset-4"
+                    >
+                      tobyrennick@gmail.com
                     </a>
                     .
                   </p>
@@ -184,6 +199,13 @@ export default function ContactModal({ open, onClose }: Props) {
                     autoComplete="email"
                   />
                   <Field
+                    label="Phone (optional)"
+                    value={phone}
+                    onChange={setPhone}
+                    type="tel"
+                    autoComplete="tel"
+                  />
+                  <Field
                     label="Project"
                     placeholder="Tell us about your project, vision, or campaign."
                     value={project}
@@ -191,6 +213,19 @@ export default function ContactModal({ open, onClose }: Props) {
                     required
                     multiline
                   />
+
+                  {status === "error" && (
+                    <p className="t-meta text-destructive">
+                      Something went wrong. Please try again, or email{" "}
+                      <a
+                        href="mailto:tobyrennick@gmail.com"
+                        className="underline underline-offset-4"
+                      >
+                        tobyrennick@gmail.com
+                      </a>{" "}
+                      directly.
+                    </p>
+                  )}
 
                   <div className="pt-4">
                     <button
@@ -221,7 +256,7 @@ export default function ContactModal({ open, onClose }: Props) {
 
               {/* Mobile-only footer info */}
               <div className="md:hidden mt-10 pt-6 border-t border-border t-meta text-muted-foreground">
-                hello@fly4media.com · Alberta, Canada
+                tobyrennick@gmail.com · 403 818 9686 · Alberta, Canada
               </div>
             </div>
           </section>
