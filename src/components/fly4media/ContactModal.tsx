@@ -156,13 +156,20 @@ export default function ContactModal({ open, onClose }: Props) {
                     In motion.
                   </p>
                   <p className="t-meta text-muted-foreground">
-                    We'll respond within one business day. Your email client should
-                    have opened — if not, write to{" "}
+                    Your message just landed with us — we'll respond within one
+                    business day. If it's urgent, call{" "}
                     <a
-                      href="mailto:hello@fly4media.com"
+                      href="tel:+14038189686"
                       className="text-foreground underline underline-offset-4"
                     >
-                      hello@fly4media.com
+                      403&nbsp;818&nbsp;9686
+                    </a>{" "}
+                    or write to{" "}
+                    <a
+                      href="mailto:tobyrennick@gmail.com"
+                      className="text-foreground underline underline-offset-4"
+                    >
+                      tobyrennick@gmail.com
                     </a>
                     .
                   </p>
@@ -192,6 +199,13 @@ export default function ContactModal({ open, onClose }: Props) {
                     autoComplete="email"
                   />
                   <Field
+                    label="Phone (optional)"
+                    value={phone}
+                    onChange={setPhone}
+                    type="tel"
+                    autoComplete="tel"
+                  />
+                  <Field
                     label="Project"
                     placeholder="Tell us about your project, vision, or campaign."
                     value={project}
@@ -199,6 +213,19 @@ export default function ContactModal({ open, onClose }: Props) {
                     required
                     multiline
                   />
+
+                  {status === "error" && (
+                    <p className="t-meta text-destructive">
+                      Something went wrong. Please try again, or email{" "}
+                      <a
+                        href="mailto:tobyrennick@gmail.com"
+                        className="underline underline-offset-4"
+                      >
+                        tobyrennick@gmail.com
+                      </a>{" "}
+                      directly.
+                    </p>
+                  )}
 
                   <div className="pt-4">
                     <button
