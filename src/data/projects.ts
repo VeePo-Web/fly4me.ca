@@ -18,6 +18,20 @@ import csField1 from "@/assets/cs-field-1.jpg";
 import csField2 from "@/assets/cs-field-2.jpg";
 import work4 from "@/assets/work-04-industrial.jpg";
 
+export interface VideoSource {
+  src: string;
+  type: string;
+  media?: string;
+}
+
+export interface GalleryItem {
+  src: string;
+  alt: string;
+  ratio: "wide" | "portrait" | "square";
+  videoSources?: VideoSource[];
+  objectPosition?: string;
+}
+
 export interface Project {
   slug: string;
   number: string;
@@ -34,35 +48,57 @@ export interface Project {
   impact: string;
   outcome: string;
   cardImage: string;
+  cardVideoSources?: VideoSource[];
+  cardObjectPosition?: string;
   heroImage: string;
-  gallery: { src: string; alt: string; ratio: "wide" | "portrait" | "square" }[];
+  heroVideoSources?: VideoSource[];
+  gallery: GalleryItem[];
 }
+
+const canmore1Mp4 = "/work/canmore/canmore-1.mp4";
+const canmore2Mp4 = "/work/canmore/canmore-2.mp4";
+const canmore1Poster = "/work/canmore/canmore-1-poster.jpg";
+const canmore2Poster = "/work/canmore/canmore-2-poster.jpg";
 
 export const projects: Project[] = [
   {
     slug: "canmore-heights",
     number: "01",
-    title: "Canmore Heights",
+    title: "Among the Pines",
     category: "Real Estate",
-    client: "Private Residence",
+    client: "Private Acreage",
     location: "Canmore, Alberta",
-    year: "2025",
-    services: ["Aerial Cinematography", "Real Estate Media", "Creative Direction"],
-    tagline: "A modern alpine residence, framed at the scale it was built for.",
+    year: "2026",
+    services: ["Aerial Cinematography", "Land & Estate Films", "Creative Direction"],
+    tagline:
+      "An Alberta acreage shown the way it actually feels — from above the canopy, and from inside the trees.",
     challenge:
-      "The home was being shown the way every home is shown — accurately, but without altitude. Buyers were seeing square footage, not a place worth standing in.",
+      "Land doesn't photograph the way it stands. Surveys show shape; listing photos show weather. Neither tells a buyer what it feels like to walk in under the pines.",
     perspectiveShift:
-      "We stopped framing it as a property and started framing it as a vantage point. The architecture became a quiet instrument; the range became the room.",
+      "We stopped framing acreage as a parcel and started framing it as a place. One vantage from above the canopy to register scale and snowline, one low pass through the trunks to register quiet — and the property became something you could already imagine standing in.",
     story:
-      "Architecture this confident asks for restraint. We approached Canmore Heights as a single, composed portrait — patient camera moves, golden-hour light, and the surrounding range allowed to do what it does. The result is a film that feels less like a listing and more like a quiet introduction.",
+      "Two passes, one early-spring evening. Top-down through the larch and pine to read the land's relationship to the snowline and the surrounding range — then a slow, low traverse through the trunks at human height. The first frame says where you are. The second says what it feels like.",
     impact:
-      "Buyers stopped comparing it to other listings. They started comparing it to the idea of living differently.",
-    outcome: "Listed and sold within nineteen days of release.",
-    cardImage: work2,
-    heroImage: csCanmoreHero,
+      "Buyers stopped asking about lot lines and started asking about the trees.",
+    outcome: "Generated qualified showings within the first week of release.",
+    cardImage: canmore1Poster,
+    cardVideoSources: [{ src: canmore1Mp4, type: "video/mp4" }],
+    cardObjectPosition: "center",
+    heroImage: canmore1Poster,
+    heroVideoSources: [{ src: canmore1Mp4, type: "video/mp4" }],
     gallery: [
-      { src: csCanmore1, alt: "Drone hovering at dusk by mountain home glass facade", ratio: "wide" },
-      { src: csCanmore2, alt: "Top-down view of the home with snow-bordered pool", ratio: "portrait" },
+      {
+        src: canmore1Poster,
+        alt: "Top-down aerial of Alberta pine and larch canopy meeting an early-spring snowline",
+        ratio: "wide",
+        videoSources: [{ src: canmore1Mp4, type: "video/mp4" }],
+      },
+      {
+        src: canmore2Poster,
+        alt: "Low-altitude pass through a stand of pines on a private Canmore acreage at dusk",
+        ratio: "portrait",
+        videoSources: [{ src: canmore2Mp4, type: "video/mp4" }],
+      },
     ],
   },
   {
@@ -151,3 +187,9 @@ export const getNextProject = (slug: string) => {
   if (i === -1) return projects[0];
   return projects[(i + 1) % projects.length];
 };
+
+// Suppress unused import warnings — kept for future use
+void csCanmoreHero;
+void csCanmore1;
+void csCanmore2;
+void work2;
