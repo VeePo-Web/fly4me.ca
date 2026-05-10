@@ -13,16 +13,16 @@ export default function Capabilities() {
   const ref = useReveal<HTMLDivElement>();
   return (
     <section className="bg-foreground text-background py-section">
-      <div ref={ref} className="reveal container-x grid grid-cols-1 md:grid-cols-12 gap-10">
-        <div className="md:col-span-4">
-          <p className="t-eyebrow text-background/50 mb-6">
+      <div ref={ref} className="reveal container-x grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+        <div className="lg:col-span-4">
+          <p className="t-eyebrow text-background/50 mb-6 lg:mb-8">
             Capabilities
           </p>
-          <h2 className="t-headline-2">
+          <h2 className="t-headline-2 max-w-md">
             Built for the projects you can&rsquo;t afford to look ordinary.
           </h2>
         </div>
-        <ul className="md:col-span-8 md:pl-10 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
+        <ul className="lg:col-span-8 lg:pl-10 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
           {ITEMS.map((item, i) => (
             <li
               key={item}

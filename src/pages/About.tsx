@@ -34,7 +34,7 @@ export default function About() {
               <p className="t-eyebrow text-background/80 mb-6">
                 A note from Toby &mdash; founder, Fly4MEdia
               </p>
-              <h1 className="t-display-1 wrap-editorial text-background max-w-5xl animate-fade-up">
+              <h1 className="t-display-1 wrap-editorial text-background max-w-4xl animate-fade-up">
                 We believe perspective
                 <br />
                 changes everything.
@@ -67,19 +67,21 @@ function Philosophy() {
   const ref = useReveal<HTMLDivElement>();
   return (
     <section className="bg-background py-section">
-      <div ref={ref} className="reveal container-x grid grid-cols-1 md:grid-cols-12 gap-10">
-        <div className="md:col-span-3">
+      <div ref={ref} className="reveal container-x grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+        <div className="lg:col-span-3">
           <p className="t-eyebrow text-muted-foreground mb-6">A letter</p>
-          <figure className="max-w-[280px]">
-            <img
-              src={toby}
-              alt="Toby Rennick, founder of Fly4MEdia, on a ridge above an alpine lake in the Canadian Rockies"
-              width={1080}
-              height={1440}
-              loading="lazy"
-              decoding="async"
-              className="w-full h-auto object-cover aspect-[3/4] bg-secondary"
-            />
+          <figure className="max-w-[280px] lg:max-w-[320px]">
+            <div className="media-frame aspect-[3/4]">
+              <img
+                src={toby}
+                alt="Toby Rennick, founder of Fly4MEdia, on a ridge above an alpine lake in the Canadian Rockies"
+                width={1080}
+                height={1440}
+                loading="lazy"
+                decoding="async"
+                className="media-img"
+              />
+            </div>
             <figcaption className="mt-4">
               <span className="t-meta block">Toby Rennick</span>
               <span className="t-eyebrow text-muted-foreground">
@@ -88,8 +90,8 @@ function Philosophy() {
             </figcaption>
           </figure>
         </div>
-        <div className="md:col-span-9 max-w-3xl space-y-8">
-          <p className="t-headline-2">
+        <div className="lg:col-span-9 max-w-3xl space-y-8">
+          <p className="t-headline-2 max-w-[24ch] lg:max-w-none">
             You didn&rsquo;t spend a decade building this thing
             just to watch it get flattened by another
             forgettable drone reel. The way you&rsquo;re seen
