@@ -36,13 +36,18 @@ export default function ContactModal({ open, onClose }: Props) {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (status === "sending") return;
     setStatus("sending");
     try {
-      const subject = encodeURIComponent(`New project enquiry from ${name}`);
-      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${project}`);
-      window.location.href = `mailto:hello@fly4media.com?subject=${subject}&body=${body}`;
-      setTimeout(() => setStatus("sent"), 400);
-    } catch {
+      const { data, error } = await supabase.functions.invoke("send-contact", {
+        body: { name, email, phone, project },
+      });
+      if (error || (data && (data as { error?: string }).error)) {
+        throw error ?? new Error("Submission failed");
+      }
+      setStatus("sent");
+    } catch (err) {
+      console.error("[contact] submit failed", err);
       setStatus("error");
     }
   };
