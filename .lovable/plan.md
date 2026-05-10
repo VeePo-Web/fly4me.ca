@@ -1,46 +1,45 @@
-# Hero video sequence — current clip → new uploaded clip (loop)
+## Replace "Field & Frequency" with cinematic drone videos
 
-The user wants the existing hero video to play through once, then seamlessly hand off to the new uploaded clip (`DJI_0398.MP4`), which then loops. Today, `<HeroMedia>` plays a single set of `<source>` tags with `loop` always on. We need a sequence.
+Three uploaded clips are all vertical (720×1280 / 404×720, 19–24s each, ~8–10MB raw H.264). Same project, three angles. They will replace the static `Field & Frequency` (project 04) card image, hero, and gallery — using the same `CinematicMedia` component already proven on the Canmore card. No layout, type, or grid changes.
 
-**Note on the upload**: it's a vertical 720×1280 / 40s / 15MB H.264 file. In a landscape hero with `object-cover`, the sides will be cropped heavily and only a narrow center slice will be visible. That's a product decision — flagging once, then proceeding as requested.
+### 1. Asset pipeline (videos + posters)
 
-One file change + one new asset. No animation libraries, no design changes.
+Re-encode each clip into a web-optimized MP4 (H.264 high profile, CRF 24, faststart, audio stripped, ~4–6 MB each) and capture a poster JPG at ~1s in. Output to `public/work/field/`:
 
----
+- `field-1.mp4` + `field-1-poster.jpg`  ← from `DJI_0397.MP4` (primary — used on card + hero)
+- `field-2.mp4` + `field-2-poster.jpg`  ← from `DJI_20260108113014_0019_D.MP4`
+- `field-3.mp4` + `field-3-poster.jpg`  ← from `DJI_20260108103806_0003_D.MP4`
 
-## Changes
+Posters are LCP-eligible; videos lazy-mount via the existing `CinematicMedia` IntersectionObserver, respect `prefers-reduced-motion` and `Save-Data`. Cards keep their current dimensions, radius, hover, and grid alignment.
 
-### 1. Add the asset
-- `code--copy user-uploads://DJI_0398.MP4` → `public/hero/dji-0398.mp4`.
-- Stays in `public/` (referenced as a static URL like the other hero clips).
+### 2. `src/data/projects.ts` — rewrite project 04
 
-### 2. `src/components/fly4media/HeroMedia.tsx` — add a queued second clip
-- New optional prop `nextSources?: VideoSource[]`. When present:
-  - First clip plays with `loop={false}`.
-  - On the video's `onEnded`, swap the `<source>` list to `nextSources`, set `loop=true`, call `videoEl.load()` then `videoEl.play()`.
-  - Track which clip is active in `useState<'first' | 'next'>('first')` so the `key` on `<video>` flips, React rerenders the source children cleanly, and we attach a one-shot `onEnded` only when `phase === 'first'`.
-- When `nextSources` is absent (every other hero on the site — case studies etc.), behavior is unchanged: single clip, `loop={true}`. Backward compatible.
-- Keep all existing behavior: poster paints first as LCP, fade-in on `canPlay`, IntersectionObserver pause/play, reduced-motion + Save-Data bail-outs, `playsInline`, `muted`, `disableRemotePlayback`, `disablePictureInPicture`.
-- Crossfade polish: when phase swaps to `next`, briefly drop opacity to 0 and let the existing 700ms `canPlay` opacity transition fade the second clip back in. No new CSS — reuse the existing `ready` state path by resetting it on swap.
+Rewrite the project (preserve `slug: "field-and-frequency"` to keep URLs stable; preserve `number: "04"`):
 
-### 3. `src/components/fly4media/Hero.tsx` — wire the second clip
-- Add `nextSources={[{ src: "/hero/dji-0398.mp4", type: "video/mp4" }]}` to the existing `<HeroMedia>` invocation. Existing `sources` array (mobile mp4 / webm / mp4) untouched.
+- **title:** `Field & Frequency`  *(retained — still fits the new footage)*
+- **category:** `Industrial`
+- **client:** `Private commission`
+- **location:** `Southern Alberta`
+- **year:** `2026`
+- **services:** `Aerial Cinematography`, `Industrial Documentation`, `Brand Films`
+- **tagline:** *"A working landscape, framed at the scale it actually operates at."*
+- **challenge / perspectiveShift / story / impact / outcome:** rewritten in the same restrained editorial register as Canmore — focused on perception of scale, repetition, and the quiet geometry of working land. No drone-company clichés, no slogan repetition.
+- **cardImage / heroImage:** `field-1-poster.jpg`
+- **cardVideoSources / heroVideoSources:** `[{ src: "/work/field/field-1.mp4", type: "video/mp4" }]`
+- **cardObjectPosition:** `"center"`
+- **gallery:** two items, both video-backed
+  - `{ src: field-2-poster, ratio: "wide",     videoSources: [field-2.mp4] }`
+  - `{ src: field-3-poster, ratio: "portrait", videoSources: [field-3.mp4] }`
 
----
+Old `csField*` / `work4` imports stay (suppressed) so other refs don't break, then removed if fully unused.
 
-## What does NOT change
+### 3. No component changes required
 
-- The Intro veil component (`src/components/fly4media/Intro.tsx`) — untouched. The user's brief was about the hero video sequence, not the text intro.
-- All other hero/usage sites of `HeroMedia` (case studies, About hero) — `nextSources` is opt-in.
-- Hero copy, layout, gradients, CTAs.
-- The poster image — same `hero` asset stays as the LCP painter and as the swap-state poster.
+`CinematicMedia`, `FeaturedWork`, `Work`, `CaseStudyHero`, and `CaseStudyGallery` already read `cardVideoSources` / `heroVideoSources` / `gallery[].videoSources` — proven on Canmore. Nothing else is touched.
 
----
+### Verification
 
-## Verification
-
-- Hard reload `/` — first hero clip plays through, then visibly hands off to the new clip with a soft crossfade; new clip then loops indefinitely.
-- DevTools Network — second clip fetched (lazy is fine; `preload="metadata"` keeps initial weight low).
-- Reduced-motion / Save-Data — both clips suppressed, poster only (existing behavior preserved).
-- Tab away and back — IntersectionObserver still pauses/plays the active clip.
-- Other pages with `<HeroMedia>` (no `nextSources`) — behavior unchanged.
+- Hard reload `/work` and `/work/field-and-frequency`: card, hero, and both gallery tiles show the new footage; posters appear instantly, video fades in once visible.
+- Network: each clip is ~4–6 MB; only the in-view clip decodes at a time (IntersectionObserver pauses offscreen).
+- Reduced-motion / Save-Data: posters only, no autoplay.
+- Other three projects unchanged.
