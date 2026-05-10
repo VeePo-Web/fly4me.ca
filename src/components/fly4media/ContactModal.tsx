@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import heroImage from "@/assets/cs-canmore-hero.jpg";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Props {
   open: boolean;
