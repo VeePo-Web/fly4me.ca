@@ -12,6 +12,10 @@ import csNorthern1 from "@/assets/cs-northern-1.jpg";
 import csNorthern2 from "@/assets/cs-northern-2.jpg";
 import work1 from "@/assets/work-01-mountain-road.jpg";
 
+import northernMileMarker from "@/assets/cs/northern/mile-marker.jpg";
+import northernEmptyShoulder from "@/assets/cs/northern/empty-shoulder.jpg";
+import northernGlacialReflection from "@/assets/cs/northern/glacial-reflection.jpg";
+
 import csLakeHero from "@/assets/cs-above-lake-hero.jpg";
 import csLake1 from "@/assets/cs-lake-1.jpg";
 import csLake2 from "@/assets/cs-lake-2.jpg";
@@ -203,6 +207,53 @@ export const projects: Project[] = [
     gallery: [
       { src: csNorthern1, alt: "Aerial shot of a single vehicle on a snow-covered road", ratio: "wide" },
       { src: csNorthern2, alt: "Aerial of turquoise glacial lake with ice floes", ratio: "portrait" },
+    ],
+    narrative: {
+      opportunity: {
+        headline: "A Road, Not A Postcard.",
+        body: "Travel Alberta wanted a tourism film that didn't oversell. The Icefields Parkway already sells itself — granite, glaciers, glacial water, two hundred and thirty kilometres of country between Lake Louise and Jasper. The work was simply to honour it.",
+      },
+      problem: {
+        headline: "Tourism Films Got Loud.",
+        body: "Quick cuts. Hero music. Postcards in motion. The genre had been so over-sold that audiences had stopped trusting it — and the parkway, of all places, deserved quieter. The risk was making something true and being mistaken for something ordinary.",
+      },
+      perspectiveShift: {
+        headline: "The Road As The Protagonist.",
+        body: "We stopped framing the destinations and started framing the country between them. One vehicle. One line of light moving through a vast, indifferent range. The destination becomes the road itself — and the viewer becomes the traveller.",
+      },
+      execution: {
+        headline: "No Music Swell. No Hard Sell.",
+        body: "Two pre-dawn shoots, Lake Louise to Jasper, a single vehicle holding a single line. Held altitude. Held pace. Held silence. The film became a meditation rather than a brochure — and the parkway did the work it was always going to do.",
+      },
+      outcome: {
+        headline: "From Place To Feeling.",
+        body: "The conversation moved from a place to visit to a feeling people wanted to chase. Featured across the 2025 destination campaign and short-film circuit — and quietly resharing across audiences who don't normally reshare tourism work.",
+      },
+      takeaway:
+        "Tourism is sold by spectacle. Travel is sold by atmosphere. We chose the second — and so did the audience.",
+    },
+    supportingImages: [
+      {
+        src: northernMileMarker,
+        alt: "Frosted unbranded green metal road sign post on the Icefields Parkway at first light, distant pine and snowline",
+        caption: "Detail study — frost, quiet, scale.",
+        ratio: "portrait",
+        placement: "after-opportunity",
+      },
+      {
+        src: northernEmptyShoulder,
+        alt: "Empty Icefields Parkway shoulder before sunrise, fresh tire tracks in light snow curving toward the Canadian Rockies",
+        caption: "What every other tourism film leaves out — the road, without a campaign on top of it.",
+        ratio: "wide",
+        placement: "after-problem",
+      },
+      {
+        src: northernGlacialReflection,
+        alt: "Still turquoise glacial lake at dawn in the Canadian Rockies with thin ice floes and mountain reflection",
+        caption: "The country between destinations — atmosphere, not spectacle.",
+        ratio: "wide",
+        placement: "after-execution",
+      },
     ],
   },
   {
