@@ -3,6 +3,10 @@ import csCanmore1 from "@/assets/cs-canmore-1.jpg";
 import csCanmore2 from "@/assets/cs-canmore-2.jpg";
 import work2 from "@/assets/work-02-architecture.jpg";
 
+import canmoreBarkMacro from "@/assets/cs/canmore/bark-macro.jpg";
+import canmoreListingFrame from "@/assets/cs/canmore/typical-listing-frame.jpg";
+import canmoreDuskTrack from "@/assets/cs/canmore/dusk-access-track.jpg";
+
 import csNorthernHero from "@/assets/cs-northern-roads-hero.jpg";
 import csNorthern1 from "@/assets/cs-northern-1.jpg";
 import csNorthern2 from "@/assets/cs-northern-2.jpg";
