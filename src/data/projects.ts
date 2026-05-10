@@ -208,3 +208,7 @@ void csCanmoreHero;
 void csCanmore1;
 void csCanmore2;
 void work2;
+void csFieldHero;
+void csField1;
+void csField2;
+void work4;
