@@ -256,7 +256,7 @@ export default function ContactModal({ open, onClose }: Props) {
 
               {/* Mobile-only footer info */}
               <div className="md:hidden mt-10 pt-6 border-t border-border t-meta text-muted-foreground">
-                hello@fly4media.com · Alberta, Canada
+                tobyrennick@gmail.com · 403 818 9686 · Alberta, Canada
               </div>
             </div>
           </section>
