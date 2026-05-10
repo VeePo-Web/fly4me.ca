@@ -125,7 +125,8 @@ export default function ContactModal({ open, onClose }: Props) {
               </div>
 
               <div className="hidden md:flex flex-col gap-1 t-meta text-background/60">
-                <span>hello@fly4media.com</span>
+                <a href="mailto:tobyrennick@gmail.com" className="hover:text-background transition-colors">tobyrennick@gmail.com</a>
+                <a href="tel:+14038189686" className="hover:text-background transition-colors">403&nbsp;818&nbsp;9686</a>
                 <span>Alberta, Canada</span>
               </div>
             </div>
