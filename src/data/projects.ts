@@ -36,6 +36,30 @@ export interface GalleryItem {
   objectPosition?: string;
 }
 
+export type SupportingPlacement =
+  | "after-opportunity"
+  | "after-problem"
+  | "after-shift"
+  | "after-execution"
+  | "after-outcome";
+
+export interface SupportingImage {
+  src: string;
+  alt: string;
+  caption?: string;
+  ratio: "wide" | "portrait" | "square";
+  placement: SupportingPlacement;
+}
+
+export interface Narrative {
+  opportunity: { headline: string; body: string };
+  problem: { headline: string; body: string };
+  perspectiveShift: { headline: string; body: string };
+  execution: { headline: string; body: string };
+  outcome: { headline: string; body: string };
+  takeaway: string;
+}
+
 export interface Project {
   slug: string;
   number: string;
@@ -57,6 +81,9 @@ export interface Project {
   heroImage: string;
   heroVideoSources?: VideoSource[];
   gallery: GalleryItem[];
+  /** Optional editorial narrative — when present, CaseStudy renders the upgraded layout */
+  narrative?: Narrative;
+  supportingImages?: SupportingImage[];
 }
 
 const canmore1Mp4 = "/work/canmore/canmore-1.mp4";
