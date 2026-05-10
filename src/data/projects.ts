@@ -468,10 +468,10 @@ export const projects: Project[] = [
     perspectiveImage: haulingFoothillsHorizon,
     gallery: [
       {
-        src: "/work/hauling/hauling-1-poster.jpg",
-        alt: "Aerial follow of a pickup hauling a flatbed-loaded skid steer down a foothills two-lane",
+        src: "/work/hauling/hauling-2-poster.jpg",
+        alt: "Second aerial pass following the load along the foothills two-lane",
         ratio: "wide",
-        videoSources: [{ src: "/work/hauling/hauling-1.mp4", type: "video/mp4" }],
+        videoSources: [{ src: "/work/hauling/hauling-2.mp4", type: "video/mp4" }],
       },
     ],
     narrative: {
