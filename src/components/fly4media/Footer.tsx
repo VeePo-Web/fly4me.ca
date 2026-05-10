@@ -37,8 +37,13 @@ export default function Footer({ onContact }: Props) {
           </p>
           <ul className="space-y-2.5 t-body">
             <li>
-              <a href="mailto:hello@fly4media.com" data-cursor="hover" className="link-underline">
-                hello@fly4media.com
+              <a href="mailto:tobyrennick@gmail.com" data-cursor="hover" className="link-underline">
+                tobyrennick@gmail.com
+              </a>
+            </li>
+            <li>
+              <a href="tel:+14038189686" data-cursor="hover" className="link-underline">
+                403&nbsp;818&nbsp;9686
               </a>
             </li>
             <li className="text-muted-foreground">Calgary · Alberta · Canada</li>
