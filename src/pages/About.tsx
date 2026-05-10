@@ -47,7 +47,7 @@ export default function About() {
 
           <CTA
             onContact={openContact}
-            eyebrow="Let's work together"
+            eyebrow="Reframe what you're showing the world"
             heading={
               <>
                 Built for brands that understand
