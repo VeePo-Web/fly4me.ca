@@ -19,14 +19,14 @@ export default function ServiceFeature({
 }: Props) {
   const ref = useReveal<HTMLDivElement>();
   return (
-    <article ref={ref} className="reveal border-t border-border py-16 md:py-28">
+    <article ref={ref} className="reveal border-t border-border py-section-sm lg:py-section">
       <div
-        className={`container-x grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-center ${
-          reverse ? "md:[&>*:first-child]:order-last" : ""
+        className={`container-x grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center ${
+          reverse ? "lg:[&>*:first-child]:order-last" : ""
         }`}
       >
-        <div className="md:col-span-6">
-          <div className="overflow-hidden bg-secondary aspect-[4/5] md:aspect-[5/6]">
+        <div className="lg:col-span-6">
+          <div className="media-frame aspect-[4/5] lg:aspect-[5/6]">
             <img
               src={image}
               alt={alt}
@@ -34,18 +34,18 @@ export default function ServiceFeature({
               decoding="async"
               width={1280}
               height={1600}
-              className="w-full h-full object-cover"
+              className="media-img"
             />
           </div>
         </div>
-        <div className="md:col-span-6">
-          <p className="t-eyebrow text-muted-foreground mb-5">
+        <div className="lg:col-span-6">
+          <p className="t-eyebrow text-muted-foreground mb-4 lg:mb-5">
             {number}
           </p>
-          <h3 className="t-headline-1 mb-6">
+          <h3 className="t-headline-1 mb-6 max-w-[16ch]">
             {title}
           </h3>
-          <p className="t-lede text-muted-foreground max-w-md">
+          <p className="t-lede text-muted-foreground max-w-md lg:max-w-lg">
             {desc}
           </p>
         </div>
