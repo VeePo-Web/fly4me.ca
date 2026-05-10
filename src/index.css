@@ -671,12 +671,16 @@
     100% { transform: translateX(400%); opacity: 0; }
   }
   @keyframes intro-word-in {
-    0%   { opacity: 0; letter-spacing: 0.4em; transform: translateY(6px); }
-    100% { opacity: 1; letter-spacing: 0.18em; transform: translateY(0); }
+    0%   { opacity: 0; letter-spacing: 0.40em; transform: translateY(10px); filter: blur(6px); }
+    100% { opacity: 1; letter-spacing: 0.16em; transform: translateY(0);    filter: blur(0); }
   }
-  @keyframes intro-eyebrow-in {
+  @keyframes intro-brand-in {
+    0%   { opacity: 0; transform: translateY(8px); filter: blur(4px); }
+    100% { opacity: 1; transform: translateY(0);   filter: blur(0); }
+  }
+  @keyframes intro-descriptor-in {
     0%   { opacity: 0; transform: translateY(4px); }
-    100% { opacity: 0.7; transform: translateY(0); }
+    100% { opacity: 0.55; transform: translateY(0); }
   }
   @keyframes intro-fog-drift {
     0%   { transform: translate3d(-3%, 0, 0) scale(1.05); }
@@ -687,13 +691,16 @@
     to { opacity: 0; }
   }
 
-  .intro-mark     { animation: intro-mark-in 900ms var(--ease-out-soft) 100ms both; }
-  .intro-hairline { animation: intro-hairline-in 700ms var(--ease-out-soft) 450ms both; }
-  .intro-sweep    { animation: intro-sweep 700ms var(--ease-out-soft) 550ms both; }
-  .intro-word     { display: inline-block; animation: intro-word-in 900ms var(--ease-out-soft) 700ms both; }
-  .intro-eyebrow  { animation: intro-eyebrow-in 700ms var(--ease-out-soft) 1050ms both; }
+  /* Phase 2 — slogan reveal (300–1100ms) */
+  .intro-word     { display: inline-block; will-change: opacity, transform, filter; animation: intro-word-in 800ms var(--ease-out-soft) 300ms both; }
+  /* Phase 4 — brand stack (1500–2050ms), preceded by cinematic pause */
+  .intro-hairline { will-change: transform, opacity; animation: intro-hairline-in 600ms var(--ease-out-soft) 1500ms both; }
+  .intro-brand    { will-change: opacity, transform, filter; animation: intro-brand-in 700ms var(--ease-out-soft) 1620ms both; }
+  .intro-descriptor { will-change: opacity, transform; animation: intro-descriptor-in 600ms var(--ease-out-soft) 1780ms both; }
+  /* Sweep crosses during the cinematic pause + brand reveal */
+  .intro-sweep    { animation: intro-sweep 1100ms var(--ease-out-soft) 1300ms both; }
   .intro-fog      { animation: intro-fog-drift 40s ease-in-out infinite; }
-  .intro-veil-out { animation: intro-veil-fade 500ms var(--ease-out-soft) forwards; }
+  .intro-veil-out { animation: intro-veil-fade 550ms var(--ease-out-soft) forwards; }
 }
 
 /* ---------- Reduced motion guard ---------- */

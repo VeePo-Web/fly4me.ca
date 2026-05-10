@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
 
-const SESSION_KEY = "f4m:intro:v1";
-const HOLD_MS = 1700;
-const FADE_MS = 500;
+const SESSION_KEY = "f4m:intro:v2";
+const HOLD_MS = 2050;
+const FADE_MS = 550;
 
 const Intro = () => {
   const [mounted, setMounted] = useState(() => {
@@ -73,23 +73,25 @@ const Intro = () => {
       />
 
       <div className="relative flex flex-col items-center px-6 text-center">
-        {/* eyebrow */}
-        <span className="text-white/55 t-micro intro-eyebrow">
-          Fly4MEdia
-        </span>
-
-        {/* hairline */}
-        <span className="block mt-5 h-px w-16 origin-center bg-white/25 intro-hairline" />
-
-        {/* slogan — the brand thesis */}
+        {/* slogan — the brand thesis (Phase 2) */}
         <span
-          className="mt-7 block text-white t-headline-2 intro-word"
+          className="block text-white t-headline-1 intro-word"
           style={{ maxWidth: "22ch" }}
         >
-          Perspective changes everything.
+          Perspective Changes Everything.
         </span>
 
-        {/* mark light-sweep accent (kept as a subtle texture) */}
+        {/* brand stack (Phase 4) */}
+        <span className="mt-14 block h-px w-16 origin-center bg-white/25 intro-hairline" />
+
+        <span className="mt-7 block text-white t-headline-3 intro-brand">
+          Fly4MEdia
+        </span>
+        <span className="mt-3 block text-white/55 t-micro intro-descriptor">
+          A cinematic perspective studio
+        </span>
+
+        {/* restrained light sweep across the stack */}
         <span className="pointer-events-none absolute inset-0 overflow-hidden">
           <span className="absolute inset-y-0 -left-1/2 w-1/2 intro-sweep bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent)]" />
         </span>
