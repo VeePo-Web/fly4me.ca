@@ -2,11 +2,11 @@ import { useReveal } from "./useReveal";
 
 const ITEMS = [
   "Cinema-grade aerial drone systems",
-  "FPV cinematic platforms",
+  "FPV platforms — for the shot a crane can't get to",
   "Stabilised ground & gimbal workflows",
   "Transport Canada — Advanced RPAS",
   "Insured commercial operations",
-  "Alberta-based, available worldwide",
+  "Alberta-rooted. On a plane when the brief calls for it.",
 ];
 
 export default function Capabilities() {

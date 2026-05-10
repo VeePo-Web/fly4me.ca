@@ -1,10 +1,10 @@
 import { useReveal, useRevealStagger } from "./useReveal";
 
 const STEPS = [
-  { n: "01", title: "Discovery", desc: "We listen first. Understanding the audience, the brief, and the truth you're trying to tell." },
-  { n: "02", title: "Creative Direction", desc: "Shot lists, references, and storyboards — every frame composed before the drone leaves the ground." },
-  { n: "03", title: "Production", desc: "Licensed flight operations, cinema-grade gear, and the patience to wait for the right light." },
-  { n: "04", title: "Delivery", desc: "Colour-graded master files, optimised cuts for every channel, and full archival." },
+  { n: "01", title: "Discovery", desc: "The call where you realise we actually got the brief — not just heard it. We listen for the truth underneath the deck." },
+  { n: "02", title: "Creative Direction", desc: "Storyboards and shot lists you can show a stakeholder without flinching. Every frame is composed before the drone leaves the ground." },
+  { n: "03", title: "Production", desc: "Licensed flight operations and cinema-grade gear, run with the patience to wait out the weather instead of compromising the shot." },
+  { n: "04", title: "Delivery", desc: "Colour-graded masters and channel-ready cuts. The work isn't done until the cut lands and the room exhales." },
 ];
 
 export default function ProcessList() {
