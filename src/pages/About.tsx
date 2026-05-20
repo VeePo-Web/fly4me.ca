@@ -9,6 +9,29 @@ import about from "@/assets/about-hero.jpg";
 import toby from "@/assets/toby-portrait.jpg";
 import tobyRidge from "@/assets/toby-ridge.jpg";
 
+function TobyRidgeInterlude() {
+  return (
+    <section className="bg-[#0a0a0a] relative overflow-hidden">
+      <div className="w-full h-[55vh] md:h-[70vh]">
+        <img
+          src={tobyRidge}
+          alt="Toby Rennick on a scree slope above a turquoise alpine lake in the Canadian Rockies"
+          loading="lazy"
+          decoding="async"
+          width={1080}
+          height={1920}
+          className="w-full h-full object-cover object-[center_30%] opacity-85"
+        />
+      </div>
+      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background to-transparent pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+      <div className="absolute bottom-10 left-0 right-0 container-x">
+        <p className="t-eyebrow text-background/50">On location — Canadian Rockies</p>
+      </div>
+    </section>
+  );
+}
+
 export default function About() {
   useEffect(() => {
     document.title = "About — Perspective Changes Everything · Fly4MEdia";
@@ -18,8 +41,8 @@ export default function About() {
     <PageShell>
       {({ openContact }: { openContact: () => void }) => (
         <>
-          {/* Minimal hero */}
-          <section className="relative min-h-[80dvh] md:min-h-[100dvh] w-full overflow-hidden bg-secondary">
+          {/* Cinematic hero */}
+          <section className="relative min-h-[80dvh] md:min-h-[100dvh] w-full overflow-hidden bg-[#0a0a0a]">
             <HeroMedia
               image={about}
               alt="Drone pilot silhouette on alpine ridge at dawn"
@@ -27,14 +50,16 @@ export default function About() {
               width={1620}
               height={1080}
             />
+            {/* Bottom-only gradient — cinematic, not flat */}
             <div
-              className="absolute inset-0 bg-gradient-to-t from-foreground/55 via-foreground/15 to-transparent"
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(8,8,8,0.88) 0%, rgba(8,8,8,0.30) 30%, transparent 60%)",
+              }}
               aria-hidden
             />
-            <div className="relative container-x pt-32 md:pt-40 pb-12 md:pb-16 min-h-[80dvh] md:min-h-[100dvh] flex flex-col justify-end">
-              <p className="t-eyebrow text-background/80 mb-6">
-                A note from Toby &mdash; founder, Fly4MEdia
-              </p>
+            <div className="relative container-x pt-32 md:pt-40 pb-14 md:pb-20 min-h-[80dvh] md:min-h-[100dvh] flex flex-col justify-end">
               <h1 className="t-display-1 wrap-editorial text-background max-w-4xl animate-fade-up">
                 We believe perspective
                 <br />
@@ -44,6 +69,7 @@ export default function About() {
           </section>
 
           <Philosophy />
+          <TobyRidgeInterlude />
           <ProcessList />
           <Capabilities />
 
@@ -71,7 +97,7 @@ function Philosophy() {
       <div ref={ref} className="reveal container-x grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
         <div className="lg:col-span-3">
           <p className="t-eyebrow text-muted-foreground mb-6">A letter</p>
-          <figure className="max-w-[280px] lg:max-w-[320px]">
+          <figure>
             <div className="media-frame aspect-[3/4]">
               <img
                 src={toby}
@@ -117,23 +143,6 @@ function Philosophy() {
             person. But the answer to your first email is
             still mine.
           </p>
-
-          <figure className="pt-6 lg:pt-10 max-w-md">
-            <div className="media-frame aspect-[4/5]">
-              <img
-                src={tobyRidge}
-                alt="Toby Rennick on a scree slope above a turquoise alpine lake in the Canadian Rockies"
-                width={1080}
-                height={1920}
-                loading="lazy"
-                decoding="async"
-                className="media-img object-[center_30%]"
-              />
-            </div>
-            <figcaption className="mt-4 t-eyebrow text-muted-foreground">
-              On location &mdash; Canadian Rockies
-            </figcaption>
-          </figure>
         </div>
       </div>
     </section>

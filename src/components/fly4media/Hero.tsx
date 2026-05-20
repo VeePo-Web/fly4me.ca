@@ -1,5 +1,5 @@
 import HeroMedia from "./HeroMedia";
-import { Button, LinkButton } from "./Button";
+import { LinkButton } from "./Button";
 import hero from "@/assets/hero-drone.jpg";
 
 interface Props {
@@ -10,61 +10,108 @@ export default function Hero({ onContact }: Props) {
   return (
     <section
       id="top"
-      className="relative w-full overflow-hidden bg-secondary h-[100svh] md:h-[100dvh] max-h-[100dvh]"
+      /*
+        bg-[#0a0a0a] — if the poster is momentarily absent, the dark
+        background is consistent with the vignette rather than flashing
+        the old light bg-secondary.
+      */
+      className="relative w-full overflow-hidden bg-[#0a0a0a] h-[100svh] md:h-[100dvh] max-h-[100dvh]"
     >
+      {/* Media layer — full-viewport subject, not wallpaper */}
       <HeroMedia
         image={hero}
-        alt="Aerial drone in flight over the Canadian Rockies"
+        alt="Aerial drone footage over the Canadian Rockies"
         priority
         sources={[
           { src: "/hero/hero-drone-mobile.mp4", type: "video/mp4", media: "(max-width: 768px)" },
           { src: "/hero/hero-drone.webm", type: "video/webm" },
-          { src: "/hero/hero-drone.mp4", type: "video/mp4" },
+          { src: "/hero/hero-drone.mp4",  type: "video/mp4" },
         ]}
         nextSources={[
           { src: "/hero/dji-0398.mp4", type: "video/mp4" },
         ]}
       />
-      <div
-        className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/30 to-transparent"
-        aria-hidden
-      />
 
+      {/*
+        Cinematic vignette — replaces the cheap left-to-right gradient wipe.
+        Desktop: a dark radial ellipse anchored left-center where the copy lives.
+        The right 50%+ of the aerial footage is completely unobstructed.
+        Mobile: bottom-rise so the copy at the lower viewport reads clearly.
+        See .hero-vignette in index.css for the gradient definition.
+      */}
+      <div className="absolute inset-0 hero-vignette" aria-hidden />
+
+      {/* Content — relative so it sits above both media and vignette layers */}
       <div className="relative container-x h-full hero-pt hero-pb flex flex-col">
-        <div className="flex-1 min-h-0 flex flex-col justify-center max-w-3xl animate-fade-up">
-          <p className="hero-eyebrow t-eyebrow text-foreground/60 mb-4 md:mb-6">
-            A cinematic perspective studio
-          </p>
-          <h1 className="hero-display wrap-editorial text-foreground t-reveal-track">
-            We make the brands,
+
+        {/* Main copy — vertically centered, constrained to left column */}
+        <div className="flex-1 min-h-0 flex flex-col justify-center max-w-2xl lg:max-w-[52rem]">
+
+          {/* Headline — leads the sequence, no eyebrow crutch */}
+          <h1
+            className="hero-display wrap-editorial text-background t-reveal-track"
+            style={{ animationDelay: "0ms" }}
+          >
+            The brands,
             <br />
             places, and stories
             <br />
             the world actually looks up at.
           </h1>
 
-          <p className="hero-lede hero-gap-lede max-w-md text-foreground/70 measure">
+          {/* Lede — cascades in as headline is mid-animation */}
+          <p
+            className="hero-lede hero-gap-lede max-w-[38ch] text-background/50 animate-fade-up"
+            style={{ animationDelay: "260ms" }}
+          >
             For the founders, marketers, and destinations who already know — the
             way you're presented is the position you hold. We just make sure the
             frame deserves it.
           </p>
 
-          <div className="hero-gap-cta flex items-center gap-6 flex-wrap">
-            <LinkButton to="/work">View our work</LinkButton>
-            <Button onClick={onContact} variant="ghost">
+          {/* CTAs */}
+          <div
+            className="hero-gap-cta flex items-center gap-8 flex-wrap animate-fade-up"
+            style={{ animationDelay: "440ms" }}
+          >
+            <LinkButton to="/work" variant="light">
+              View our work
+            </LinkButton>
+
+            <button
+              onClick={onContact}
+              data-cursor="hover"
+              className="t-button text-background/70 hover:text-background transition-colors duration-[260ms] ease-[var(--ease-out-soft)]"
+            >
               Start a project
-            </Button>
+            </button>
           </div>
         </div>
 
-        <div className="hidden md:flex items-end justify-between t-micro text-foreground/60 shrink-0">
-          <span>Fly4MEdia / 2026</span>
-          <span className="text-right">
-            Based in Alberta, Canada
-            <br />
+        {/* Bottom bar — GPS coordinate + availability. Desktop only. */}
+        <div
+          className="hidden md:flex items-end justify-between shrink-0 animate-fade-up"
+          style={{ animationDelay: "600ms" }}
+        >
+          <span className="t-micro text-background/25 tracking-[0.18em]">
+            N&thinsp;51.04°&ensp;W&thinsp;114.07°
+          </span>
+          <span className="t-micro text-background/25 text-right tracking-[0.08em]">
             Available worldwide
           </span>
         </div>
+      </div>
+
+      {/*
+        Scroll indicator — a thin vertical line that pulses downward.
+        Desktop only. No label — the animation implies the direction.
+        Centered at the bottom of the hero.
+      */}
+      <div
+        className="absolute bottom-8 md:bottom-10 left-1/2 -translate-x-1/2 hidden md:block"
+        aria-hidden
+      >
+        <div className="w-px h-9 bg-background/20 hero-scroll-line" />
       </div>
     </section>
   );

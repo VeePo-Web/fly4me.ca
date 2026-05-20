@@ -3,20 +3,19 @@ import Header from "./Header";
 import Footer from "./Footer";
 import ContactModal from "./ContactModal";
 import { usePageEnter } from "@/hooks/usePageEnter";
-import { useScrollVelocity } from "./useScrollVelocity";
 
 type ChildArg = { openContact: () => void };
 
 interface Props {
   children: ReactNode | ((args: ChildArg) => ReactNode);
-  showFloating?: boolean;
 }
 
-export default function PageShell({ children, showFloating = true }: Props) {
+export default function PageShell({ children }: Props) {
   const [open, setOpen] = useState(false);
   const openContact = () => setOpen(true);
   usePageEnter();
-  useScrollVelocity();
+  /* useScrollVelocity removed — it powered the scroll-blur on .media-img
+     which degraded 4K drone footage. The blur is gone; the hook is gone. */
 
   const rendered = typeof children === "function" ? children({ openContact }) : children;
 
@@ -25,20 +24,6 @@ export default function PageShell({ children, showFloating = true }: Props) {
       <Header onContact={openContact} />
       <main>{rendered}</main>
       <Footer onContact={openContact} />
-
-      {showFloating && (
-        <button
-          onClick={openContact}
-          aria-label="Start a project"
-          data-cursor="hover"
-          data-magnetic
-          className="btn-primary group fixed bottom-5 right-5 md:bottom-8 md:right-8 z-40 !px-5 !py-3 md:!px-6 md:!py-3.5 rounded-full"
-        >
-          <span>Start a project</span>
-          <span className="link-arrow">↗</span>
-        </button>
-      )}
-
       <ContactModal open={open} onClose={() => setOpen(false)} />
     </div>
   );

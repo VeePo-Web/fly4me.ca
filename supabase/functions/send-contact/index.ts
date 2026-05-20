@@ -23,6 +23,7 @@ interface Payload {
   email?: unknown;
   phone?: unknown;
   project?: unknown;
+  services?: unknown;
 }
 
 function asString(v: unknown, max: number): string {
@@ -42,12 +43,16 @@ function buildInternalEmail(
   email: string,
   phone: string,
   project: string,
+  services: string[],
 ): string {
   const rows: { label: string; value: string; href?: string }[] = [
     { label: "Email", value: email, href: `mailto:${email}` },
   ];
   if (phone) {
     rows.push({ label: "Phone", value: phone, href: `tel:${phone}` });
+  }
+  if (services.length > 0) {
+    rows.push({ label: "Interested in", value: services.join(", ") });
   }
   rows.push({ label: "Source", value: "fly4me.ca · contact modal" });
 
@@ -121,6 +126,9 @@ Deno.serve(async (req) => {
     const email = asString(body.email, 255);
     const phone = asString(body.phone, 30);
     const project = asString(body.project, 2000);
+    const services = Array.isArray(body.services)
+      ? (body.services as unknown[]).filter((s) => typeof s === "string").slice(0, 9) as string[]
+      : [];
 
     if (!name || !email || !project || !isEmail(email)) {
       return new Response(JSON.stringify({ error: "Invalid input" }), {
@@ -142,6 +150,7 @@ Deno.serve(async (req) => {
         email,
         phone: phone || null,
         project,
+        services: services.length > 0 ? services : null,
       });
 
     if (insertError) {
@@ -151,7 +160,7 @@ Deno.serve(async (req) => {
     if (resendKey) {
       const sender = "Fly4MEdia <onboarding@resend.dev>";
 
-      const internalHtml = buildInternalEmail(name, email, phone, project);
+      const internalHtml = buildInternalEmail(name, email, phone, project, services);
       const submitterHtml = buildSubmitterEmail(name);
 
       const results = await Promise.allSettled([

@@ -64,9 +64,10 @@ export default function Header({ onContact }: Props) {
       ref={headerRef}
       className={`fixed top-0 inset-x-0 z-50 nav-surface ${
         hidden && !open ? "nav-hidden" : ""
-      } ${open ? "bg-background/90" : ""}`}
+      } ${open ? "bg-background/95" : ""}`}
     >
       <div className="container-x flex items-center justify-between h-16 md:h-20 nav-compress">
+        {/* Brand mark — scale on hover, never rotate; marks are anchors */}
         <Link
           to="/"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -79,11 +80,12 @@ export default function Header({ onContact }: Props) {
             alt=""
             width={28}
             height={28}
-            className="size-6 md:size-7 object-contain transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:rotate-[8deg]"
+            className="size-6 md:size-7 object-contain transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:scale-[1.06]"
           />
           <span className="t-nav">Fly4MEdia</span>
         </Link>
 
+        {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-9" aria-label="Primary">
           {NAV.map((item) => (
             <Link
@@ -92,8 +94,8 @@ export default function Header({ onContact }: Props) {
               data-cursor="hover"
               className={`link-underline t-nav transition-colors duration-300 ${
                 isActive(item.to)
-                  ? "text-foreground is-active"
-                  : "text-foreground/70 hover:text-foreground"
+                  ? "text-foreground font-medium is-active"
+                  : "text-foreground/50 hover:text-foreground"
               }`}
             >
               {item.label}
@@ -102,15 +104,16 @@ export default function Header({ onContact }: Props) {
           <button
             onClick={handleContact}
             data-cursor="hover"
-            className="link-underline t-nav text-foreground/70 hover:text-foreground transition-colors"
+            className="link-underline t-nav text-foreground/70 hover:text-foreground transition-colors duration-300 ml-4 pl-4 border-l border-border/40"
           >
             Contact
           </button>
         </nav>
 
+        {/* Mobile hamburger — two bars, editorial */}
         <button
           onClick={() => setOpen((v) => !v)}
-          aria-label="Menu"
+          aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           data-cursor="hover"
           className="md:hidden flex flex-col gap-[5px] p-2 -mr-2"
@@ -128,38 +131,58 @@ export default function Header({ onContact }: Props) {
         </button>
       </div>
 
+      {/*
+        Mobile drawer — grid-template-rows: 0fr → 1fr animates to true content height
+        at consistent velocity. No max-height accordion velocity inconsistency.
+      */}
       <div
-        className={`md:hidden overflow-hidden bg-background/95 backdrop-blur-md border-b border-border/60 transition-[max-height,opacity] duration-500 ease-[var(--ease-out-soft)] ${
-          open ? "max-h-[28rem] opacity-100" : "max-h-0 opacity-0"
+        className={`md:hidden grid transition-[grid-template-rows,opacity] duration-500 ease-[var(--ease-out-soft)] bg-background/95 backdrop-blur-md border-b border-border/40 ${
+          open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
         }`}
       >
-        <nav className="container-x py-8 flex flex-col gap-6" aria-label="Mobile">
-          {NAV.map((item, i) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className="t-headline-2 text-foreground"
+        <div className="overflow-hidden">
+          <nav className="container-x pt-8 pb-10 flex flex-col gap-5" aria-label="Mobile">
+            {NAV.map((item, i) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={`t-headline-2 transition-colors duration-300 ${
+                  isActive(item.to) ? "text-foreground font-medium" : "text-foreground/60 hover:text-foreground"
+                }`}
+                style={{
+                  animation: open
+                    ? `page-enter-fade 500ms var(--ease-out-soft) ${60 + i * 70}ms both`
+                    : undefined,
+                }}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <button
+              onClick={handleContact}
+              className="t-headline-2 text-left text-foreground/60 hover:text-foreground transition-colors duration-300"
               style={{
                 animation: open
-                  ? `page-enter-fade 480ms var(--ease-out-soft) ${80 + i * 70}ms both`
+                  ? `page-enter-fade 500ms var(--ease-out-soft) ${60 + NAV.length * 70}ms both`
                   : undefined,
               }}
             >
-              {item.label}
-            </Link>
-          ))}
-          <button
-            onClick={handleContact}
-            className="t-headline-2 text-left text-foreground"
-            style={{
-              animation: open
-                ? `page-enter-fade 480ms var(--ease-out-soft) ${80 + NAV.length * 70}ms both`
-                : undefined,
-            }}
-          >
-            Contact
-          </button>
-        </nav>
+              Contact
+            </button>
+
+            {/* Mobile location footnote — editorial anchor */}
+            <p
+              className="t-micro text-foreground/35 mt-4"
+              style={{
+                animation: open
+                  ? `page-enter-fade 500ms var(--ease-out-soft) ${60 + (NAV.length + 1) * 70}ms both`
+                  : undefined,
+              }}
+            >
+              Alberta, Canada · Available worldwide
+            </p>
+          </nav>
+        </div>
       </div>
     </header>
   );

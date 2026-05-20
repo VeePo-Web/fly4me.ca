@@ -29,15 +29,6 @@ const Index = () => {
       </main>
       <Footer onContact={openContact} />
 
-      <button
-        onClick={openContact}
-        aria-label="Start a project"
-        data-magnetic
-        className="btn-primary t-button fixed bottom-5 right-5 md:bottom-8 md:right-8 z-40 shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
-      >
-        Start a project <span aria-hidden>↗</span>
-      </button>
-
       <ContactModal open={open} onClose={() => setOpen(false)} />
       <Intro />
     </div>

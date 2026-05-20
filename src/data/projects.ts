@@ -94,6 +94,11 @@ export interface Project {
   cardImage: string;
   cardVideoSources?: VideoSource[];
   cardObjectPosition?: string;
+  /** CSS aspect-ratio Tailwind class — editorial decision reflecting the actual footage format */
+  cardAspect: string;
+  /** Intrinsic dimensions for img[width/height] — prevents CLS on card grid */
+  cardImgW: number;
+  cardImgH: number;
   heroImage: string;
   heroVideoSources?: VideoSource[];
   /** Optional bespoke asset for the Perspective Shift section (avoids reusing the hero) */
@@ -135,6 +140,9 @@ export const projects: Project[] = [
     cardImage: canmore1Poster,
     cardVideoSources: [{ src: canmore1Mp4, type: "video/mp4" }],
     cardObjectPosition: "center",
+    cardAspect: "aspect-[4/5]",
+    cardImgW: 1080,
+    cardImgH: 1350,
     heroImage: canmore1Poster,
     heroVideoSources: [{ src: canmore1Mp4, type: "video/mp4" }],
     perspectiveImage: canmore2Poster,
@@ -221,6 +229,9 @@ export const projects: Project[] = [
       "The campaign changed the conversation around the parkway from a place to visit to a feeling people wanted to chase.",
     outcome: "Featured across the 2025 destination campaign and short-film circuit.",
     cardImage: work1,
+    cardAspect: "aspect-[16/9]",
+    cardImgW: 1920,
+    cardImgH: 1080,
     heroImage: csNorthernHero,
     perspectiveImage: csNorthern1,
     gallery: [
@@ -295,6 +306,9 @@ export const projects: Project[] = [
       "The work re-anchored the brand around restraint. Customers started describing the company as the one that 'feels different' — without being able to say why.",
     outcome: "Anthology series picked up by three regional outfitters.",
     cardImage: work3,
+    cardAspect: "aspect-[4/3]",
+    cardImgW: 1920,
+    cardImgH: 1440,
     heroImage: csLakeHero,
     perspectiveImage: csLake1,
     gallery: [
@@ -373,6 +387,9 @@ export const projects: Project[] = [
     cardImage: "/work/field/field-1-poster.jpg",
     cardVideoSources: [{ src: "/work/field/field-1.mp4", type: "video/mp4" }],
     cardObjectPosition: "center",
+    cardAspect: "aspect-[3/2]",
+    cardImgW: 1920,
+    cardImgH: 1280,
     heroImage: "/work/field/field-1-poster.jpg",
     heroVideoSources: [{ src: "/work/field/field-1.mp4", type: "video/mp4" }],
     perspectiveImage: "/work/field/field-2-poster.jpg",
@@ -463,6 +480,9 @@ export const projects: Project[] = [
     cardImage: "/work/hauling/hauling-1-poster.jpg",
     cardVideoSources: [{ src: "/work/hauling/hauling-1.mp4", type: "video/mp4" }],
     cardObjectPosition: "center",
+    cardAspect: "aspect-[21/9]",
+    cardImgW: 1920,
+    cardImgH: 823,
     heroImage: "/work/hauling/hauling-1-poster.jpg",
     heroVideoSources: [{ src: "/work/hauling/hauling-1.mp4", type: "video/mp4" }],
     perspectiveImage: haulingFoothillsHorizon,

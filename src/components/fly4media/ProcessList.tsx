@@ -39,15 +39,23 @@ function Row({ n, title, desc }: { n: string; title: string; desc: string }) {
   return (
     <li
       ref={ref}
-      className="reveal border-b border-border py-8 lg:py-10 grid grid-cols-12 gap-6 items-baseline"
+      className="reveal relative border-b border-border py-10 lg:py-14 grid grid-cols-12 gap-6 items-baseline group overflow-hidden"
     >
+      {/* Ghost number — Aristide Benoist technique */}
+      <span
+        className="absolute right-0 top-1/2 -translate-y-1/2 t-display-1 font-bold leading-none text-foreground/[0.03] select-none pointer-events-none tabular-nums"
+        aria-hidden
+      >
+        {n}
+      </span>
+
       <span className="col-span-2 lg:col-span-1 t-micro text-muted-foreground">
         {n}
       </span>
-      <h3 className="col-span-10 lg:col-span-4 t-headline-3">
+      <h3 className="col-span-10 lg:col-span-4 t-headline-2 transition-transform duration-300 ease-out group-hover:translate-x-1">
         {title}
       </h3>
-      <p className="col-span-12 lg:col-span-7 t-body text-muted-foreground">
+      <p className="col-span-12 lg:col-span-7 t-body text-muted-foreground leading-relaxed">
         {desc}
       </p>
     </li>

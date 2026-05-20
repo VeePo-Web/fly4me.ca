@@ -18,7 +18,7 @@ export default function Capabilities() {
           <p className="t-eyebrow text-background/50 mb-6 lg:mb-8">
             Capabilities
           </p>
-          <h2 className="t-headline-2 max-w-md">
+          <h2 className="t-headline-1 max-w-md">
             Built for the projects you can&rsquo;t afford to look ordinary.
           </h2>
         </div>
