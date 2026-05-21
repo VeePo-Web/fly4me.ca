@@ -1,29 +1,23 @@
-## Case Study 5 — Add second real drone clip
+## Add parker@veepo.ca as a second internal recipient
 
-CS5 narrative, supporting stills, and `perspectiveImage` are already shipped. The user uploaded `DJI_0398-3.MP4` and wants it added as the second real drone clip on `/work/hauling-the-foothills`. The hero (`hauling-1.mp4`) stays untouched.
+The contact form already sends through Resend via the `send-contact` edge function. Currently the internal enquiry email is sent only to `tobyrennick@gmail.com`. We'll add `parker@veepo.ca` as a second recipient on that same internal email.
 
-### 1. Add the uploaded video to the project
+### Change
 
-- `code--copy user-uploads://DJI_0398-3.MP4 → public/work/hauling/hauling-2.mp4`
-- Extract first-frame poster with ffmpeg → `public/work/hauling/hauling-2-poster.jpg` (matches the `hauling-1-poster.jpg` pattern, so it lazy-loads cleanly and gives the gallery a sharp still before the video kicks in).
+**File:** `supabase/functions/send-contact/index.ts`
 
-### 2. `src/data/projects.ts` — wire it into CS5
-
-In the `hauling-the-foothills` entry, replace the existing single gallery item (which currently duplicates the hero and gets filtered out by the auto-dedupe) with the new clip:
+In the internal email send (around line 167), update the `to` array:
 
 ```ts
-gallery: [
-  {
-    src: "/work/hauling/hauling-2-poster.jpg",
-    alt: "Second aerial pass following the load along the foothills two-lane",
-    ratio: "wide",
-    videoSources: [{ src: "/work/hauling/hauling-2.mp4", type: "video/mp4" }],
-  },
-],
+to: ["tobyrennick@gmail.com", "parker@veepo.ca"],
 ```
 
-Hero stays as `hauling-1.mp4`. `perspectiveImage` stays as the `foothills-horizon` Nano Banana still. Net result: two **real** drone clips on the page (hero + closing gallery), each appearing exactly once, plus the three supporting stills.
+That's it — one line. Both Toby and Parker will receive every new enquiry. The submitter confirmation email (to the person filling out the form) is unchanged. `reply_to` stays as the submitter's email so replies from either Toby or Parker land in the lead's inbox.
 
-### 3. Out of scope
+### Out of scope
 
-No copy changes, no narrative edits, no component changes, no other case studies touched.
+- No template changes
+- No DB schema changes
+- No frontend changes
+- Submitter auto-reply unchanged
+- Sender stays `onboarding@resend.dev` until `fly4me.ca` is verified in Resend
