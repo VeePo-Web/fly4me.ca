@@ -19,7 +19,8 @@ export default function CTA({
   heading,
   cta = "Begin a conversation",
 }: Props) {
-  const ref = useReveal<HTMLDivElement>();
+  const refHeading = useReveal<HTMLDivElement>();
+  const refCta     = useReveal<HTMLDivElement>();
 
   return (
     /*
@@ -51,49 +52,36 @@ export default function CTA({
         className="absolute inset-0 w-full h-full object-cover opacity-[0.07] pointer-events-none select-none"
       />
 
-      <div ref={ref} className="reveal relative container-x">
+      <div className="relative container-x">
 
-        {/*
-          Eyebrow — only renders when explicitly passed.
-          Default is empty so homepage/work/services get no label.
-          About page passes "If you've read this far —" which earns it.
-        */}
-        {eyebrow && (
-          <p className="t-eyebrow text-background/40 mb-8 md:mb-10">
-            {eyebrow}
-          </p>
-        )}
-
-        {/*
-          Heading at t-display-2 — was t-headline-1 (same scale as every
-          other section header). The CTA is the last thing the viewer reads;
-          it earns the largest type. Left-aligned — the centered CTA is an
-          expired pattern. Left alignment creates directional pull toward
-          the button below.
-          max-w-[16ch] prevents extremely long lines at very wide viewports.
-        */}
-        <h2 className="t-display-2 wrap-editorial max-w-[16ch] mb-10 md:mb-14 lg:mb-16">
-          {heading ?? (
-            <>
-              Some stories deserve
-              <br />
-              to be seen from above.
-            </>
+        {/* Heading — arrives first, argument before action */}
+        <div ref={refHeading} className="reveal">
+          {eyebrow && (
+            <p className="t-eyebrow text-background/40 mb-8 md:mb-10">
+              {eyebrow}
+            </p>
           )}
-        </h2>
+          <h2 className="t-display-2 wrap-editorial wrap-editorial-mobile-off max-w-[16ch] mb-10 md:mb-14 lg:mb-16">
+            {heading ?? (
+              <>
+                Some stories deserve
+                <br />
+                to be seen from above.
+              </>
+            )}
+          </h2>
+        </div>
 
-        {/*
-          btn-light — white button (bg-background, text-foreground) on
-          the dark ground. The standard btn-primary (dark fill) would be
-          invisible on bg-foreground. btn-light is the correct inversion.
-        */}
-        <Button
-          variant="light"
-          onClick={onContact}
-          arrow
-        >
-          {cta}
-        </Button>
+        {/* Button — surfaces 200ms after heading; action follows argument */}
+        <div ref={refCta} className="reveal" style={{ transitionDelay: "200ms" }}>
+          <Button
+            variant="light"
+            onClick={onContact}
+            arrow
+          >
+            {cta}
+          </Button>
+        </div>
 
       </div>
     </section>

@@ -22,7 +22,7 @@ export default function Divider() {
         decoding="async"
         width={1920}
         height={1080}
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover motion-safe:animate-kenburns"
       />
 
       {/*
@@ -40,7 +40,7 @@ export default function Divider() {
         Not decorative: the caption below requires a dark surface.
       */}
       <div
-        className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/60 to-transparent pointer-events-none"
+        className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#0a0a0a]/75 to-transparent pointer-events-none"
         aria-hidden
       />
 
@@ -52,8 +52,8 @@ export default function Divider() {
       */}
       <div className="absolute bottom-6 md:bottom-8 inset-x-0 container-x flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="w-8 h-px bg-background/45 shrink-0" />
-          <span className="t-micro text-background/55 tracking-[0.14em]">
+          <div className="w-8 h-px bg-background/40 shrink-0" />
+          <span className="t-micro text-background/50 tracking-[0.14em]">
             Canadian Rockies &nbsp;·&nbsp; Alberta, Canada
           </span>
         </div>

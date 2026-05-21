@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import ContactModal from "./ContactModal";
 import { usePageEnter } from "@/hooks/usePageEnter";
 
-type ChildArg = { openContact: () => void };
+type ChildArg = { openContact: () => void; openContactWithService: (service: string) => void };
 
 interface Props {
   children: ReactNode | ((args: ChildArg) => ReactNode);
@@ -12,19 +12,34 @@ interface Props {
 
 export default function PageShell({ children }: Props) {
   const [open, setOpen] = useState(false);
-  const openContact = () => setOpen(true);
+  const [initialServices, setInitialServices] = useState<string[]>([]);
   usePageEnter();
-  /* useScrollVelocity removed — it powered the scroll-blur on .media-img
-     which degraded 4K drone footage. The blur is gone; the hook is gone. */
 
-  const rendered = typeof children === "function" ? children({ openContact }) : children;
+  const openContact = () => {
+    setInitialServices([]);
+    setOpen(true);
+  };
+
+  const openContactWithService = (service: string) => {
+    setInitialServices([service]);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setInitialServices([]);
+  };
+
+  const rendered = typeof children === "function"
+    ? children({ openContact, openContactWithService })
+    : children;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header onContact={openContact} />
       <main>{rendered}</main>
       <Footer onContact={openContact} />
-      <ContactModal open={open} onClose={() => setOpen(false)} />
+      <ContactModal open={open} onClose={handleClose} initialServices={initialServices} />
     </div>
   );
 }

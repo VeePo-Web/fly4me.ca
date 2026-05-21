@@ -5,16 +5,12 @@ import { projects } from "@/data/projects";
 
 export default function CaseStudyTeaser() {
   const featured = projects[0];
-  const ref = useReveal<HTMLDivElement>();
+  const refMedia = useReveal<HTMLDivElement>();
+  const refText  = useReveal<HTMLDivElement>();
 
   return (
-    /*
-      py-section (not py-section-lg) — the previous maximum breathing token
-      created excessive white space on a section that should feel purposeful.
-      The Divider above already provides the transition pause.
-    */
     <section className="bg-background py-section">
-      <div ref={ref} className="reveal container-x">
+      <div className="container-x">
 
         <Link
           to={`/work/${featured.slug}`}
@@ -31,7 +27,7 @@ export default function CaseStudyTeaser() {
             - md+: aspect-[21/9] — cinema scope, the filmic association
               this studio's work deserves. Not 16/9 (broadcast/YouTube).
           */}
-          <div className="media-frame aspect-[4/3] md:aspect-[21/9]">
+          <div ref={refMedia} className="reveal media-frame aspect-[4/3] md:aspect-[21/9]">
             <CinematicMedia
               image={featured.heroImage}
               alt={`${featured.title} — ${featured.category}`}
@@ -46,7 +42,11 @@ export default function CaseStudyTeaser() {
             mt-8 md:mt-10 — tighter than the previous mt-8 lg:mt-12,
             keeping the text felt as part of the media, not a separate block.
           */}
-          <div className="relative mt-8 md:mt-10">
+          <div
+            ref={refText}
+            className="reveal relative mt-8 md:mt-10"
+            style={{ transitionDelay: "180ms" }}
+          >
 
             {/*
               Ghost project number — Aristide Benoist oversized number technique:
@@ -96,9 +96,9 @@ export default function CaseStudyTeaser() {
               It signals: there is a story here, not just a deliverable.
               The ↗ arrow is correct here — forward navigation within the site.
             */}
-            <span className="inline-flex items-center gap-2 t-button text-foreground/55 group-hover:text-foreground transition-colors duration-300">
+            <span className="inline-flex items-center gap-2 t-button text-foreground/70 group-hover:text-foreground transition-colors duration-300">
               <span className="link-underline">See the full story</span>
-              <span className="link-arrow" aria-hidden>↗</span>
+              <span className="link-arrow group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" aria-hidden>↗</span>
             </span>
 
           </div>

@@ -31,7 +31,6 @@ const SERVICES = [
 
 export default function Services() {
   const headRef = useReveal<HTMLDivElement>();
-  const listRef = useReveal<HTMLUListElement>();
 
   return (
     <section id="services" className="bg-foreground text-background py-section">
@@ -57,7 +56,7 @@ export default function Services() {
           Row border: background/20 (slightly more present than the
           previous background/15 which was near-invisible on near-black).
         */}
-        <ul ref={listRef} className="reveal border-t border-background/20">
+        <ul className="border-t border-background/20">
           {SERVICES.map((s) => (
             <ServiceRow key={s.n} {...s} />
           ))}
@@ -71,7 +70,7 @@ export default function Services() {
             className="group inline-flex items-center gap-2 t-button text-background/60 hover:text-background transition-colors duration-300"
           >
             <span className="link-underline">All services</span>
-            <span className="link-arrow" aria-hidden>↗</span>
+            <span className="link-arrow group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" aria-hidden>↗</span>
           </Link>
         </div>
 
@@ -126,7 +125,7 @@ function ServiceRow({ n, title, desc }: { n: string; title: string; desc: string
 
         {/* Title — nudges right on hover */}
         <h3
-          className="md:col-span-5 t-headline-3 text-background transition-transform duration-[360ms] ease-[var(--ease-out-soft)] group-hover:translate-x-2"
+          className="md:col-span-5 t-headline-2 text-background transition-transform duration-[360ms] ease-[var(--ease-out-soft)] group-hover:translate-x-2"
         >
           {title}
         </h3>

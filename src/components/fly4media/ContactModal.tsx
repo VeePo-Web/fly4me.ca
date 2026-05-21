@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 interface Props {
   open: boolean;
   onClose: () => void;
+  initialServices?: string[];
 }
 
 const SERVICE_CHIPS = [
@@ -21,7 +22,7 @@ const SERVICE_CHIPS = [
   "Not sure yet — let's talk",
 ];
 
-export default function ContactModal({ open, onClose }: Props) {
+export default function ContactModal({ open, onClose, initialServices = [] }: Props) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -47,9 +48,12 @@ export default function ContactModal({ open, onClose }: Props) {
     };
   }, [open, onClose]);
 
-  /* Reset all state when modal closes */
+  /* Seed services when modal opens; reset all state when it closes */
   useEffect(() => {
-    if (open) return;
+    if (open) {
+      setServices(initialServices);
+      return;
+    }
     const t = setTimeout(() => {
       setStatus("idle");
       setName("");
@@ -59,7 +63,7 @@ export default function ContactModal({ open, onClose }: Props) {
       setServices([]);
     }, 300);
     return () => clearTimeout(t);
-  }, [open]);
+  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!open) return null;
 
