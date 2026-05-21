@@ -35,9 +35,15 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
 
   /* Reset scroll to top whenever the modal opens */
   useEffect(() => {
-    if (open && scrollRef.current) {
-      scrollRef.current.scrollTop = 0;
-    }
+    if (!open) return;
+    const resetScroll = () => scrollRef.current?.scrollTo({ top: 0, left: 0 });
+    resetScroll();
+    const frame = requestAnimationFrame(resetScroll);
+    const t = setTimeout(resetScroll, 360);
+    return () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(t);
+    };
   }, [open]);
 
   /* Focus trap + scroll lock */
@@ -47,7 +53,10 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
-    const t = setTimeout(() => firstFieldRef.current?.focus(), 320);
+    const t = setTimeout(() => {
+      firstFieldRef.current?.focus({ preventScroll: true });
+      scrollRef.current?.scrollTo({ top: 0, left: 0 });
+    }, 320);
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
@@ -118,7 +127,7 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
         <div className="min-h-full grid grid-cols-1 lg:grid-cols-2">
 
           {/* ── LEFT — Brand panel ───────────────────────────────── */}
-          <aside className="relative isolate overflow-hidden bg-foreground text-background h-[28vh] min-h-[180px] max-h-[260px] lg:h-auto lg:min-h-screen lg:max-h-none">
+          <aside className="relative isolate overflow-hidden bg-foreground text-background h-[22vh] min-h-[140px] max-h-[220px] sm:min-h-[160px] lg:h-auto lg:min-h-screen lg:max-h-none">
             <img
               src={heroImage}
               alt=""
@@ -145,13 +154,13 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
               }}
             />
 
-            <div className="relative h-full flex flex-col justify-between p-8 lg:p-16 xl:p-20 lg:min-h-screen">
+            <div className="relative h-full flex flex-col justify-between p-6 sm:p-8 lg:p-16 xl:p-20 lg:min-h-screen">
               <div className="hidden lg:flex items-center gap-3">
                 <span className="t-eyebrow text-background/50">Fly4MEdia</span>
               </div>
 
               <div className="max-w-md mt-auto">
-                <p className="t-eyebrow text-background/50 mb-4 lg:mb-8">
+                <p className="hidden sm:block t-eyebrow text-background/50 mb-3 lg:mb-8">
                   A private consultation
                 </p>
                 <h2
@@ -186,10 +195,10 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
               <X className="size-5" strokeWidth={1.25} />
             </button>
 
-            <div className="w-full max-w-xl mx-auto px-8 lg:px-16 xl:px-20 py-10 lg:py-14">
+            <div className="w-full max-w-xl mx-auto px-6 sm:px-8 lg:px-16 xl:px-20 py-7 sm:py-10 lg:py-14">
 
               <h3
-                className="t-headline-2 mb-6 lg:mb-10 max-w-[20ch] animate-fade-up"
+                className="t-headline-2 mb-5 sm:mb-6 lg:mb-10 max-w-[20ch] animate-fade-up"
                 style={{ animationDelay: "0ms" }}
               >
                 Tell us what deserves
@@ -225,7 +234,7 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
                   </button>
                 </div>
               ) : (
-                <form onSubmit={submit} className="space-y-8">
+                <form onSubmit={submit} className="space-y-6 sm:space-y-8">
 
                   <div className="animate-fade-up" style={{ animationDelay: "60ms" }}>
                     <Field
@@ -251,10 +260,10 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
 
                   {/* Service interest chips */}
                   <div className="animate-fade-up" style={{ animationDelay: "180ms" }}>
-                    <p className="t-micro text-muted-foreground mb-3 block">
+                    <p className="t-micro text-muted-foreground mb-2 sm:mb-3 block">
                       What are you working on?
                     </p>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {SERVICE_CHIPS.map((s) => {
                         const active = services.includes(s);
                         return (
@@ -263,7 +272,7 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
                             type="button"
                             onClick={() => toggleService(s)}
                             className={`
-                              t-micro px-3 py-1.5 border transition-all duration-200
+                              t-micro px-2.5 sm:px-3 py-1.5 border transition-all duration-200
                               ${active
                                 ? "border-foreground bg-foreground text-background"
                                 : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground"
@@ -341,7 +350,7 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
               )}
 
               {/* Mobile contact fallback */}
-              <div className="lg:hidden mt-10 pt-6 border-t border-border t-meta text-muted-foreground space-y-1">
+                  <div className="lg:hidden mt-7 sm:mt-10 pt-5 sm:pt-6 border-t border-border t-meta text-muted-foreground space-y-1">
                 <a href="mailto:tobyrennick@gmail.com" className="block hover:text-foreground transition-colors duration-200">tobyrennick@gmail.com</a>
                 <a href="tel:+14038189686" className="block hover:text-foreground transition-colors duration-200">403&nbsp;818&nbsp;9686</a>
               </div>
