@@ -163,18 +163,27 @@ Deno.serve(async (req) => {
       const internalHtml = buildInternalEmail(name, email, phone, project, services);
       const submitterHtml = buildSubmitterEmail(name);
 
-      const results = await Promise.allSettled([
+      // Send internal notifications as SEPARATE requests per recipient.
+      // Resend rejects the entire send (403) if any single recipient is
+      // outside the verified domain — so batching toby + parker together
+      // means parker also misses the email. Splitting isolates failures.
+      const internalRecipients = ["tobyrennick@gmail.com", "parker@veepo.ca"];
+
+      const sends = internalRecipients.map((to) =>
         sendViaResend(
           resendKey,
           {
             from: sender,
-            to: ["tobyrennick@gmail.com", "parker@veepo.ca"],
+            to: [to],
             reply_to: email,
             subject: `New enquiry — ${name}`,
             html: internalHtml,
           },
-          "internal",
+          `internal:${to}`,
         ),
+      );
+
+      sends.push(
         sendViaResend(
           resendKey,
           {
@@ -186,14 +195,15 @@ Deno.serve(async (req) => {
           },
           "submitter",
         ),
-      ]);
+      );
 
+      const results = await Promise.allSettled(sends);
       results.forEach((r, i) => {
         if (r.status === "rejected") {
-          console.error(
-            `[send-contact] email ${i === 0 ? "internal" : "submitter"} rejected`,
-            r.reason,
-          );
+          const label = i < internalRecipients.length
+            ? `internal:${internalRecipients[i]}`
+            : "submitter";
+          console.error(`[send-contact] email ${label} rejected`, r.reason);
         }
       });
     } else {
