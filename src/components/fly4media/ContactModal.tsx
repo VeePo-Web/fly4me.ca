@@ -175,7 +175,7 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
           </aside>
 
           {/* ── RIGHT — Form panel ───────────────────────────────── */}
-          <section className="relative bg-background text-foreground flex items-center lg:min-h-screen">
+          <section className="relative bg-background text-foreground flex items-start">
 
             {/* Close button — single, always visible, top-right of form panel */}
             <button
