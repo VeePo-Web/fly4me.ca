@@ -30,7 +30,15 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
   const [project, setProject] = useState("");
   const [services, setServices] = useState<string[]>([]);
   const firstFieldRef = useRef<HTMLInputElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);
+
+  /* Reset scroll to top whenever the modal opens */
+  useEffect(() => {
+    if (open && scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [open]);
 
   /* Focus trap + scroll lock */
   useEffect(() => {
