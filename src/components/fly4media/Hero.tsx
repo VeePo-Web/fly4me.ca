@@ -52,22 +52,23 @@ export default function Hero({ onContact }: Props) {
             className="hero-display wrap-editorial text-background t-reveal-track"
             style={{ animationDelay: "0ms" }}
           >
-            The brands,
+            Your competitors
             <br />
-            places, and stories
+            look ordinary
             <br />
-            the world actually looks up at.
+            from up here.
           </h1>
 
           {/* Lede — cascades in as headline is mid-animation */}
           <p
-            className="hero-lede hero-gap-lede max-w-[38ch] text-background/50 animate-fade-up"
+            className="hero-lede hero-gap-lede max-w-[42ch] text-background/60 animate-fade-up"
             style={{ animationDelay: "260ms" }}
           >
-            For the founders, marketers, and destinations who already know — the
-            way you're presented is the position you hold. We just make sure the
-            frame deserves it.
+            People don't buy what you do. They buy how it looks
+            when they imagine themselves inside it. We build the
+            footage that closes the gap — and the sale.
           </p>
+
 
           {/* CTAs */}
           <div
