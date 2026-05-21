@@ -168,7 +168,7 @@ Deno.serve(async (req) => {
           resendKey,
           {
             from: sender,
-            to: ["tobyrennick@gmail.com"],
+            to: ["tobyrennick@gmail.com", "parker@veepo.ca"],
             reply_to: email,
             subject: `New enquiry — ${name}`,
             html: internalHtml,
