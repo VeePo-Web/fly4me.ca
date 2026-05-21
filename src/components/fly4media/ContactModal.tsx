@@ -35,9 +35,15 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
 
   /* Reset scroll to top whenever the modal opens */
   useEffect(() => {
-    if (open && scrollRef.current) {
-      scrollRef.current.scrollTop = 0;
-    }
+    if (!open) return;
+    const resetScroll = () => scrollRef.current?.scrollTo({ top: 0, left: 0 });
+    resetScroll();
+    const frame = requestAnimationFrame(resetScroll);
+    const t = setTimeout(resetScroll, 360);
+    return () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(t);
+    };
   }, [open]);
 
   /* Focus trap + scroll lock */
@@ -47,7 +53,10 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
-    const t = setTimeout(() => firstFieldRef.current?.focus(), 320);
+    const t = setTimeout(() => {
+      firstFieldRef.current?.focus({ preventScroll: true });
+      scrollRef.current?.scrollTo({ top: 0, left: 0 });
+    }, 320);
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
