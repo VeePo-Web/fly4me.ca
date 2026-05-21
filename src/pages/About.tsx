@@ -7,26 +7,26 @@ import CTA from "@/components/fly4media/CTA";
 import { useReveal } from "@/components/fly4media/useReveal";
 import about from "@/assets/about-hero.jpg";
 import toby from "@/assets/toby-portrait.jpg";
-import tobyRidge from "@/assets/toby-ridge.jpg";
+import sunriseMist from "@/assets/sunrise-mist-455am.jpg";
 
 function TobyRidgeInterlude() {
   return (
     <section className="bg-[#0a0a0a] relative overflow-hidden">
       <div className="w-full h-[55vh] md:h-[70vh]">
         <img
-          src={tobyRidge}
-          alt="Toby Rennick on a scree slope above a turquoise alpine lake in the Canadian Rockies"
+          src={sunriseMist}
+          alt="Pre-dawn alpenglow on the Canadian Rockies, mist pooling in the valley below at 4:55 AM"
           loading="lazy"
           decoding="async"
           width={1080}
           height={1920}
-          className="w-full h-full object-cover object-[center_30%] opacity-85"
+          className="w-full h-full object-cover object-[center_40%] opacity-95"
         />
       </div>
       <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background to-transparent pointer-events-none" />
       <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-background to-transparent pointer-events-none" />
       <div className="absolute bottom-10 left-0 right-0 container-x">
-        <p className="t-eyebrow text-background/50">On location — Canadian Rockies</p>
+        <p className="t-eyebrow text-background/50">4:55 AM — Canadian Rockies</p>
       </div>
     </section>
   );
