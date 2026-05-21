@@ -114,7 +114,7 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
       />
 
       {/* Modal panel */}
-      <div className="relative h-full w-full overflow-y-auto animate-modal-panel-in">
+      <div ref={scrollRef} className="relative h-full w-full overflow-y-auto animate-modal-panel-in">
         <div className="min-h-full grid grid-cols-1 lg:grid-cols-2">
 
           {/* ── LEFT — Brand panel ───────────────────────────────── */}
