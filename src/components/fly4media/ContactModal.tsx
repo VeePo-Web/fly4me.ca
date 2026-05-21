@@ -118,7 +118,7 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
         <div className="min-h-full grid grid-cols-1 lg:grid-cols-2">
 
           {/* ── LEFT — Brand panel ───────────────────────────────── */}
-          <aside className="relative isolate overflow-hidden bg-foreground text-background h-[42vh] min-h-[240px] max-h-[360px] lg:h-auto lg:min-h-screen lg:max-h-none">
+          <aside className="relative isolate overflow-hidden bg-foreground text-background h-[28vh] min-h-[180px] max-h-[260px] lg:h-auto lg:min-h-screen lg:max-h-none">
             <img
               src={heroImage}
               alt=""
