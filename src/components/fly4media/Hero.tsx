@@ -61,13 +61,15 @@ export default function Hero({ onContact }: Props) {
 
           {/* Lede — cascades in as headline is mid-animation */}
           <p
-            className="hero-lede hero-gap-lede max-w-[42ch] text-background/60 animate-fade-up"
+            className="hero-lede hero-gap-lede max-w-[44ch] text-background/60 animate-fade-up"
             style={{ animationDelay: "260ms" }}
           >
-            People don't buy what you do. They buy how it looks
-            when they imagine themselves inside it. We build the
-            footage that closes the gap — and the sale.
+            Two consistent impressions. That's all it takes for
+            someone to decide who you are — and sometimes, they
+            never revise it. We make sure the perception they
+            keep is the one you've actually earned.
           </p>
+
 
 
           {/* CTAs */}
