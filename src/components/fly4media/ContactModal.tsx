@@ -30,7 +30,15 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
   const [project, setProject] = useState("");
   const [services, setServices] = useState<string[]>([]);
   const firstFieldRef = useRef<HTMLInputElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);
+
+  /* Reset scroll to top whenever the modal opens */
+  useEffect(() => {
+    if (open && scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [open]);
 
   /* Focus trap + scroll lock */
   useEffect(() => {
@@ -106,11 +114,11 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
       />
 
       {/* Modal panel */}
-      <div className="relative h-full w-full overflow-y-auto animate-modal-panel-in">
+      <div ref={scrollRef} className="relative h-full w-full overflow-y-auto animate-modal-panel-in">
         <div className="min-h-full grid grid-cols-1 lg:grid-cols-2">
 
           {/* ── LEFT — Brand panel ───────────────────────────────── */}
-          <aside className="relative isolate overflow-hidden bg-foreground text-background h-[42vh] min-h-[240px] max-h-[360px] lg:h-auto lg:min-h-screen lg:max-h-none">
+          <aside className="relative isolate overflow-hidden bg-foreground text-background h-[28vh] min-h-[180px] max-h-[260px] lg:h-auto lg:min-h-screen lg:max-h-none">
             <img
               src={heroImage}
               alt=""
@@ -167,7 +175,7 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
           </aside>
 
           {/* ── RIGHT — Form panel ───────────────────────────────── */}
-          <section className="relative bg-background text-foreground flex items-center lg:min-h-screen">
+          <section className="relative bg-background text-foreground flex items-start">
 
             {/* Close button — single, always visible, top-right of form panel */}
             <button
@@ -178,10 +186,10 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
               <X className="size-5" strokeWidth={1.25} />
             </button>
 
-            <div className="w-full max-w-xl mx-auto px-8 lg:px-16 xl:px-20 py-16 lg:py-20">
+            <div className="w-full max-w-xl mx-auto px-8 lg:px-16 xl:px-20 py-10 lg:py-14">
 
               <h3
-                className="t-headline-2 mb-10 lg:mb-14 max-w-[20ch] animate-fade-up"
+                className="t-headline-2 mb-6 lg:mb-10 max-w-[20ch] animate-fade-up"
                 style={{ animationDelay: "0ms" }}
               >
                 Tell us what deserves
