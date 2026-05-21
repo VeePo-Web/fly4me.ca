@@ -260,10 +260,10 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
 
                   {/* Service interest chips */}
                   <div className="animate-fade-up" style={{ animationDelay: "180ms" }}>
-                    <p className="t-micro text-muted-foreground mb-3 block">
+                    <p className="t-micro text-muted-foreground mb-2 sm:mb-3 block">
                       What are you working on?
                     </p>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {SERVICE_CHIPS.map((s) => {
                         const active = services.includes(s);
                         return (
@@ -272,7 +272,7 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
                             type="button"
                             onClick={() => toggleService(s)}
                             className={`
-                              t-micro px-3 py-1.5 border transition-all duration-200
+                              t-micro px-2.5 sm:px-3 py-1.5 border transition-all duration-200
                               ${active
                                 ? "border-foreground bg-foreground text-background"
                                 : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground"
@@ -350,7 +350,7 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
               )}
 
               {/* Mobile contact fallback */}
-              <div className="lg:hidden mt-10 pt-6 border-t border-border t-meta text-muted-foreground space-y-1">
+                  <div className="lg:hidden mt-7 sm:mt-10 pt-5 sm:pt-6 border-t border-border t-meta text-muted-foreground space-y-1">
                 <a href="mailto:tobyrennick@gmail.com" className="block hover:text-foreground transition-colors duration-200">tobyrennick@gmail.com</a>
                 <a href="tel:+14038189686" className="block hover:text-foreground transition-colors duration-200">403&nbsp;818&nbsp;9686</a>
               </div>
