@@ -161,6 +161,8 @@ export default function Services() {
 
           <CTA
             onContact={openContact}
+            backgroundImage={ctaWedding}
+            backgroundAlt="Aerial wedding ceremony in the Canadian Rocky Mountains"
             heading={
               <>
                 Some stories deserve
