@@ -186,10 +186,10 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
               <X className="size-5" strokeWidth={1.25} />
             </button>
 
-            <div className="w-full max-w-xl mx-auto px-8 lg:px-16 xl:px-20 py-16 lg:py-20">
+            <div className="w-full max-w-xl mx-auto px-8 lg:px-16 xl:px-20 py-10 lg:py-14">
 
               <h3
-                className="t-headline-2 mb-10 lg:mb-14 max-w-[20ch] animate-fade-up"
+                className="t-headline-2 mb-6 lg:mb-10 max-w-[20ch] animate-fade-up"
                 style={{ animationDelay: "0ms" }}
               >
                 Tell us what deserves
