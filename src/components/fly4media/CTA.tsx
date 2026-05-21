@@ -11,6 +11,13 @@ interface Props {
   eyebrow?: string;
   heading?: React.ReactNode;
   cta?: string;
+  /**
+   * Optional background image override. When provided, image renders
+   * prominently (not as a 7% texture) with a dark left-to-right gradient
+   * so the heading + button stay legible.
+   */
+  backgroundImage?: string;
+  backgroundAlt?: string;
 }
 
 export default function CTA({
@@ -18,39 +25,52 @@ export default function CTA({
   eyebrow = "",
   heading,
   cta = "Begin a conversation",
+  backgroundImage,
+  backgroundAlt = "",
 }: Props) {
   const refHeading = useReveal<HTMLDivElement>();
   const refCta     = useReveal<HTMLDivElement>();
 
-  return (
-    /*
-      Dark close — bg-foreground on every page this appears.
-      The CTA is Act III: the resolution. It should be the most visually
-      authoritative moment on the page — not the most invisible.
-      Dark ground creates the bookend that signals: the argument is complete.
+  const isFeatureBg = !!backgroundImage;
+  const bgSrc = backgroundImage ?? ctaBg;
 
-      Stacks with the dark footer below, creating a deliberate dark close
-      to every page rather than a white-section fade into the footer.
-    */
+  return (
     <section
       id="contact"
       className="relative overflow-hidden bg-foreground text-background py-section-lg min-h-[52vh] flex flex-col justify-center"
     >
-      {/*
-        Aerial texture — cta-background.jpg at 7% opacity on near-black.
-        Barely visible: creates subtle spatial variation in the dark ground
-        without competing with the type. Benoist spatial texture technique.
-      */}
       <img
-        src={ctaBg}
-        alt=""
-        aria-hidden
+        src={bgSrc}
+        alt={backgroundAlt}
+        aria-hidden={backgroundAlt ? undefined : true}
         loading="lazy"
         decoding="async"
         width={1920}
         height={1080}
-        className="absolute inset-0 w-full h-full object-cover opacity-[0.07] pointer-events-none select-none"
+        className={
+          isFeatureBg
+            ? "absolute inset-0 w-full h-full object-cover opacity-[0.62] pointer-events-none select-none"
+            : "absolute inset-0 w-full h-full object-cover opacity-[0.07] pointer-events-none select-none"
+        }
       />
+
+      {/*
+        When a feature background is supplied, layer two overlays:
+        - L→R gradient keeps the left (text) side dark, image breathes right
+        - Bottom-up vignette guarantees button contrast
+      */}
+      {isFeatureBg && (
+        <>
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/65 to-foreground/25 pointer-events-none"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-foreground/80 to-transparent pointer-events-none"
+          />
+        </>
+      )}
 
       <div className="relative container-x">
 
