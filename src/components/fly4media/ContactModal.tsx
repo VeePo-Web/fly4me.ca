@@ -127,7 +127,7 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
         <div className="min-h-full grid grid-cols-1 lg:grid-cols-2">
 
           {/* ── LEFT — Brand panel ───────────────────────────────── */}
-          <aside className="relative isolate overflow-hidden bg-foreground text-background h-[28vh] min-h-[180px] max-h-[260px] lg:h-auto lg:min-h-screen lg:max-h-none">
+          <aside className="relative isolate overflow-hidden bg-foreground text-background h-[22vh] min-h-[140px] max-h-[220px] sm:min-h-[160px] lg:h-auto lg:min-h-screen lg:max-h-none">
             <img
               src={heroImage}
               alt=""
@@ -154,13 +154,13 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
               }}
             />
 
-            <div className="relative h-full flex flex-col justify-between p-8 lg:p-16 xl:p-20 lg:min-h-screen">
+            <div className="relative h-full flex flex-col justify-between p-6 sm:p-8 lg:p-16 xl:p-20 lg:min-h-screen">
               <div className="hidden lg:flex items-center gap-3">
                 <span className="t-eyebrow text-background/50">Fly4MEdia</span>
               </div>
 
               <div className="max-w-md mt-auto">
-                <p className="t-eyebrow text-background/50 mb-4 lg:mb-8">
+                <p className="hidden sm:block t-eyebrow text-background/50 mb-3 lg:mb-8">
                   A private consultation
                 </p>
                 <h2
@@ -195,10 +195,10 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
               <X className="size-5" strokeWidth={1.25} />
             </button>
 
-            <div className="w-full max-w-xl mx-auto px-8 lg:px-16 xl:px-20 py-10 lg:py-14">
+            <div className="w-full max-w-xl mx-auto px-6 sm:px-8 lg:px-16 xl:px-20 py-7 sm:py-10 lg:py-14">
 
               <h3
-                className="t-headline-2 mb-6 lg:mb-10 max-w-[20ch] animate-fade-up"
+                className="t-headline-2 mb-5 sm:mb-6 lg:mb-10 max-w-[20ch] animate-fade-up"
                 style={{ animationDelay: "0ms" }}
               >
                 Tell us what deserves
@@ -234,7 +234,7 @@ export default function ContactModal({ open, onClose, initialServices = [] }: Pr
                   </button>
                 </div>
               ) : (
-                <form onSubmit={submit} className="space-y-8">
+                <form onSubmit={submit} className="space-y-6 sm:space-y-8">
 
                   <div className="animate-fade-up" style={{ animationDelay: "60ms" }}>
                     <Field
