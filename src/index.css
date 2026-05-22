@@ -752,52 +752,109 @@
   }
 }
 
-/* ---------- Cinematic intro ---------- */
+/* ---------- Cinematic intro (v3) ----------
+   Five-phase sequence: dark → slogan (letter cascade, center-out) → hold →
+   brand stack (slogan softens, hairline reframes wide) → dissolve (stack
+   zooms + blurs while veil clears). All sequencing owned by Intro.tsx;
+   per-element delays are passed inline so the JS is the single timeline.   */
 @layer utilities {
-  @keyframes intro-mark-in {
-    0%   { opacity: 0; transform: scale(0.92); filter: blur(6px); }
-    100% { opacity: 1; transform: scale(1);    filter: blur(0); }
+  /* Slogan — letter-by-letter cascade (delay set inline per letter). */
+  @keyframes intro-letter-in {
+    0%   { opacity: 0; transform: translateY(14px); filter: blur(8px); letter-spacing: 0.18em; }
+    100% { opacity: 1; transform: translateY(0);    filter: blur(0);   letter-spacing: 0.02em; }
   }
-  @keyframes intro-hairline-in {
-    0%   { opacity: 0; transform: scaleX(0); }
-    100% { opacity: 1; transform: scaleX(1); }
+  .intro-letter {
+    display: inline-block;
+    opacity: 0;
+    will-change: opacity, transform, filter, letter-spacing;
+    animation: intro-letter-in 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
+
+  /* Hairline — strikes once the cascade settles, then re-frames wider. */
+  @keyframes intro-hl-strike {
+    0%   { transform: scaleX(0); opacity: 0; }
+    100% { transform: scaleX(1); opacity: 1; }
+  }
+  @keyframes intro-hl-expand {
+    0%   { width: 3rem; }
+    100% { width: 9rem; }
+  }
+  .intro-hairline {
+    width: 3rem;
+    transform-origin: center;
+    transform: scaleX(0);
+    opacity: 0;
+    will-change: transform, opacity, width;
+    animation: intro-hl-strike 700ms cubic-bezier(0.7, 0, 0.3, 1) 1700ms forwards;
+  }
+  .intro-hairline.is-wide {
+    animation: intro-hl-expand 900ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
+  }
+
+  /* Brand stack — rises in phase 4. Delay supplied inline so JS owns it. */
+  @keyframes intro-rise-in {
+    0%   { opacity: 0; transform: translateY(10px); filter: blur(4px); }
+    100% { opacity: 1; transform: translateY(0);    filter: blur(0); }
+  }
+  .intro-brand-rise {
+    opacity: 0;
+    will-change: opacity, transform, filter;
+    animation: intro-rise-in 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes intro-rise-dim-in {
+    0%   { opacity: 0;    transform: translateY(6px); }
+    100% { opacity: 0.55; transform: translateY(0); }
+  }
+  .intro-descriptor-rise {
+    opacity: 0;
+    will-change: opacity, transform;
+    animation: intro-rise-dim-in 800ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* Slogan dims (does NOT exit) when brand stack arrives — single composed frame. */
+  @keyframes intro-slogan-dim {
+    0%   { opacity: 1; }
+    100% { opacity: 0.28; }
+  }
+  .intro-slogan-soften {
+    animation: intro-slogan-dim 900ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
+  }
+
+  /* Dissolve — stack pulls toward camera while the veil clears. */
+  @keyframes intro-stack-zoom {
+    0%   { transform: scale(1);    filter: blur(0); }
+    100% { transform: scale(1.04); filter: blur(6px); }
+  }
+  .intro-stack-zoom {
+    animation: intro-stack-zoom 1350ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Light sweep — single calm pass across the hold. */
   @keyframes intro-sweep {
-    0%   { transform: translateX(0); opacity: 0; }
+    0%   { transform: translateX(0);    opacity: 0; }
     20%  { opacity: 1; }
     100% { transform: translateX(400%); opacity: 0; }
   }
-  @keyframes intro-word-in {
-    0%   { opacity: 0; letter-spacing: 0.40em; transform: translateY(10px); filter: blur(6px); }
-    100% { opacity: 1; letter-spacing: 0.16em; transform: translateY(0);    filter: blur(0); }
-  }
-  @keyframes intro-brand-in {
-    0%   { opacity: 0; transform: translateY(8px); filter: blur(4px); }
-    100% { opacity: 1; transform: translateY(0);   filter: blur(0); }
-  }
-  @keyframes intro-descriptor-in {
-    0%   { opacity: 0; transform: translateY(4px); }
-    100% { opacity: 0.55; transform: translateY(0); }
-  }
+  .intro-sweep { animation: intro-sweep 1800ms var(--ease-out-soft) 2200ms both; }
+
+  /* Drifting fog — ambient, runs the whole intro. */
   @keyframes intro-fog-drift {
     0%   { transform: translate3d(-3%, 0, 0) scale(1.05); }
-    50%  { transform: translate3d(3%, 1%, 0) scale(1.08); }
+    50%  { transform: translate3d(3%, 1%, 0)  scale(1.08); }
     100% { transform: translate3d(-3%, 0, 0) scale(1.05); }
   }
-  @keyframes intro-veil-fade {
-    to { opacity: 0; }
-  }
+  .intro-fog { animation: intro-fog-drift 40s ease-in-out infinite; }
 
-  /* Phase 2 — slogan reveal (300–1100ms) */
-  .intro-word     { display: inline-block; will-change: opacity, transform, filter; animation: intro-word-in 800ms var(--ease-out-soft) 300ms both; }
-  /* Phase 4 — brand stack (1500–2050ms), preceded by cinematic pause */
-  .intro-hairline { will-change: transform, opacity; animation: intro-hairline-in 600ms var(--ease-out-soft) 1500ms both; }
-  .intro-brand    { will-change: opacity, transform, filter; animation: intro-brand-in 700ms var(--ease-out-soft) 1620ms both; }
-  .intro-descriptor { will-change: opacity, transform; animation: intro-descriptor-in 600ms var(--ease-out-soft) 1780ms both; }
-  /* Sweep crosses during the cinematic pause + brand reveal */
-  .intro-sweep    { animation: intro-sweep 1100ms var(--ease-out-soft) 1300ms both; }
-  .intro-fog      { animation: intro-fog-drift 40s ease-in-out infinite; }
-  .intro-veil-out { animation: intro-veil-fade 550ms var(--ease-out-soft) forwards; }
+  /* Veil dissolve — symmetric curve, paired with stack zoom. */
+  @keyframes intro-veil-fade { to { opacity: 0; } }
+  .intro-veil-out { animation: intro-veil-fade 1350ms cubic-bezier(0.7, 0, 0.3, 1) forwards; }
+
+  /* Skip affordance — fades in after the slogan has settled. */
+  @keyframes intro-skip-in { to { opacity: 0.4; } }
+  .intro-skip {
+    opacity: 0;
+    animation: intro-skip-in 600ms ease 1800ms forwards;
+  }
 }
 
 /* ---------- Reduced motion guard ---------- */
