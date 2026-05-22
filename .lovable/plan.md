@@ -1,117 +1,65 @@
-## Why the current intro doesn't feel premium
 
-The veil at `src/components/fly4media/Intro.tsx` runs the entire show in **2050ms**:
+# Nav: fantasy.co register
 
-```
-0ms    veil appears
-300ms  slogan animates in (800ms)
-1300ms light sweep starts
-1500ms hairline + brand + descriptor (all within 280ms of each other)
-2050ms veil fades out
-```
+## The move
 
-Three problems:
-1. **No breathing room.** The slogan appears, the brand stack lands on top of it almost immediately, then the whole thing leaves. There's no moment where the viewer *sits* with the slogan.
-2. **Everything animates the same way.** Every element uses `--ease-out-soft` over ~600–800ms. There's no contrast between a quiet hold and an emphatic reveal — so nothing feels emphatic.
-3. **Any input skips it** (`keydown, wheel, touchstart, click`). A premium intro is a directed moment, not something the visitor accidentally dismisses on first scroll.
+Strip the desktop nav of its visible link list. Replace it with the same two anchors fantasy.co uses: **wordmark top-left, "Menu" top-right.** That single edit upgrades the page's silence — the hero is no longer competing with four links for attention.
 
-Studios like fantasy.co and the Worship VeilIntro reference earn their feel from **distinct phases separated by silence**, slower easing curves, and a deliberate hand-off into the page underneath.
+The page becomes the work. The nav becomes a door.
 
----
+## Top-left — the brand mark
 
-## The new sequence (~6.2s total)
+Keep the logo + "Fly4MEdia" wordmark. Make both legible against the dark hero without lighting up the whole header.
 
-Five named phases, each with its own intent and easing. Total runtime is long enough to feel ceremonial but short enough to never frustrate.
+- Logo upgrade: bump from `size-6 md:size-7` to `size-7 md:size-8`, add a soft drop-shadow over media (`drop-shadow: 0 1px 12px rgba(0,0,0,0.35)`) that fades to 0 once the header passes the hero (drive off existing `--nav-progress`)
+- Wordmark: same color treatment — text uses a `mix-blend-mode: difference` adjacent layer over hero, or simpler: a CSS variable color that interpolates from `rgba(255,255,255,0.92)` over hero to `hsl(var(--foreground))` after scroll. Drive off `--nav-progress`.
+- Result: crisp white wordmark on the video, switches to ink on white once the page scrolls. No background plate, no blur, no chrome.
 
-```
-Phase          Start    Duration  What happens
-────────────────────────────────────────────────────────────────────
-1 dark         0ms      650ms     Pure black. Grain + warm radial pulse fades up.
-2 slogan-in    650ms    1400ms    "Perspective Changes Everything."
-                                  Letter-by-letter blur-to-sharp stagger.
-                                  Hairline below it draws in last.
-3 hold         2050ms   1200ms    Slogan sits perfectly still. Grain drifts.
-                                  Light sweep crosses once, very slowly.
-4 brand-in     3250ms   1600ms    Slogan softens to 30% opacity (doesn't leave).
-                                  Hairline reframes from short → wide.
-                                  "Fly4MEdia" rises with optical blur clearing.
-                                  Descriptor types in beneath it.
-5 dissolve     4850ms   1350ms    Entire stack scales 1.00 → 1.04, blurs 0 → 6px,
-                                  veil opacity 1 → 0 with cubic-bezier(0.7,0,0.3,1).
-                                  Hero underneath simultaneously gets a .hero-handoff
-                                  class that fades its content from 0 → 1.
-                                  ────────────────────
-Total: 6200ms
-```
+## Top-right — "Menu"
 
-Key feel changes vs. today:
-- **The slogan is the hero of phase 1.** It gets its own 1.4s reveal + a 1.2s hold where nothing else moves. Currently it competes with the brand stack 1.2s later.
-- **Brand reveal doesn't replace the slogan** — slogan stays visible at low opacity, so the two concepts feel like a single composed frame instead of a slide change.
-- **Dissolve, not fade.** Today the veil opacity drops in 550ms over a static stack. The new exit zooms + blurs the stack as the veil clears, so it feels like the camera pulls into the hero rather than the curtain dropping.
+Replace the three inline links + Contact button with a single word: **Menu**.
 
----
+- `t-nav` weight, same color logic as wordmark (white over hero → ink after scroll)
+- To the left of the word: two stacked 18px hairlines (the same vocabulary as today's mobile hamburger, but desktop-sized). On hover they shift — top line slides right 2px, bottom slides left 2px — a tiny editorial tell.
+- Click opens a **full-viewport overlay menu**, not a dropdown. This is the fantasy.co register: the overlay is a moment, not a utility.
 
-## Slogan letter-by-letter reveal
+## The overlay (the actual fantasy.co feel)
 
-Replace the single `.intro-word` span with letter spans wrapped per word (preserving word-break behavior). Each letter animates:
+This is what makes it feel like fantasy.co rather than a stripped-down navbar.
 
-```
-opacity:        0 → 1
-transform:      translateY(14px) → 0
-filter:         blur(8px) → blur(0)
-letter-spacing: 0.18em → 0.02em (settles)
-```
+- Veil: `bg-[#0a0a0a]` matching the intro veil. Same vocabulary as the cinematic intro — the menu is "the same studio, looked at differently."
+- Reveal: 320ms wipe from top, `cubic-bezier(0.22, 1, 0.36, 1)`. Veil arrives first, content cascades second.
+- Layout: **left column** — oversized link list (`t-display-2`, ~80–96px), each link on its own line, hover state slides the link 14px right with a hairline drawing under it left-to-right (300ms). **Right column** — small editorial block: Alberta coords, contact email, phone, "Available worldwide". Spatially echoes the bottom-bar of the hero.
+- Per-word reveal on each link: same blur-to-sharp cascade as the new hero lede (60ms stagger between links, 1100ms duration). The menu and the hero share one motion language.
+- Close: small × top-right, plus Esc key, plus click on veil
+- Body scroll lock while open
+- Active route gets a thin left rule (2px tall, 16px wide) instead of an underline — quieter, more permanent
 
-Stagger 28ms per letter, easing `cubic-bezier(0.2, 0.7, 0.2, 1)` (calm exponential out). Total slogan reveal = ~1.4s for ~33 chars. This is the single move that makes it read as "designed" instead of "generated."
+## Mobile
 
-A 12px hairline underneath the slogan draws in left-to-right `scaleX(0) → scaleX(1)` over 700ms, starting at the 80% point of the letter cascade, so it feels like an underline being struck after the phrase lands.
+Mobile already uses a hamburger → drawer pattern that's close. Upgrade it to use the **same full-viewport overlay** as desktop (one component, one feel). Drop the accordion grid trick — overlay is simpler and more cinematic.
 
----
+## Scroll behavior (keep)
 
-## Easing & timing principles applied
+- Direction-aware hide past 240px stays
+- `--nav-progress` continues to drive color interpolation (now drives wordmark/Menu color crossfade, not background opacity)
+- Header gets a near-invisible scrim only over media-heavy pages: `linear-gradient(to bottom, rgba(0,0,0,0.18), transparent)` clipped to 88px, fades out as you scroll past hero. No blur, no plate.
 
-| Move                  | Easing                          | Why                                                        |
-| --------------------- | ------------------------------- | ---------------------------------------------------------- |
-| Letter cascade        | `cubic-bezier(0.2, 0.7, 0.2, 1)`| Slow start, quick settle — feels like ink drying           |
-| Slogan hold           | (no motion)                     | Stillness is the move                                      |
-| Brand rise            | `cubic-bezier(0.16, 1, 0.3, 1)` | Existing `--ease-out-soft`, gentle deceleration             |
-| Hairline reframe      | `cubic-bezier(0.7, 0, 0.3, 1)`  | Symmetric in/out — feels mechanical, premium                |
-| Veil dissolve         | `cubic-bezier(0.7, 0, 0.3, 1)`  | Same curve so dissolve feels like the same hand            |
-| Stack zoom on exit    | `cubic-bezier(0.16, 1, 0.3, 1)` | Eases out into the hero                                    |
+## What gets removed
 
-No bouncy springs anywhere. Premium cinema doesn't bounce.
+- Inline desktop links (Work / Services / About / Contact)
+- Mobile drawer accordion
+- The `border-l` divider before Contact
+- The `.bg-background/95` plate when mobile menu is open (replaced by full overlay)
 
----
+## Files touched
 
-## Interaction & accessibility rules
+- `src/components/fly4media/Header.tsx` — gut the desktop nav, swap mobile drawer for overlay trigger, add color-interp via `--nav-progress`
+- `src/components/fly4media/MenuOverlay.tsx` — new component, shared desktop + mobile
+- `src/index.css` — small additions: `--nav-ink` interpolated color custom prop driven off `--nav-progress`, scrim utility
 
-- **Skip controls become explicit.** Remove `wheel`, `touchstart`, `click` from skip events. Only `Escape` and `Enter` skip. (`keydown` on any key was too aggressive.) Plus a tiny **"Skip"** label fades in bottom-right at 1500ms, `t-micro` opacity 35%, clickable.
-- **`prefers-reduced-motion`** still bypasses the whole thing immediately (unchanged).
-- **`sessionStorage` key** bumps from `f4m:intro:v2` → `f4m:intro:v3` so returning users get the new intro once.
-- **Body scroll lock** stays in place for full duration (already correct).
-- **First paint** of the hero underneath happens *during* phase 5 — we add a `.hero-handoff` class that the Hero component listens for (via a custom event `f4m:intro:exit`) so its own headline reveal starts ~200ms into the dissolve, not after it.
+## What I want you to confirm
 
----
-
-## Files that will change
-
-1. **`src/components/fly4media/Intro.tsx`** — full rewrite of phase logic. New constants: `PHASE_DARK = 650`, `PHASE_SLOGAN = 1400`, `PHASE_HOLD = 1200`, `PHASE_BRAND = 1600`, `PHASE_DISSOLVE = 1350`. New letter-splitting helper for the slogan. New skip-key handler (`Escape`/`Enter` only). Dispatches `f4m:intro:exit` 200ms before veil unmounts.
-2. **`src/index.css`** (intro block at line 755) — add `.intro-letter`, `.intro-letter--delay-N` (or use inline `animationDelay` per letter from JSX). Add `.intro-hairline-wide` (reframed width). Add `.intro-stack-zoom` keyframes. Tune existing `.intro-veil-out` to 1350ms with the dissolve curve. Add `.intro-slogan-soften` (slogan opacity drop during phase 4).
-3. **`src/components/fly4media/Hero.tsx`** — listen for `f4m:intro:exit` and apply a brief class (or trigger the existing `t-reveal-track` headline animation) so the hero composition lands *during* the dissolve, not after a beat of black.
-
-No other components are affected. No new dependencies. Same Framer-less, CSS-only approach the rest of the site uses.
-
----
-
-## What I'm NOT changing
-- The slogan copy ("Perspective Changes Everything.")
-- The brand mark, descriptor, fonts, color
-- The skip-once-per-session behavior
-- The reduced-motion bypass
-- Anything outside the Intro / Hero handshake
-
----
-
-## Open question
-
-Do you want the **slogan letters** to animate **left → right** (a "reading" cascade, more traditional/editorial) or **center-out** (more symmetric/ceremonial, what fantasy.co would lean toward)? I'll default to **center-out** unless you say otherwise — it pairs better with the symmetric hairline strike and the radial vignette.
+1. Are you OK losing the visible Work / Services / About from the top bar entirely? (This is the fantasy.co move — discoverability moves into the overlay.)
+2. Should the overlay show **just the links** (Work, Services, About, Contact) or also include the editorial right-column (coords, email, phone)?
+3. Keep the wordmark "Fly4MEdia" beside the logo, or **logo only** top-left (most fantasy.co-like — even more silent)?
