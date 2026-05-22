@@ -27,6 +27,7 @@ export default function Hero({ onContact }: Props) {
   // When the intro is about to play, hold the hero animations until the
   // dissolve begins, then snap to 0 so the natural choreography runs.
   const [revealDelay, setRevealDelay] = useState<number>(getInitialRevealDelay);
+  const [ledeOpen, setLedeOpen] = useState(false);
 
   useEffect(() => {
     if (revealDelay === 0) return;
@@ -39,14 +40,14 @@ export default function Hero({ onContact }: Props) {
   // hero reveals land *as* the veil clears, not after a beat of black.
   const d = (base: number) => `${base + revealDelay}ms`;
 
+  // Hover handlers — sub-text only fades in when the headline or CTAs are
+  // hovered/focused. Otherwise the drone footage is left to breathe.
+  const showLede = () => setLedeOpen(true);
+  const hideLede = () => setLedeOpen(false);
+
   return (
     <section
       id="top"
-      /*
-        bg-[#0a0a0a] — if the poster is momentarily absent, the dark
-        background is consistent with the vignette rather than flashing
-        the old light bg-secondary.
-      */
       className="relative w-full overflow-hidden bg-[#0a0a0a] h-[100svh] md:h-[100dvh] max-h-[100dvh]"
     >
       {/* Media layer — full-viewport subject, not wallpaper */}
@@ -64,25 +65,23 @@ export default function Hero({ onContact }: Props) {
         ]}
       />
 
-      {/*
-        Cinematic vignette — replaces the cheap left-to-right gradient wipe.
-        Desktop: a dark radial ellipse anchored left-center where the copy lives.
-        The right 50%+ of the aerial footage is completely unobstructed.
-        Mobile: bottom-rise so the copy at the lower viewport reads clearly.
-        See .hero-vignette in index.css for the gradient definition.
-      */}
-      <div className="absolute inset-0 hero-vignette" aria-hidden />
+      {/* Cinematic vignette — sits above the video layer (z:2) so copy reads */}
+      <div className="absolute inset-0 hero-vignette z-10" aria-hidden />
 
-      {/* Content — relative so it sits above both media and vignette layers */}
-      <div className="relative container-x h-full hero-pt hero-pb flex flex-col">
+      {/* Content — z-20 so it's always above every video frame */}
+      <div className="relative z-20 container-x h-full hero-pt hero-pb flex flex-col">
 
-        {/* Main copy — vertically centered, constrained to left column */}
         <div className="flex-1 min-h-0 flex flex-col justify-center max-w-2xl lg:max-w-[52rem]">
 
-          {/* Headline — leads the sequence, no eyebrow crutch */}
+          {/* Headline — hovering it (or the CTAs) reveals the sub-text */}
           <h1
-            className="hero-display wrap-editorial text-background t-reveal-track"
+            className="hero-display wrap-editorial text-background t-reveal-track cursor-default"
             style={{ animationDelay: d(0) }}
+            onMouseEnter={showLede}
+            onMouseLeave={hideLede}
+            onFocus={showLede}
+            onBlur={hideLede}
+            tabIndex={-1}
           >
             Your competitors
             <br />
@@ -91,10 +90,18 @@ export default function Hero({ onContact }: Props) {
             from up here.
           </h1>
 
-          {/* Lede — cascades in as headline is mid-animation */}
+          {/*
+            Lede — hidden by default; only present when the headline or CTAs
+            are hovered/focused. Subtle fade + slight rise, no layout shift
+            (uses opacity + transform only; reserves its own height).
+          */}
           <p
-            className="hero-lede hero-gap-lede max-w-[44ch] text-background/60 animate-fade-up"
-            style={{ animationDelay: d(260) }}
+            className="hero-lede hero-gap-lede max-w-[44ch] text-background/75 pointer-events-none transition-[opacity,transform] duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+            style={{
+              opacity: ledeOpen ? 1 : 0,
+              transform: ledeOpen ? "translateY(0)" : "translateY(6px)",
+            }}
+            aria-hidden={!ledeOpen}
           >
             Two consistent impressions. That's all it takes for
             someone to decide who you are — and sometimes, they
@@ -102,12 +109,14 @@ export default function Hero({ onContact }: Props) {
             keep is the one you've actually earned.
           </p>
 
-
-
-          {/* CTAs */}
+          {/* CTAs — hovering also reveals the sub-text */}
           <div
             className="hero-gap-cta flex items-center gap-8 flex-wrap animate-fade-up"
             style={{ animationDelay: d(440) }}
+            onMouseEnter={showLede}
+            onMouseLeave={hideLede}
+            onFocus={showLede}
+            onBlur={hideLede}
           >
             <LinkButton to="/work" variant="light">
               View our work
@@ -137,13 +146,9 @@ export default function Hero({ onContact }: Props) {
         </div>
       </div>
 
-      {/*
-        Scroll indicator — a thin vertical line that pulses downward.
-        Desktop only. No label — the animation implies the direction.
-        Centered at the bottom of the hero.
-      */}
+      {/* Scroll indicator */}
       <div
-        className="absolute bottom-8 md:bottom-10 left-1/2 -translate-x-1/2 hidden md:block"
+        className="absolute bottom-8 md:bottom-10 left-1/2 -translate-x-1/2 hidden md:block z-20"
         aria-hidden
       >
         <div className="w-px h-9 bg-background/20 hero-scroll-line" />
@@ -151,3 +156,4 @@ export default function Hero({ onContact }: Props) {
     </section>
   );
 }
+
