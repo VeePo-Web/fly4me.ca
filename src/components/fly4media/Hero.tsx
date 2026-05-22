@@ -24,6 +24,21 @@ function getInitialRevealDelay(): number {
 
 
 export default function Hero({ onContact }: Props) {
+  // When the intro is about to play, hold the hero animations until the
+  // dissolve begins, then snap to 0 so the natural choreography runs.
+  const [revealDelay, setRevealDelay] = useState<number>(getInitialRevealDelay);
+
+  useEffect(() => {
+    if (revealDelay === 0) return;
+    const onExit = () => setRevealDelay(0);
+    window.addEventListener("f4m:intro:exit", onExit as EventListener);
+    return () => window.removeEventListener("f4m:intro:exit", onExit as EventListener);
+  }, [revealDelay]);
+
+  // Offset original animation delays by the intro's dissolve mark so the
+  // hero reveals land *as* the veil clears, not after a beat of black.
+  const d = (base: number) => `${base + revealDelay}ms`;
+
   return (
     <section
       id="top"
