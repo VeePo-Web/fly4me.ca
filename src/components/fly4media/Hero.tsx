@@ -1,12 +1,44 @@
+import { useEffect, useState } from "react";
 import HeroMedia from "./HeroMedia";
 import { LinkButton } from "./Button";
+import { INTRO_SESSION_KEY, INTRO_HERO_REVEAL_AT_MS } from "./Intro";
 import hero from "@/assets/hero-drone.jpg";
 
 interface Props {
   onContact: () => void;
 }
 
+/**
+ * Compute the reveal offset for hero contents.
+ * If the cinematic intro is about to play, delay the hero's animations so
+ * they land *during* the veil dissolve instead of finishing behind a black veil.
+ */
+function getInitialRevealDelay(): number {
+  if (typeof window === "undefined") return 0;
+  if (window.location.pathname !== "/") return 0;
+  if (new URLSearchParams(window.location.search).has("nointro")) return 0;
+  if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return 0;
+  if (sessionStorage.getItem(INTRO_SESSION_KEY)) return 0;
+  return INTRO_HERO_REVEAL_AT_MS;
+}
+
+
 export default function Hero({ onContact }: Props) {
+  // When the intro is about to play, hold the hero animations until the
+  // dissolve begins, then snap to 0 so the natural choreography runs.
+  const [revealDelay, setRevealDelay] = useState<number>(getInitialRevealDelay);
+
+  useEffect(() => {
+    if (revealDelay === 0) return;
+    const onExit = () => setRevealDelay(0);
+    window.addEventListener("f4m:intro:exit", onExit as EventListener);
+    return () => window.removeEventListener("f4m:intro:exit", onExit as EventListener);
+  }, [revealDelay]);
+
+  // Offset original animation delays by the intro's dissolve mark so the
+  // hero reveals land *as* the veil clears, not after a beat of black.
+  const d = (base: number) => `${base + revealDelay}ms`;
+
   return (
     <section
       id="top"
@@ -50,7 +82,7 @@ export default function Hero({ onContact }: Props) {
           {/* Headline — leads the sequence, no eyebrow crutch */}
           <h1
             className="hero-display wrap-editorial text-background t-reveal-track"
-            style={{ animationDelay: "0ms" }}
+            style={{ animationDelay: d(0) }}
           >
             Your competitors
             <br />
@@ -62,7 +94,7 @@ export default function Hero({ onContact }: Props) {
           {/* Lede — cascades in as headline is mid-animation */}
           <p
             className="hero-lede hero-gap-lede max-w-[44ch] text-background/60 animate-fade-up"
-            style={{ animationDelay: "260ms" }}
+            style={{ animationDelay: d(260) }}
           >
             Two consistent impressions. That's all it takes for
             someone to decide who you are — and sometimes, they
@@ -75,7 +107,7 @@ export default function Hero({ onContact }: Props) {
           {/* CTAs */}
           <div
             className="hero-gap-cta flex items-center gap-8 flex-wrap animate-fade-up"
-            style={{ animationDelay: "440ms" }}
+            style={{ animationDelay: d(440) }}
           >
             <LinkButton to="/work" variant="light">
               View our work
@@ -94,7 +126,7 @@ export default function Hero({ onContact }: Props) {
         {/* Bottom bar — GPS coordinate + availability. Desktop only. */}
         <div
           className="hidden md:flex items-end justify-between shrink-0 animate-fade-up"
-          style={{ animationDelay: "600ms" }}
+          style={{ animationDelay: d(600) }}
         >
           <span className="t-micro text-background/25 tracking-[0.18em]">
             N&thinsp;51.04°&ensp;W&thinsp;114.07°
