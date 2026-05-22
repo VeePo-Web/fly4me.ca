@@ -54,45 +54,52 @@ export default function Header({ onContact }: Props) {
           hidden && !open ? "nav-hidden" : ""
         }`}
       >
-        {/* Subtle top scrim — only visible while wordmark is white (over hero media) */}
+        {/* Top scrim — slightly stronger, only over hero media */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/25 to-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/35 to-transparent"
           style={{ opacity: `calc(1 - var(--nav-progress))` }}
         />
 
+        {/* Discreet frame-edge hairline — only visible over hero */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-white/20"
+          style={{ opacity: `calc((1 - var(--nav-progress)) * 0.9)` }}
+        />
+
         <div className="relative container-x flex items-center justify-between h-16 md:h-20">
-          {/* Brand — logo + wordmark, ink that crossfades white → foreground via --nav-progress */}
+          {/* Brand — crossfades white → foreground via --nav-progress */}
           <Link
             to="/"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="flex items-center gap-2.5 group nav-ink"
+            className="flex items-center gap-2.5 group nav-ink nav-ink-shadow"
             data-cursor="hover"
             aria-label="Fly4MEdia — home"
           >
             <img
               src={logo}
               alt=""
-              width={32}
-              height={32}
-              className="size-7 md:size-8 object-contain transition-[transform,filter] duration-500 ease-[var(--ease-out-soft)] group-hover:scale-[1.06] nav-mark-shadow"
+              width={36}
+              height={36}
+              className="size-8 md:size-9 object-contain transition-[transform,filter] duration-500 ease-[var(--ease-out-soft)] group-hover:scale-[1.06] nav-mark-shadow"
             />
-            <span className="t-nav">Fly4MEdia</span>
+            <span className="t-nav-strong">Fly4MEdia</span>
           </Link>
 
-          {/* Menu trigger — two hairlines that shift on hover, single word */}
+          {/* Menu trigger — beefier hairlines, halo via nav-ink-shadow */}
           <button
             onClick={() => setOpen(true)}
             aria-label="Open menu"
             aria-expanded={open}
             data-cursor="hover"
-            className="group flex items-center gap-3 nav-ink"
+            className="group flex items-center gap-3 nav-ink nav-ink-shadow"
           >
-            <span className="relative block w-[22px] h-[10px]">
-              <span className="absolute left-0 right-0 top-[1px] h-px bg-current transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:translate-x-[2px]" />
-              <span className="absolute left-0 right-0 bottom-[1px] h-px bg-current transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:-translate-x-[2px]" />
+            <span className="relative block w-6 h-[10px]">
+              <span className="absolute left-0 right-0 top-[1px] h-[1.5px] bg-current transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:translate-x-[2px]" />
+              <span className="absolute left-0 right-0 bottom-[1px] h-[1.5px] bg-current transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:-translate-x-[2px]" />
             </span>
-            <span className="t-nav">Menu</span>
+            <span className="t-nav-strong">Menu</span>
           </button>
         </div>
       </header>
