@@ -1,16 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/fly4media-mark.png";
+import MenuOverlay from "./MenuOverlay";
 
 interface Props {
   onContact: () => void;
 }
-
-const NAV: { label: string; to: string }[] = [
-  { label: "Work", to: "/work" },
-  { label: "Services", to: "/services" },
-  { label: "About", to: "/about" },
-];
 
 export default function Header({ onContact }: Props) {
   const [open, setOpen] = useState(false);
@@ -28,7 +23,6 @@ export default function Header({ onContact }: Props) {
       const progress = Math.min(Math.max(y / 120, 0), 1);
       headerRef.current?.style.setProperty("--nav-progress", progress.toFixed(3));
 
-      // Direction-aware hide (only past 240px)
       if (y > 240 && y - lastY > 4) setHidden(true);
       else if (lastY - y > 4 || y < 80) setHidden(false);
       lastY = y;
@@ -49,141 +43,61 @@ export default function Header({ onContact }: Props) {
     };
   }, []);
 
+  // Close menu on route change
   useEffect(() => setOpen(false), [pathname]);
 
-  const isActive = (to: string) =>
-    to === "/" ? pathname === "/" : pathname.startsWith(to);
-
-  const handleContact = () => {
-    setOpen(false);
-    onContact();
-  };
-
   return (
-    <header
-      ref={headerRef}
-      className={`fixed top-0 inset-x-0 z-50 nav-surface ${
-        hidden && !open ? "nav-hidden" : ""
-      } ${open ? "bg-background/95" : ""}`}
-    >
-      <div className="container-x flex items-center justify-between h-16 md:h-20 nav-compress">
-        {/* Brand mark — scale on hover, never rotate; marks are anchors */}
-        <Link
-          to="/"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="flex items-center gap-2.5 group"
-          data-cursor="hover"
-          aria-label="Fly4MEdia — home"
-        >
-          <img
-            src={logo}
-            alt=""
-            width={28}
-            height={28}
-            className="size-6 md:size-7 object-contain transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:scale-[1.06]"
-          />
-          <span className="t-nav">Fly4MEdia</span>
-        </Link>
-
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-9" aria-label="Primary">
-          {NAV.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              data-cursor="hover"
-              className={`link-underline t-nav transition-colors duration-300 ${
-                isActive(item.to)
-                  ? "text-foreground font-medium is-active"
-                  : "text-foreground/50 hover:text-foreground"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <button
-            onClick={handleContact}
-            data-cursor="hover"
-            className="link-underline t-nav text-foreground/70 hover:text-foreground transition-colors duration-300 ml-4 pl-4 border-l border-border/40"
-          >
-            Contact
-          </button>
-        </nav>
-
-        {/* Mobile hamburger — two bars, editorial */}
-        <button
-          onClick={() => setOpen((v) => !v)}
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          data-cursor="hover"
-          className="md:hidden flex flex-col gap-[5px] p-2 -mr-2"
-        >
-          <span
-            className={`block w-5 h-px bg-foreground transition-transform duration-500 ease-[var(--ease-out-soft)] ${
-              open ? "translate-y-[6px] rotate-45" : ""
-            }`}
-          />
-          <span
-            className={`block w-5 h-px bg-foreground transition-transform duration-500 ease-[var(--ease-out-soft)] ${
-              open ? "-translate-y-[1px] -rotate-45" : ""
-            }`}
-          />
-        </button>
-      </div>
-
-      {/*
-        Mobile drawer — grid-template-rows: 0fr → 1fr animates to true content height
-        at consistent velocity. No max-height accordion velocity inconsistency.
-      */}
-      <div
-        className={`md:hidden grid transition-[grid-template-rows,opacity] duration-500 ease-[var(--ease-out-soft)] bg-background/95 backdrop-blur-md border-b border-border/40 ${
-          open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+    <>
+      <header
+        ref={headerRef}
+        className={`fixed top-0 inset-x-0 z-50 nav-surface-quiet ${
+          hidden && !open ? "nav-hidden" : ""
         }`}
       >
-        <div className="overflow-hidden">
-          <nav className="container-x pt-8 pb-10 flex flex-col gap-5" aria-label="Mobile">
-            {NAV.map((item, i) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`t-headline-2 transition-colors duration-300 ${
-                  isActive(item.to) ? "text-foreground font-medium" : "text-foreground/60 hover:text-foreground"
-                }`}
-                style={{
-                  animation: open
-                    ? `page-enter-fade 500ms var(--ease-out-soft) ${60 + i * 70}ms both`
-                    : undefined,
-                }}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <button
-              onClick={handleContact}
-              className="t-headline-2 text-left text-foreground/60 hover:text-foreground transition-colors duration-300"
-              style={{
-                animation: open
-                  ? `page-enter-fade 500ms var(--ease-out-soft) ${60 + NAV.length * 70}ms both`
-                  : undefined,
-              }}
-            >
-              Contact
-            </button>
+        {/* Subtle top scrim — only visible while wordmark is white (over hero media) */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/25 to-transparent"
+          style={{ opacity: `calc(1 - var(--nav-progress))` }}
+        />
 
-            {/* Mobile location footnote — editorial anchor */}
-            <p
-              className="t-micro text-foreground/35 mt-4"
-              style={{
-                animation: open
-                  ? `page-enter-fade 500ms var(--ease-out-soft) ${60 + (NAV.length + 1) * 70}ms both`
-                  : undefined,
-              }}
-            >
-              Alberta, Canada · Available worldwide
-            </p>
-          </nav>
+        <div className="relative container-x flex items-center justify-between h-16 md:h-20">
+          {/* Brand — logo + wordmark, ink that crossfades white → foreground via --nav-progress */}
+          <Link
+            to="/"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="flex items-center gap-2.5 group nav-ink"
+            data-cursor="hover"
+            aria-label="Fly4MEdia — home"
+          >
+            <img
+              src={logo}
+              alt=""
+              width={32}
+              height={32}
+              className="size-7 md:size-8 object-contain transition-[transform,filter] duration-500 ease-[var(--ease-out-soft)] group-hover:scale-[1.06] nav-mark-shadow"
+            />
+            <span className="t-nav">Fly4MEdia</span>
+          </Link>
+
+          {/* Menu trigger — two hairlines that shift on hover, single word */}
+          <button
+            onClick={() => setOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={open}
+            data-cursor="hover"
+            className="group flex items-center gap-3 nav-ink"
+          >
+            <span className="relative block w-[22px] h-[10px]">
+              <span className="absolute left-0 right-0 top-[1px] h-px bg-current transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:translate-x-[2px]" />
+              <span className="absolute left-0 right-0 bottom-[1px] h-px bg-current transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:-translate-x-[2px]" />
+            </span>
+            <span className="t-nav">Menu</span>
+          </button>
         </div>
-      </div>
-    </header>
+      </header>
+
+      <MenuOverlay open={open} onClose={() => setOpen(false)} onContact={onContact} />
+    </>
   );
 }
