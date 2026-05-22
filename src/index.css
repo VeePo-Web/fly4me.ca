@@ -361,25 +361,44 @@
      Desktop: dark pool on the left where copy lives; right side breathes free.
      Mobile: bottom-rise gradient since copy is lower on portrait viewports.    */
   .hero-vignette {
-    background: radial-gradient(
-      ellipse 72% 120% at 18% 60%,
-      rgba(8, 8, 8, 0.91) 0%,
-      rgba(8, 8, 8, 0.62) 28%,
-      rgba(8, 8, 8, 0.24) 52%,
-      transparent 76%
-    );
+    background:
+      /* top scrim — keeps the nav readable over bright footage */
+      linear-gradient(
+        to bottom,
+        rgba(8, 8, 8, 0.72) 0%,
+        rgba(8, 8, 8, 0.38) 8%,
+        rgba(8, 8, 8, 0.10) 16%,
+        transparent 22%
+      ),
+      /* left pool — anchors the copy column */
+      radial-gradient(
+        ellipse 80% 130% at 16% 58%,
+        rgba(6, 6, 6, 0.96) 0%,
+        rgba(6, 6, 6, 0.78) 24%,
+        rgba(6, 6, 6, 0.42) 48%,
+        rgba(6, 6, 6, 0.12) 68%,
+        transparent 82%
+      );
   }
   @media (max-width: 767px) {
     .hero-vignette {
-      background: linear-gradient(
-        to top,
-        rgba(8, 8, 8, 0.94) 0%,
-        rgba(8, 8, 8, 0.65) 35%,
-        rgba(8, 8, 8, 0.20) 62%,
-        transparent 100%
-      );
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(8, 8, 8, 0.75) 0%,
+          rgba(8, 8, 8, 0.35) 10%,
+          transparent 22%
+        ),
+        linear-gradient(
+          to top,
+          rgba(8, 8, 8, 0.96) 0%,
+          rgba(8, 8, 8, 0.72) 38%,
+          rgba(8, 8, 8, 0.28) 65%,
+          transparent 100%
+        );
     }
   }
+
 
   /* Scroll indicator — editorial pulse at hero bottom-center */
   @keyframes hero-scroll-pulse {
