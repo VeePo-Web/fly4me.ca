@@ -60,7 +60,7 @@ export default function Hero({ onContact }: Props) {
           { src: "/hero/hero-drone.mp4",  type: "video/mp4" },
         ]}
         nextSources={[
-          { src: "/hero/dji-0398.mp4", type: "video/mp4" },
+          { src: "/hero/sabines-property.mp4", type: "video/mp4" },
         ]}
       />
 
