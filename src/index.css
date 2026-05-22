@@ -717,11 +717,15 @@
     transition: text-shadow var(--dur-soft) var(--ease-out-quart);
   }
 
-  /* Two-layer drop-shadow on the mark — feels carved out of footage. */
+  /* Mark — invert black → white over hero, back to black after scroll.
+     Stacked with two-layer drop-shadow so the white mark feels carved out
+     of the footage instead of pasted on top. */
   .nav-mark-shadow {
     filter:
+      invert(calc(1 - var(--nav-progress)))
       drop-shadow(0 0 1px rgba(0, 0, 0, calc((1 - var(--nav-progress)) * 0.5)))
       drop-shadow(0 2px 18px rgba(0, 0, 0, calc((1 - var(--nav-progress)) * 0.45)));
+    transition: filter var(--dur-soft) var(--ease-out-quart);
   }
 
   /* Nav-only type — promoted for optical mass over video. Still quiet. */
