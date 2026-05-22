@@ -96,17 +96,16 @@ export default function Hero({ onContact }: Props) {
             (uses opacity + transform only; reserves its own height).
           */}
           <p
-            className="hero-lede hero-gap-lede max-w-[44ch] text-background/75 pointer-events-none transition-[opacity,transform] duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+            className="hero-lede hero-gap-lede max-w-[44ch] text-background/80 pointer-events-none transition-[opacity,transform,letter-spacing] duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] italic font-light"
             style={{
               opacity: ledeOpen ? 1 : 0,
-              transform: ledeOpen ? "translateY(0)" : "translateY(6px)",
+              transform: ledeOpen ? "translateY(0)" : "translateY(10px)",
+              letterSpacing: ledeOpen ? "0em" : "0.04em",
             }}
             aria-hidden={!ledeOpen}
           >
-            Two consistent impressions. That's all it takes for
-            someone to decide who you are — and sometimes, they
-            never revise it. We make sure the perception they
-            keep is the one you've actually earned.
+            <span className="text-background/40 not-italic mr-2">What if</span>
+            perspective changed everything?
           </p>
 
           {/* CTAs — hovering also reveals the sub-text */}
@@ -132,16 +131,13 @@ export default function Hero({ onContact }: Props) {
           </div>
         </div>
 
-        {/* Bottom bar — GPS coordinate + availability. Desktop only. */}
+        {/* Bottom bar — GPS coordinate. Desktop only. */}
         <div
           className="hidden md:flex items-end justify-between shrink-0 animate-fade-up"
           style={{ animationDelay: d(600) }}
         >
           <span className="t-micro text-background/25 tracking-[0.18em]">
             N&thinsp;51.04°&ensp;W&thinsp;114.07°
-          </span>
-          <span className="t-micro text-background/25 text-right tracking-[0.08em]">
-            Available worldwide
           </span>
         </div>
       </div>
