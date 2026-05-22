@@ -95,18 +95,56 @@ export default function Hero({ onContact }: Props) {
             are hovered/focused. Subtle fade + slight rise, no layout shift
             (uses opacity + transform only; reserves its own height).
           */}
-          <p
-            className="hero-lede hero-gap-lede max-w-[44ch] text-background/80 pointer-events-none transition-[opacity,transform,letter-spacing] duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] italic font-light"
-            style={{
-              opacity: ledeOpen ? 1 : 0,
-              transform: ledeOpen ? "translateY(0)" : "translateY(10px)",
-              letterSpacing: ledeOpen ? "0em" : "0.04em",
-            }}
+          {/*
+            Lede — fantasy.co-grade reveal. Each word resolves independently
+            from blur(6px) + translateY(14px) + opacity 0 → crisp, with a
+            70ms cascade. A hairline draws in from the left at the same rate,
+            anchoring the line. Reverses faster than it arrives (releases feel
+            cheap if they linger). Reserves its own height so nothing shifts.
+          */}
+          <div
+            className="hero-gap-lede max-w-[44ch] pointer-events-none select-none"
             aria-hidden={!ledeOpen}
           >
-            <span className="text-background/40 not-italic mr-2">What if</span>
-            perspective changed everything?
-          </p>
+            {/* Hairline rule — draws in from the left, syncs with cascade */}
+            <span
+              aria-hidden
+              className="block h-px bg-background/25 origin-left transition-transform ease-[cubic-bezier(0.22,1,0.36,1)]"
+              style={{
+                transform: ledeOpen ? "scaleX(1)" : "scaleX(0)",
+                transitionDuration: ledeOpen ? "900ms" : "420ms",
+                width: "3.5rem",
+                marginBottom: "1.1rem",
+              }}
+            />
+
+            <p className="hero-lede text-background/85 font-light leading-[1.45]">
+              {[
+                { w: "What", prefix: true },
+                { w: "if", prefix: true },
+                { w: "perspective" },
+                { w: "changed" },
+                { w: "everything." },
+              ].map((item, i, arr) => (
+                <span
+                  key={i}
+                  className="inline-block transition-[opacity,transform,filter,letter-spacing] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[transform,opacity,filter]"
+                  style={{
+                    opacity: ledeOpen ? (item.prefix ? 0.5 : 1) : 0,
+                    transform: ledeOpen ? "translateY(0)" : "translateY(14px)",
+                    filter: ledeOpen ? "blur(0px)" : "blur(6px)",
+                    letterSpacing: ledeOpen ? "0em" : "0.08em",
+                    transitionDuration: ledeOpen ? "1200ms" : "520ms",
+                    transitionDelay: ledeOpen ? `${i * 70}ms` : `${(arr.length - 1 - i) * 24}ms`,
+                    fontStyle: item.prefix ? "normal" : "italic",
+                    marginRight: i < arr.length - 1 ? "0.32em" : 0,
+                  }}
+                >
+                  {item.w}
+                </span>
+              ))}
+            </p>
+          </div>
 
           {/* CTAs — hovering also reveals the sub-text */}
           <div
