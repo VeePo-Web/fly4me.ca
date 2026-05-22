@@ -696,21 +696,42 @@
   }
   .nav-hidden { transform: translateY(-100%); }
 
-  /* Ink crossfade — white over hero, foreground after scroll.
-     color-mix is supported in all modern evergreen browsers. */
+  /* Ink crossfade — warm cream-white over hero (reads better against cool
+     sky tones than pure #fff), foreground after scroll. */
   .nav-ink {
     color: color-mix(
       in srgb,
-      rgb(255 255 255 / 0.95) calc((1 - var(--nav-progress)) * 100%),
+      rgb(250 248 244 / 0.98) calc((1 - var(--nav-progress)) * 100%),
       hsl(var(--foreground)) calc(var(--nav-progress) * 100%)
     );
     transition: color var(--dur-soft) var(--ease-out-quart);
   }
 
-  /* Soft drop-shadow on the logo while it's white over media; fades to flat as the page scrolls. */
-  .nav-mark-shadow {
-    filter: drop-shadow(0 1px 14px rgba(0, 0, 0, calc((1 - var(--nav-progress)) * 0.35)));
+  /* Text-shadow halo — single biggest legibility gain over video.
+     Tight 1px anti-alias halo + wide 12px atmospheric lift. Both fade
+     out as --nav-progress resolves to ink on white. */
+  .nav-ink-shadow {
+    text-shadow:
+      0 0 1px rgba(0, 0, 0, calc((1 - var(--nav-progress)) * 0.55)),
+      0 1px 12px rgba(0, 0, 0, calc((1 - var(--nav-progress)) * 0.55));
+    transition: text-shadow var(--dur-soft) var(--ease-out-quart);
   }
+
+  /* Two-layer drop-shadow on the mark — feels carved out of footage. */
+  .nav-mark-shadow {
+    filter:
+      drop-shadow(0 0 1px rgba(0, 0, 0, calc((1 - var(--nav-progress)) * 0.5)))
+      drop-shadow(0 2px 18px rgba(0, 0, 0, calc((1 - var(--nav-progress)) * 0.45)));
+  }
+
+  /* Nav-only type — promoted for optical mass over video. Still quiet. */
+  .t-nav-strong {
+    font-size: 15px;
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+    font-weight: 600;
+  }
+
 
 
   /* ---------- Form field micro-system ---------- */
