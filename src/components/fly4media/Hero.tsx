@@ -1,10 +1,27 @@
+import { useEffect, useState } from "react";
 import HeroMedia from "./HeroMedia";
 import { LinkButton } from "./Button";
+import { INTRO_SESSION_KEY, INTRO_HERO_REVEAL_AT_MS } from "./Intro";
 import hero from "@/assets/hero-drone.jpg";
 
 interface Props {
   onContact: () => void;
 }
+
+/**
+ * Compute the reveal offset for hero contents.
+ * If the cinematic intro is about to play, delay the hero's animations so
+ * they land *during* the veil dissolve instead of finishing behind a black veil.
+ */
+function getInitialRevealDelay(): number {
+  if (typeof window === "undefined") return 0;
+  if (window.location.pathname !== "/") return 0;
+  if (new URLSearchParams(window.location.search).has("nointro")) return 0;
+  if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return 0;
+  if (sessionStorage.getItem(INTRO_SESSION_KEY)) return 0;
+  return INTRO_HERO_REVEAL_AT_MS;
+}
+
 
 export default function Hero({ onContact }: Props) {
   return (
