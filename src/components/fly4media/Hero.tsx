@@ -82,7 +82,7 @@ export default function Hero({ onContact }: Props) {
           {/* Headline — leads the sequence, no eyebrow crutch */}
           <h1
             className="hero-display wrap-editorial text-background t-reveal-track"
-            style={{ animationDelay: "0ms" }}
+            style={{ animationDelay: d(0) }}
           >
             Your competitors
             <br />
@@ -94,7 +94,7 @@ export default function Hero({ onContact }: Props) {
           {/* Lede — cascades in as headline is mid-animation */}
           <p
             className="hero-lede hero-gap-lede max-w-[44ch] text-background/60 animate-fade-up"
-            style={{ animationDelay: "260ms" }}
+            style={{ animationDelay: d(260) }}
           >
             Two consistent impressions. That's all it takes for
             someone to decide who you are — and sometimes, they
@@ -107,7 +107,7 @@ export default function Hero({ onContact }: Props) {
           {/* CTAs */}
           <div
             className="hero-gap-cta flex items-center gap-8 flex-wrap animate-fade-up"
-            style={{ animationDelay: "440ms" }}
+            style={{ animationDelay: d(440) }}
           >
             <LinkButton to="/work" variant="light">
               View our work
@@ -126,7 +126,7 @@ export default function Hero({ onContact }: Props) {
         {/* Bottom bar — GPS coordinate + availability. Desktop only. */}
         <div
           className="hidden md:flex items-end justify-between shrink-0 animate-fade-up"
-          style={{ animationDelay: "600ms" }}
+          style={{ animationDelay: d(600) }}
         >
           <span className="t-micro text-background/25 tracking-[0.18em]">
             N&thinsp;51.04°&ensp;W&thinsp;114.07°
