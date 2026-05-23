@@ -872,16 +872,16 @@
    zooms + blurs while veil clears). All sequencing owned by Intro.tsx;
    per-element delays are passed inline so the JS is the single timeline.   */
 @layer utilities {
-  /* Slogan — letter-by-letter cascade (delay set inline per letter). */
+  /* Slogan — letter-by-letter cascade (delay set inline per letter). No blur. */
   @keyframes intro-letter-in {
-    0%   { opacity: 0; transform: translateY(14px); filter: blur(8px); letter-spacing: 0.18em; }
-    100% { opacity: 1; transform: translateY(0);    filter: blur(0);   letter-spacing: 0.02em; }
+    0%   { opacity: 0; transform: translateY(14px); letter-spacing: 0.14em; }
+    100% { opacity: 1; transform: translateY(0);    letter-spacing: 0.02em; }
   }
   .intro-letter {
     display: inline-block;
     opacity: 0;
-    will-change: opacity, transform, filter, letter-spacing;
-    animation: intro-letter-in 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    will-change: opacity, transform, letter-spacing;
+    animation: intro-letter-in 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
   /* Hairline — strikes once the cascade settles, then re-frames wider. */
@@ -901,73 +901,76 @@
     will-change: transform, opacity, width;
   }
   .intro-hairline.is-drawn {
-    animation: intro-hl-strike 900ms var(--ease-emphasized) forwards;
+    animation: intro-hl-strike 1400ms var(--ease-emphasized) forwards;
   }
   .intro-hairline.is-wide {
-    animation: intro-hl-expand 900ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
+    animation: intro-hl-expand 1100ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
   }
 
-  /* Brand stack — rises in phase 4. Delay supplied inline so JS owns it. */
-  @keyframes intro-rise-in {
-    0%   { opacity: 0; transform: translateY(10px); filter: blur(4px); }
-    100% { opacity: 1; transform: translateY(0);    filter: blur(0); }
-  }
-  .intro-brand-rise {
-    opacity: 0;
-    will-change: opacity, transform, filter;
-    animation: intro-rise-in 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-  @keyframes intro-rise-dim-in {
-    0%   { opacity: 0;    transform: translateY(6px); }
-    100% { opacity: 0.55; transform: translateY(0); }
-  }
-  .intro-descriptor-rise {
-    opacity: 0;
-    will-change: opacity, transform;
-    animation: intro-rise-dim-in 800ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  /* Slogan dims (does NOT exit) when brand stack arrives — single composed frame. */
+  /* Slogan dims (does NOT exit) when brand stack arrives. */
   @keyframes intro-slogan-dim {
     0%   { opacity: 1; }
-    100% { opacity: 0.28; }
+    100% { opacity: 0.35; }
   }
   .intro-slogan-soften {
-    animation: intro-slogan-dim 900ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
+    animation: intro-slogan-dim 1100ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
   }
 
-  /* Dissolve — stack pulls toward camera while the veil clears. */
+  /* Suspend breath — barely-perceptible inhale during the hold. */
+  @keyframes intro-stack-breath {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.012); }
+    100% { transform: scale(1); }
+  }
+  .intro-stack-breath {
+    animation: intro-stack-breath 2000ms cubic-bezier(0.45, 0, 0.55, 1) both;
+    will-change: transform;
+  }
+
+  /* Mark ring — one soft pulse around the drone mark during suspend. */
+  @keyframes intro-ring-pulse {
+    0%   { transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
+    25%  { opacity: 0.35; }
+    100% { transform: translate(-50%, -50%) scale(1.4); opacity: 0; }
+  }
+  .intro-mark-ring {
+    opacity: 0;
+    animation: intro-ring-pulse 1600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    will-change: transform, opacity;
+  }
+
+  /* Dissolve — stack pulls toward camera. No blur. */
   @keyframes intro-stack-zoom {
-    0%   { transform: scale(1);    filter: blur(0); }
-    100% { transform: scale(1.04); filter: blur(6px); }
+    0%   { transform: scale(1); }
+    100% { transform: scale(1.04); }
   }
   .intro-stack-zoom {
-    animation: intro-stack-zoom 1350ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: intro-stack-zoom 1500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  /* Light sweep — single calm pass across the hold. */
+  /* Light sweep — single calm pass during suspend. */
   @keyframes intro-sweep {
     0%   { transform: translateX(0);    opacity: 0; }
     20%  { opacity: 1; }
     100% { transform: translateX(400%); opacity: 0; }
   }
-  .intro-sweep { animation: intro-sweep 1800ms var(--ease-out-soft) 2600ms both; }
+  .intro-sweep { animation: intro-sweep 2000ms var(--ease-out-soft) 3600ms both; }
 
-  /* Drone mark — anchors before any type, then settles square. */
+  /* Drone mark — anchors before any type, then settles square. No blur. */
   @keyframes intro-mark-in {
-    0%   { opacity: 0; transform: scale(0.78) rotate(-6deg); filter: blur(6px); }
-    100% { opacity: 0.92; transform: scale(1) rotate(0); filter: blur(0); }
+    0%   { opacity: 0;    transform: scale(0.85) rotate(-4deg); }
+    100% { opacity: 0.92; transform: scale(1)    rotate(0); }
   }
   .intro-mark {
     opacity: 0;
-    transform: scale(0.78) rotate(-6deg);
-    will-change: opacity, transform, filter;
+    transform: scale(0.85) rotate(-4deg);
+    will-change: opacity, transform;
   }
   .intro-mark.is-framed {
-    animation: intro-mark-in 760ms var(--ease-out-quart) 80ms forwards;
+    animation: intro-mark-in 800ms var(--ease-out-quart) 80ms forwards;
   }
 
-  /* Viewfinder brackets — staggered snap, optional outward nudge on open. */
+  /* Viewfinder brackets — staggered snap-in. */
   @keyframes intro-bracket-in {
     0%   { opacity: 0; transform: scale(0.6); }
     100% { opacity: 1; transform: scale(1); }
@@ -975,23 +978,22 @@
   .intro-bracket {
     opacity: 0;
     transform: scale(0.6);
-    transition: transform 700ms var(--ease-out-quart);
     will-change: opacity, transform;
   }
   .intro-bracket.is-in {
-    animation: intro-bracket-in 520ms var(--ease-spring) both;
+    animation: intro-bracket-in 600ms var(--ease-spring) both;
   }
 
-  /* Frame counter — fades in with cascade, out before brand. */
+  /* Frame counter — visible during slogan + suspend. */
   .intro-counter {
     opacity: 0;
-    transition: opacity 400ms var(--ease-out-quart);
+    transition: opacity 500ms var(--ease-out-quart);
     will-change: opacity;
   }
   .intro-counter.is-on  { opacity: 0.4; }
   .intro-counter.is-off { opacity: 0; }
 
-  /* Clip-path wipe — wordmark + descriptor reveal as typography. */
+  /* Clip-path wipe — wordmark + descriptor reveal. */
   @keyframes intro-clip-wipe {
     0%   { clip-path: inset(0 0 100% 0); opacity: 0; transform: translateY(4px); }
     100% { clip-path: inset(0 0 0 0);    opacity: 1; transform: translateY(0); }
@@ -1000,7 +1002,7 @@
     clip-path: inset(0 0 100% 0);
     opacity: 0;
     will-change: clip-path, opacity, transform;
-    animation: intro-clip-wipe 720ms var(--ease-out-quart) both;
+    animation: intro-clip-wipe 1000ms var(--ease-out-quart) both;
   }
 
   /* Aperture part — vertical panels open like a camera shutter. */
@@ -1013,11 +1015,11 @@
     100% { transform: translateY(100%); }
   }
   .intro-aperture-top {
-    animation: intro-aperture-top 1100ms var(--ease-emphasized) 200ms forwards;
+    animation: intro-aperture-top 1400ms cubic-bezier(0.83, 0, 0.17, 1) 200ms forwards;
     will-change: transform;
   }
   .intro-aperture-bottom {
-    animation: intro-aperture-bottom 1100ms var(--ease-emphasized) 200ms forwards;
+    animation: intro-aperture-bottom 1400ms cubic-bezier(0.83, 0, 0.17, 1) 200ms forwards;
     will-change: transform;
   }
 
@@ -1029,7 +1031,7 @@
   }
   .intro-seam-flare {
     transform-origin: center;
-    animation: intro-seam-flare 850ms var(--ease-expo) 180ms forwards;
+    animation: intro-seam-flare 900ms var(--ease-expo) 180ms forwards;
     will-change: transform, opacity;
   }
 
@@ -1043,14 +1045,8 @@
 
   /* Veil dissolve — symmetric curve, paired with stack zoom. */
   @keyframes intro-veil-fade { to { opacity: 0; } }
-  .intro-veil-out { animation: intro-veil-fade 1350ms cubic-bezier(0.7, 0, 0.3, 1) forwards; }
+  .intro-veil-out { animation: intro-veil-fade 1500ms cubic-bezier(0.7, 0, 0.3, 1) forwards; }
 
-  /* Skip affordance — fades in after the slogan has settled. */
-  @keyframes intro-skip-in { to { opacity: 0.4; } }
-  .intro-skip {
-    opacity: 0;
-    animation: intro-skip-in 600ms ease 1800ms forwards;
-  }
 }
 
 /* ---------- Reduced motion guard ---------- */
