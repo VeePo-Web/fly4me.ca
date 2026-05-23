@@ -109,7 +109,7 @@ const Intro = () => {
         />
         <span className="intro-hairline mt-7 block h-px bg-white/55" />
         <p
-          className="intro-text mt-7 select-none text-white/65"
+          className="mt-7 select-none"
           style={{
             fontSize: "13px",
             letterSpacing: "0.12em",
@@ -117,8 +117,10 @@ const Intro = () => {
             lineHeight: 1.4,
           }}
         >
-          Perspective changes everything.
+          <span className="intro-word-1 text-white">Perspective</span>{" "}
+          <span className="intro-word-2 text-white">changes everything.</span>
         </p>
+
       </div>
     </div>
   );
