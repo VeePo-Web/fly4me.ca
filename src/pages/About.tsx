@@ -8,6 +8,7 @@ import { useReveal } from "@/components/fly4media/useReveal";
 import about from "@/assets/about-hero.jpg";
 import toby from "@/assets/toby-portrait.jpg";
 import sunriseMist from "@/assets/sunrise-mist-455am.jpg";
+import ctaSpringbank from "@/assets/cta-springbank-estate.jpg";
 
 function TobyRidgeInterlude() {
   return (
@@ -83,6 +84,8 @@ export default function About() {
                 you&rsquo;re trying to be seen as.
               </>
             }
+            backgroundImage={ctaSpringbank}
+            backgroundAlt="Aerial view of a modern luxury estate on a Springbank acreage at last light, Canadian Rockies on the horizon"
           />
         </>
       )}
