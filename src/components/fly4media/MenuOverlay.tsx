@@ -186,9 +186,9 @@ export default function MenuOverlay({ open, onClose, onContact }: Props) {
             })}
           </nav>
 
-          {/* Editorial right rail — echoes the hero bottom bar */}
+          {/* Slim contact rail */}
           <aside
-            className="lg:col-span-4 flex flex-col justify-end gap-10 text-white/55"
+            className="lg:col-span-3 flex flex-col justify-end gap-3 mt-auto text-white/55"
             style={{
               opacity: open ? 1 : 0,
               transform: open ? "translateY(0)" : "translateY(14px)",
@@ -197,39 +197,21 @@ export default function MenuOverlay({ open, onClose, onContact }: Props) {
               transitionDelay: open ? "680ms" : "0ms",
             }}
           >
-            <div className="space-y-3">
-              <p className="t-micro text-white/40">Studio</p>
-              <p className="t-body text-white/80">
-                Fly4MEdia — a cinematic
-                <br />
-                perspective studio.
-              </p>
-              <p className="t-micro text-white/35 tracking-[0.18em]">
-                N&thinsp;51.04°&ensp;W&thinsp;114.07° — Alberta, Canada
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <p className="t-micro text-white/40">Contact</p>
-              <a
-                href="mailto:tobyrennick@gmail.com"
-                data-cursor="hover"
-                className="block t-body text-white/80 hover:text-white transition-colors duration-300"
-              >
-                tobyrennick@gmail.com
-              </a>
-              <a
-                href="tel:+14038189686"
-                data-cursor="hover"
-                className="block t-body text-white/80 hover:text-white transition-colors duration-300"
-              >
-                +1 403 818 9686
-              </a>
-            </div>
-
-            <p className="t-micro text-white/30">
-              MMXXVI — Made carefully in Alberta
-            </p>
+            <p className="t-micro text-white/40">Contact</p>
+            <a
+              href="mailto:tobyrennick@gmail.com"
+              data-cursor="hover"
+              className="block t-body text-white/80 hover:text-white transition-colors duration-300"
+            >
+              tobyrennick@gmail.com
+            </a>
+            <a
+              href="tel:+14038189686"
+              data-cursor="hover"
+              className="block t-body text-white/80 hover:text-white transition-colors duration-300"
+            >
+              +1 403 818 9686
+            </a>
           </aside>
         </div>
       </div>
