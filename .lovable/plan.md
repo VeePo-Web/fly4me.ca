@@ -1,99 +1,212 @@
-# Hero mobile — bottom-third composition + scroll-parallax lede
+# Mobile Contact Form — Design Brief
 
-Scope: `src/components/fly4media/Hero.tsx` only. Mobile (`<md`) behavior only. Desktop is untouched.
+A prompt-style direction for the **feel and UX** of `ContactModal.tsx` on mobile (≤768px). Visual/interaction only — no business logic, no copy rewrites, no backend changes. Brand panel, success ladder, and chip taxonomy stay as-is in spirit; this is about *how the form breathes* on a phone.
 
-## Target composition (mobile, top → bottom)
+---
+
+## The one-line brief
+
+> A single, quiet column of questions that answers itself one breath at a time — like writing a letter on a clean sheet of paper, not filling out a form.
+
+Think Apple's "Hello." page, fantasy.co's editorial restraint, Linear's settings screens, Things 3's add-task sheet. **Stillness. Generous air. One thing at a time. No chrome.**
+
+---
+
+## Guiding principles
+
+1. **One question owns the screen.** The active field is the only loud element. Everything else recedes.
+2. **No boxes.** No card outlines, no filled inputs, no rounded rectangles around fields. Only a single hairline beneath each input. The form is the page.
+3. **Whitespace is the design.** Section gaps measured in `28–40px`, not `12px`. The form should feel under-furnished, not packed.
+4. **Type leads, UI follows.** The eye should land on labels and answers, never on borders, shadows, or affordance hints.
+5. **Motion is breath, not theater.** Every transition under 400ms, `cubic-bezier(0.22, 1, 0.36, 1)`. No bouncing, no scaling, no springs.
+6. **Thumb-first.** Primary CTA is sticky-bottom, full-width, inside safe-area. Submit is never a thing you have to scroll to find.
+
+---
+
+## Composition (top → bottom, mobile)
 
 ```text
-┌──────────────────────────────┐
-│                              │  ← upper 2/3: pure drone footage,
-│                              │     vignette breathes, no copy
-│                              │
-│                              │
-├──────────────────────────────┤
-│  Your competitors            │  ← bottom third opens with headline
-│  look ordinary               │
-│  from up here.               │
-│                              │
-│  ─── (hairline)              │  ← lede group, floats up 8px on scroll 0→80
-│  What if perspective         │
-│  changed everything.         │
-│                              │
-│  ┌────────────────────────┐  │  ← primary CTA, full width
-│  │     View our work  ↗  │  │
-│  └────────────────────────┘  │
-│       Start a project        │  ← quiet secondary, centered
-│  ────── safe-area ──────     │
-└──────────────────────────────┘
+┌──────────────────────────────────────┐
+│  ╳                                   │  ← close, top-right, 44pt tap target
+│                                      │
+│  [tight brand band — 22vh, already   │
+│   in place, keep as-is]              │
+│                                      │
+├──────────────────────────────────────┤
+│                                      │
+│  Tell us what deserves               │  ← headline, t-headline-2
+│  a new perspective.                  │     left-aligned, 2 lines max
+│                                      │
+│  ─── 40px air ───                    │
+│                                      │
+│  Name                                │  ← label, t-micro, muted
+│  ___________________________         │  ← single hairline, no fill
+│                                      │
+│  ─── 32px air ───                    │
+│                                      │
+│  Email                               │
+│  ___________________________         │
+│  Never shared. Never spammed.        │  ← t-micro/40, hint sits quiet
+│                                      │
+│  ─── 40px air ───                    │
+│                                      │
+│  What are you working on?            │  ← question framed as a question,
+│                                      │     not "Services" header
+│  Film & Story                        │  ← group eyebrow, t-eyebrow/50
+│  ▸ ▸ ▸ ▸ ▸ →                         │  ← horizontal scroll, edge-fade
+│                                      │
+│  Brand & Campaign                    │
+│  ▸ ▸ ▸ ▸ →                           │
+│                                      │
+│  Property & Industry                 │
+│  ▸ ▸ →                               │
+│                                      │
+│  ─── 32px air ───                    │
+│                                      │
+│  Project                             │
+│  ___________________________         │  ← textarea, hairline only,
+│  ___________________________         │     placeholder italic, muted
+│  ___________________________         │
+│                                      │
+│  ─── 32px air ───                    │
+│                                      │
+│  Phone  optional                     │
+│  ___________________________         │
+│                                      │
+│  ─── 80px air (breathing room) ───   │
+│                                      │
+│  tobyrennick@gmail.com               │  ← mobile fallback, t-meta/50
+│  403 818 9686                        │
+│                                      │
+│  [200px bottom buffer for sticky]    │
+└──────────────────────────────────────┘
+   ┌─ sticky thumb-zone CTA ─────────┐
+   │ Toby replies within 1 day.      │  ← t-micro, centered, /60
+   │ ┌─────────────────────────────┐ │
+   │ │  Send brief             ↗   │ │  ← full-width, h=56, black on white
+   │ └─────────────────────────────┘ │
+   └─ safe-area-inset-bottom ────────┘
 ```
 
-Headline opens the bottom third. CTAs hug the bottom. The lede + hairline live between them and respond to scroll.
+---
 
-## Changes
+## Field anatomy (the heart of it)
 
-### 1. Anchor the entire content stack to the bottom (mobile only)
+**Default state**
+- Label: `t-micro`, `text-muted-foreground`, 12px above the input, **always visible** (no floating-label gimmick — too clever, too 2018).
+- Input: `t-lede` (large, readable, ~20px), transparent background, **single hairline** `border-b border-border/60`, padding `pb-3`, no left/right padding, no top border, no fill.
+- Caret: native, default color.
 
-Inner content column:
+**Focus state**
+- Hairline crossfades from `border/60` → `foreground` over 280ms.
+- A **second hairline** draws beneath, 1px tall, `bg-foreground`, animating `scaleX(0) → scaleX(1)` from left over 320ms with `cubic-bezier(0.22, 1, 0.36, 1)`. Two hairlines briefly co-exist — the old one fades as the new draws.
+- Label color shifts `muted-foreground → foreground` over 200ms.
+- **No ring. No glow. No box-shadow. No background tint.** Ever.
 
-- Change `flex flex-col` → `flex flex-col justify-end md:justify-center`.
-- The inner `<div>` that wraps headline + lede + CTAs: drop `flex-1 min-h-0 flex flex-col justify-center` and replace with `flex flex-col` (no flex-grow on mobile) so the group naturally sits at the bottom of the column. Keep `md:flex-1 md:min-h-0 md:justify-center` for desktop parity.
-- Width constraint `max-w-2xl lg:max-w-[52rem]` stays.
-- Keep `max-h-[100dvh]` on the section and `hero-pb` + the safe-area `pb-[max(28px,calc(env(safe-area-inset-bottom)+20px))]` we already added.
+**Filled state (unfocused, valid)**
+- Hairline holds at `border/80`, label stays `muted-foreground`.
+- A small dot `•` (3px, `bg-foreground/40`) appears at the far right of the label row — a quiet "noted" mark. Crossfades in over 240ms.
 
-Net effect on mobile: headline + lede + CTAs become a single bottom-anchored stack; everything above is video.
+**Error state**
+- Hairline shifts to `border-destructive/60`, no shake, no icon.
+- Inline message below in `t-micro text-destructive/80`, fade-up 8px over 240ms.
 
-### 2. Headline sits at the top of that bottom-anchored stack
+**Hint text**
+- `t-micro text-muted-foreground/50`, sits 8px below input, **never bold, never colored**. Reads like a footnote.
 
-- Headline stays as-is — no copy change, same `hero-display`, same per-word reveal class, same hover/focus handlers (still no-ops on touch via `noHover`).
-- Because the stack is bottom-anchored, the headline naturally lands in the **bottom third** of the viewport on phones (375×667 → headline top ~y=440; 390×844 → ~y=560). The taller the phone, the more breathing room above — that's correct.
-- Verify on the three target sizes (375×667, 390×844, 414×896) — adjust by tightening `hero-gap-lede` / `hero-gap-cta` only if anything clips. No CSS edits expected.
+---
 
-### 3. Scroll-revealed lede (Idea #1)
+## Chip group (services)
 
-Auto-cascade already lands at ~900ms on touch. Add a tiny upward parallax on top of it, bound to scroll position 0–80px:
+Keep horizontal scroll on mobile — it's right. Refine:
 
-- Add a `ledeRef` on the existing lede `<div>` (the `hero-gap-lede` wrapper).
-- New `useEffect` (mobile only — guarded by the existing `noHover` state):
-    - Single `scroll` listener, passive, throttled with `requestAnimationFrame` (project rule: no Framer Motion, single observer pattern; mirror `useScrollVelocity` style).
-    - Compute `p = clamp(window.scrollY / 80, 0, 1)`.
-    - Set `ledeRef.current.style.transform = translate3d(0, ${-8 * p}px, 0)`.
-    - Apply via direct style mutation (not React state) to avoid re-renders. Use `transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1)` set once in JSX `style` so the float feels eased, not snappy.
-    - Cleanup: cancel rAF, remove listener.
-- Why bound to `noHover` only: desktop already gets a hover-driven reveal; parallax would fight cursor intent. Mobile-only.
-- Why 8px / 80px: matches the lede's existing 14px translate vocabulary — small enough to feel like air, big enough to register on a 390×844 retina screen. Same `cubic-bezier(0.22, 1, 0.36, 1)` as the rest of the hero.
-- `prefers-reduced-motion: reduce`: skip the listener entirely; lede sits at rest.
+- Chip: `t-micro`, `px-3 py-2`, **no border by default** — just `text-muted-foreground/70` on transparent.
+- A 1px hairline appears under the chip on hover/active via underline, not box border.
+- **Selected:** chip text goes `foreground`, a 1px underline draws beneath (320ms, left-to-right). No fill, no pill background. The selection feels like *underlining a word in a letter*, not toggling a button.
+- Group eyebrow: `t-eyebrow text-muted-foreground/50`, all-caps, tracking +0.08em, 8px below.
+- **Edge fade:** add a 24px gradient mask on the right edge of the scroll container (`mask-image: linear-gradient(to right, black 80%, transparent)`) — a wordless "scroll for more" cue.
+- No scroll indicator dots. No arrows. The fade is enough.
 
-### 4. CTAs — already correct, one tweak
+---
 
-The previous pass made `View our work` full-width and stacked `Start a project` underneath. Keep all of that. One refinement:
+## Headline
 
-- Remove `hero-gap-cta` on mobile and replace with a fixed `mt-7 md:hero-gap-cta` so the CTA block hugs the lede consistently regardless of viewport height (current `clamp(20px, 3vh, 40px)` opens too much on tall phones where every pixel of footage counts).
-- Result on mobile: ~28px between lede and the full-width primary button. Desktop unchanged.
+- `t-headline-2`, left-aligned, max 2 lines, `max-w-[16ch]`.
+- Stays as-is in copy: "Tell us what deserves / a new perspective."
+- Animates in once on mount: 12px fade-up, 480ms, no stagger needed.
 
-### 5. Vignette tweak (mobile only) — readability insurance
+---
 
-With the headline now in the bottom third, ensure the existing `.hero-vignette` darkens the bottom enough that white type stays legible over any drone frame:
+## Sticky CTA (already exists — refine)
 
-- Read `.hero-vignette` first. If the bottom darkening on mobile is weak, add a single mobile-only class `md:hidden` overlay `<div>` with `bg-gradient-to-t from-black/55 via-black/20 to-transparent` covering the bottom 55% of the section (`absolute inset-x-0 bottom-0 h-[55%] z-[5]` — sits between video and content z-20).
-- Skip this if the vignette already handles it (check during implementation; this is a contingent step, not a guaranteed edit).
+- Surface: `bg-background/85` + `backdrop-blur-xl` (heavier blur than current `md` — more iOS-glassy).
+- Top border: replace `border-t border-border` with a **6px gradient fade** from transparent → background, so the CTA bar lifts out of the page rather than sitting on a line. Cleaner.
+- Micro-copy ("Toby replies within 1 business day, every time.") stays, centered, `t-micro text-muted-foreground/60`, 8px above button.
+- Button: full-width, **56px tall** (not 48), `bg-foreground text-background`, `t-body` weight 500, arrow `↗` in trailing slot with 8px gap. No rounded corners beyond 2px (`rounded-sm`).
+- Reveal: appears once Name + Email read as valid (current logic). Translate-up from `translate-y-full` to `0` over 480ms with `cubic-bezier(0.22, 1, 0.36, 1)`. **Add a 120ms delay** — gives the validation moment a beat to register, so the bar feels *earned*, not reactive.
+- Pressed state: button opacity to 0.85, no scale.
 
-## Files
+---
 
-- `src/components/fly4media/Hero.tsx` — only file touched. ~20 lines changed + one new `useEffect` for parallax + one `ref`.
-- No new components, no new packages, no CSS file edits (the contingent gradient overlay would be inline Tailwind only).
+## Brand band (top, 22vh)
 
-## Verification
+Keep as-is structurally, but:
+- Add a **2px gold hairline** along the very bottom edge of the brand band (`bg-gold-warm/40` or equivalent token), acting as the seam between brand and form. One quiet flourish, the only ornament on the screen.
+- Headline inside brand band: ensure it sits **bottom-left**, not bottom-padded — let it almost-touch the seam. That tension is the design.
 
-- 375×667, 390×844, 414×896, 360×800: headline opens the bottom third, lede + hairline sit between headline and CTAs, primary CTA full-width pinned to bottom with safe-area buffer.
-- Begin scrolling on mobile: lede + hairline drift up 8px smoothly over the first 80px of scroll, then settle. No re-renders (verified by React DevTools profiler if needed).
-- iPad portrait (768×1024): inherits desktop layout — vertically centered, hover-gated lede, inline CTAs.
-- Desktop (≥1024): zero visual change.
-- Reduced motion on mobile: lede appears immediately at rest, no parallax.
-- Intro cold-load: lede + parallax still wait for the intro veil dissolve (revealDelay propagates to the auto-reveal timer; parallax listener attaches regardless but produces 0 translate at scrollY=0).
+---
 
-## Explicitly NOT changing
+## Micro-interactions
 
-- Copy: headline, lede, CTA labels — all verbatim.
-- Italic on "perspective changed everything.", `t-*` token usage, monochrome palette.
-- Desktop hover-to-reveal, scroll indicator, GPS quote bar.
-- Video sources, intro choreography, vignette layer's existing behavior.
+- **Tap on chip:** opacity 0.7 for 80ms, then settle. No scale.
+- **Keyboard open:** form scrolls active field to ~33% from top of remaining viewport (not centered — gives breathing room above). Use `scrollIntoView({ block: "center", behavior: "smooth" })` then offset.
+- **Field complete → next:** no auto-advance. Trust the user.
+- **Submit press:** sticky CTA shows three pulsing dots (already in place), keep — but make dots `bg-background/60` (slightly softer than current `/80`).
+
+---
+
+## What to remove / forbid
+
+- ❌ No card backgrounds behind the form.
+- ❌ No rounded input boxes.
+- ❌ No focus rings, ring-offset, or shadow on inputs.
+- ❌ No icon decorations inside fields (no email icon, no phone icon).
+- ❌ No progress bar, no "step 1 of 3."
+- ❌ No floating labels.
+- ❌ No accent colors except the gold seam and destructive red.
+- ❌ No emoji, no illustrations.
+
+---
+
+## Tokens to lean on
+
+- Typography: `t-headline-2`, `t-lede`, `t-body`, `t-micro`, `t-eyebrow` only.
+- Colors: `foreground`, `background`, `muted-foreground`, `border`, `destructive`, `gold-warm` (seam only).
+- Spacing rhythm: `28px` (between related fields), `40px` (between sections), `80px` (before footer fallback).
+- Motion: `duration-[280ms|320ms|480ms]`, easing `cubic-bezier(0.22, 1, 0.36, 1)` exclusively.
+
+---
+
+## The test
+
+Open the form on a phone, scroll slowly, focus a field, type one word. If at any moment the screen feels **busier than a blank page with one sentence on it** — the design has failed. The form should feel like the absence of a form.
+
+---
+
+## Out of scope
+
+- Desktop layout (no changes ≥768px).
+- Copy rewrites.
+- Service taxonomy changes.
+- Backend, validation logic, edge function.
+- Success ladder (already lovely).
+- Brand panel content/imagery.
+
+---
+
+## Files this would touch (on build)
+
+- `src/components/fly4media/ContactModal.tsx` — field anatomy, chip styling, sticky CTA refinement, spacing rhythm, brand seam.
+- Possibly `src/index.css` — one new utility for the edge-fade mask and the second-hairline focus animation, if not expressible inline.
+
+No new components, no new packages, no schema changes.
