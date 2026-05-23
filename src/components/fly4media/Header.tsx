@@ -80,9 +80,9 @@ export default function Header({ onContact }: Props) {
             <img
               src={logo}
               alt=""
-              width={36}
-              height={36}
-              className="size-8 md:size-9 object-contain transition-[transform,filter] duration-500 ease-[var(--ease-out-soft)] group-hover:scale-[1.06] nav-mark-shadow"
+              width={52}
+              height={52}
+              className="size-11 md:size-[52px] object-contain transition-[transform,filter] duration-500 ease-[var(--ease-out-soft)] group-hover:scale-[1.06] nav-mark-shadow"
             />
             <span className="t-nav-strong">Fly4MEdia</span>
           </Link>
