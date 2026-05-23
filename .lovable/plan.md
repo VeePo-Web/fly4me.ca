@@ -1,59 +1,112 @@
-# Intro v7 — cinematic correctness + Victorious-grade perf
+# ContactModal — Psychology pass v1
 
-## Audit findings
+Eight upgrades from the audit, all inside `src/components/fly4media/ContactModal.tsx`. No new dependencies. No layout regressions. Brand voice preserved (editorial restraint, never Temu-loud).
 
-1. **Timing collapses the hold beat.** Word-2 ends at 2950ms, fade starts at 3000ms — only 50ms of stillness. The "rack → breathe → fade" rhythm never lands.
-2. **LCP = the intro mark, not the hero.** A 28×28 PNG becomes the Largest Contentful Paint because the hero is hidden until ~2.8s. Two causes:
-   - `fly4media-mark.png` is a raster file requiring a network round-trip.
-   - The hero image isn't preloaded during the 2.8s of dead intro time.
-3. **`filter: blur(4px)` + `will-change: filter`** is the most expensive op in the sequence; drops frames on mid-range Android.
-4. **Black flash before hydration.** Intro mounts client-side, so first paint is white → jumps to black.
-5. **No prefetch during dead window** — 3s of user attention with no network demand, wasted.
-6. **Two scroll locks** (`body.style.overflow` + `.intro-active` class).
-7. **Final opacities mismatched** (0.65 vs 0.55) — reads as weaker, not deeper.
-8. **`will-change` never retired** — compositor layers stay alive forever.
+---
 
-## Changes
+## 1. Group 9 chips → 3 categories + "Not sure"
 
-### Re-timed sequence (real hold beat)
+Replace the flat `SERVICE_CHIPS` array with three labeled groups:
 
 ```text
-0     →  500    mark fade in
-500   → 1300    hairline draws (800ms)
-1300  → 1850    word-1 fades in
-1850  → 2500    word-2 rack focus (blur 2px → 0 by 60%)
-2500  → 3100    HOLD — 600ms of stillness
-3100  → 3700    layer crossfade out
-Hero reveal at 2900ms
+Film & Story        Aerial Cinematography · FPV Production · Tourism Film
+Brand & Campaign    Commercial Campaign · Social Campaign · Creative Direction
+Property & Industry Real Estate · Industrial
+                    Not sure yet — let's talk
 ```
 
-### `src/components/fly4media/Intro.tsx`
-- Update `T_HAIRLINE / T_TEXT / T_HOLD_END / T_FADE` + `INTRO_HERO_REVEAL_AT_MS` to match the table above.
-- Replace `<img src={mark}>` with an **inline SVG** of the wordmark glyph (zero network on first paint).
-- Drop the `body.style.overflow` mutation; keep only the `.intro-active` class lock.
-- After timers are queued, inject `<link rel="prefetch">` for `/work`, `/services`, `/about` chunks and `new Image().src = <first case-study cover>` — guarded by `navigator.connection.saveData` / `effectiveType !== '2g'`.
-- On finish, set `will-change: auto` on intro elements to retire compositor layers.
-- Bump `SESSION_KEY` to `f4m:intro:v8` so returning users see the corrected sequence once.
-- Fix the header comment to match real timings.
+- Render each group with a small `t-eyebrow` label above its chip row.
+- `flex-wrap` on desktop/tablet. On mobile (`<sm`), each group becomes a `overflow-x-auto snap-x` row with `scroll-snap-align: start` chips — eliminates 4-row wrap chaos on 360px viewports.
+- "Not sure yet — let's talk" sits alone, full-width-feeling, slightly muted border.
 
-### `src/index.css`
-- Update animation delays/durations to the new timeline.
-- Word-2 rack: `blur(2px)` → `blur(0)` finished by 60% of the keyframe; remove `filter` from `will-change`.
-- Unify word-1 + word-2 final opacity at `0.65`.
-- Add `animation-fill-mode: forwards` cleanup pattern.
+## 2. Pre-select chips by referrer page
 
-### `index.html`
-- Inline `<style>` in `<head>` that paints `#root` black with a centered placeholder slot, so the intro shell is visible before JS executes.
-- `<link rel="preload" as="image" href="<hero-poster>" fetchpriority="high">` — use the actual hero poster path from `Hero.tsx`.
+Already wired: `PageShell` passes `initialServices` via the `f4m:contact:open` event. Extend with a route-based fallback inside `ContactModal` using `useLocation`:
 
-## Verification
-- Lighthouse mobile cold load on `/` → LCP element should be the hero image, target LCP < 2.5s on Fast 3G.
-- DevTools Performance recording of intro → no long tasks > 50ms; blur layer released by 2500ms.
-- Visual check: a clearly visible stillness beat before the fade.
+```text
+/services/cinematography → ["Aerial Cinematography"]
+/services/fpv            → ["FPV Production"]
+/services/real-estate    → ["Real Estate"]
+/work                    → [] (browsing, don't presume)
+/                        → [] (top of funnel)
+/about                   → []
+```
+
+Only seed from route when `initialServices` is empty. Existing event-based seeding wins.
+
+## 3. Ghost prompt in the Project textarea
+
+Replace the current placeholder with copy that dissolves the blank-page freeze *and* dispels the "is this a sales call?" fear:
+
+> *A few sentences is plenty — Toby will ask the rest on a 20-minute call.*
+
+Render as an actual `placeholder` (already supported by `Field`), no behavior change. Brand voice, not Temu-cheerful.
+
+## 4. Response-time promise next to the CTA
+
+Directly above the submit button, a single `t-meta text-muted-foreground` line:
+
+> *Toby replies within 1 business day, every time.*
+
+Same `animate-fade-up` cascade (delay 330ms, slotted between Phone field and the submit row's existing 360ms).
+
+## 5. Email trust micro-copy
+
+Under the Email input (inside the `Field` slot, below the underline), a `t-micro text-muted-foreground/70` line:
+
+> *Never shared. Never spammed.*
+
+Implementation: add an optional `hint?: string` prop to `Field`. Renders a 12px-spaced line below the underline only when provided.
+
+## 6. 3-step success ladder
+
+Replace the current success paragraph with a numbered timeline:
+
+```text
+01   Brief received          just now
+02   Toby replies            within 1 business day
+03   20-min discovery call   booked in the reply
+```
+
+Layout: vertical stack, each row = `t-eyebrow` number · `t-body` action · `t-meta text-muted-foreground` timing, separated by 1px hairlines at 15% opacity. Below it, the existing "If it's urgent, call…" fallback survives but condenses to one line.
+
+## 7. Sticky mobile CTA once Name + Email are valid
+
+Below `lg`, add a fixed bottom bar that appears when `name.trim().length > 1 && /\S+@\S+\.\S+/.test(email)`:
+
+- Position: `fixed bottom-0 inset-x-0 z-[110]`
+- Backdrop: `bg-background/85 backdrop-blur-md border-t border-border`
+- Padding: `px-6 py-3` + `env(safe-area-inset-bottom)`
+- Content: same `btn-primary` "Send brief →" plus the 1-business-day promise as a `t-micro` line above it
+- Tapping it programmatically submits the form (or scrolls to the inline submit if validation fails on Project field)
+- Hidden on `lg:` and when `status === "sent"`
+- Slide-up entrance via `translate-y-full → 0` on the validity flip
+
+The inline submit stays — sticky is an *additional* surface, not a replacement, so desktop keyboard users aren't affected.
+
+## 8. CTA copy
+
+Keep "Begin the conversation" on desktop (brand). Sticky mobile bar uses the punchier "Send brief →" — tighter for thumb-zone.
+
+---
+
+## Voice guardrails (so this doesn't drift Temu)
+
+- No exclamation marks. No emoji. No countdowns. No "Hurry."
+- Numbers stay editorial (`01 02 03`, never `1. 2. 3.`).
+- Trust lines are statements, never reassurances ("Never shared. Never spammed." not "Don't worry, we'll never spam you!").
+- All new copy uses existing `.t-*` classes — no raw Tailwind type utilities.
 
 ## Files touched
-- `src/components/fly4media/Intro.tsx`
-- `src/index.css`
-- `index.html`
 
-No new dependencies. No layout changes. No copy changes.
+- `src/components/fly4media/ContactModal.tsx` (all eight changes + `Field` gains an optional `hint` prop)
+
+No CSS additions. No schema changes. No new packages.
+
+## Verification
+
+- Cold load on mobile (375px): chips scroll-snap cleanly, sticky CTA hidden until Name+Email valid, then slides up.
+- Tablet (820px): grouped chips wrap to 2 rows max per group, no overflow.
+- Desktop (1280px): three chip groups read as labeled columns of taste, response-time promise sits inline above CTA.
+- Submit flow: success state renders the 3-step ladder, hairlines render at 15% opacity.
+- Open the modal from `/services/fpv` → "FPV Production" chip is pre-selected. Open from `/` → no chips selected.
