@@ -175,7 +175,7 @@ export default function Hero({ onContact }: Props) {
           style={{ animationDelay: d(600) }}
         >
           <span className="t-micro text-background/25 tracking-[0.18em]">
-            N&thinsp;51.04°&ensp;W&thinsp;114.07°
+            &ldquo;Looked like a film. Moved like a sales tool.&rdquo;&thinsp;&mdash;&thinsp;Joe, Cochrane, AB
           </span>
         </div>
       </div>
