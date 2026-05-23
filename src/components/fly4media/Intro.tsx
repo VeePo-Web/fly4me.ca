@@ -105,12 +105,8 @@ const Intro = () => {
       window.setTimeout(finish, T_TOTAL),
     ];
 
-    // Idle prefetch — kicks off after the first paint settles.
-    const idleId = window.setTimeout(prefetchIdleRoutes, 700);
-
     return () => {
       timers.forEach((t) => window.clearTimeout(t));
-      window.clearTimeout(idleId);
       document.body.classList.remove("intro-active");
     };
   }, [mounted, runId]);
