@@ -125,11 +125,11 @@ const Intro = () => {
         <img
           src={mark}
           alt=""
-          width={28}
-          height={28}
+          width={50}
+          height={50}
           decoding="sync"
           fetchPriority="high"
-          className="intro-mark h-7 w-7"
+          className="intro-mark h-[50px] w-[50px]"
           style={{ filter: "brightness(0) invert(1)" }}
         />
         <span className="intro-hairline mt-7 block h-px bg-white/55" />
