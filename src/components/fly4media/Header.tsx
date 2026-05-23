@@ -72,10 +72,17 @@ export default function Header({ onContact }: Props) {
           {/* Brand — crossfades white → foreground via --nav-progress */}
           <Link
             to="/"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onClick={(e) => {
+              try { sessionStorage.setItem("f4m:intro:replay", "1"); } catch {}
+              if (pathname === "/") {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "auto" });
+                window.dispatchEvent(new CustomEvent("f4m:intro:replay"));
+              }
+            }}
             className="flex items-center gap-2.5 group nav-ink nav-ink-shadow"
             data-cursor="hover"
-            aria-label="Fly4MEdia — home"
+            aria-label="Fly4MEdia — replay intro"
           >
             <img
               src={logo}
