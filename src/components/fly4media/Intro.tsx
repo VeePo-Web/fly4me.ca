@@ -1,31 +1,50 @@
 import { useEffect, useRef, useState } from "react";
 import mark from "@/assets/fly4media-mark.png";
+import heroPoster from "@/assets/hero-drone.jpg";
 
 /**
- * Fly4MEdia intro — v6 "Aperture"
+ * Fly4MEdia intro — v7 "Aperture"
  *
- * Three beats, one crossfade. Total ~3.8s.
+ * Re-timed for a real hold beat, then a clean rack-out.
  *
- *   0     →  500    mark fade in           (opacity 0 → 0.9)
- *   500   →  1400   hairline draws         (scaleX 0 → 1, 96px wide)
- *   1400  →  2100   slogan fades in        (opacity 0 → 0.65)
- *   2100  →  3000   HOLD                   (everything still)
- *   3000  →  3700   intro layer fades out  (opacity 1 → 0)
+ *   0     →  500    mark fade in
+ *   500   → 1300    hairline draws (800ms)
+ *   1300  → 1850    word-1 fades in (550ms)
+ *   1850  → 2500    word-2 rack focus (650ms; blur 2px → 0 by 60%)
+ *   2500  → 3100    HOLD — 600ms of stillness
+ *   3100  → 3700    intro layer crossfades out (600ms)
  *
- * Hero begins its own reveal at 2800ms so the crossfade overlaps cleanly.
+ *   Hero begins its own reveal at 2900ms so the dissolve overlaps the
+ *   last 200ms of the hold and the full fade.
  */
 
-const SESSION_KEY = "f4m:intro:v7";
+const SESSION_KEY = "f4m:intro:v8";
 const REPLAY_KEY = "f4m:intro:replay";
 
-const T_HAIRLINE = 500;
-const T_TEXT = 1400;
-const T_HOLD_END = 3000;
-const T_FADE = 700;
+const T_HOLD_END = 3100;
+const T_FADE = 600;
 const T_TOTAL = T_HOLD_END + T_FADE; // 3700
 
 export const INTRO_SESSION_KEY = SESSION_KEY;
-export const INTRO_HERO_REVEAL_AT_MS = 2800;
+export const INTRO_HERO_REVEAL_AT_MS = 2900;
+
+/**
+ * Warm the hero LCP image the moment this module evaluates — runs before
+ * React even renders the Intro, giving the browser the full intro duration
+ * to decode the poster. No-op on the server.
+ */
+if (typeof document !== "undefined" && !document.head.querySelector('link[data-f4m-hero-preload]')) {
+  const link = document.createElement("link");
+  link.rel = "preload";
+  link.as = "image";
+  link.href = heroPoster;
+  link.setAttribute("fetchpriority", "high");
+  link.setAttribute("data-f4m-hero-preload", "");
+  document.head.appendChild(link);
+}
+
+/* Routes are eagerly bundled in App.tsx, so there's nothing to prefetch here
+ * beyond the hero poster (handled above at module-eval time). */
 
 const Intro = () => {
   const [mounted, setMounted] = useState(() => {
@@ -44,6 +63,7 @@ const Intro = () => {
   const [exiting, setExiting] = useState(false);
   const [runId, setRunId] = useState(0);
   const finishedRef = useRef(false);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onReplay = () => {
@@ -61,15 +81,18 @@ const Intro = () => {
   useEffect(() => {
     if (!mounted) return;
     sessionStorage.setItem(SESSION_KEY, "1");
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     document.body.classList.add("intro-active");
 
     const finish = () => {
       if (finishedRef.current) return;
       finishedRef.current = true;
+      // Retire compositor layers before unmount so we don't leak them.
+      const root = rootRef.current;
+      if (root) {
+        root.querySelectorAll<HTMLElement>(".intro-mark, .intro-hairline, .intro-word-1, .intro-word-2")
+          .forEach((el) => { el.style.willChange = "auto"; });
+      }
       setMounted(false);
-      document.body.style.overflow = prevOverflow;
       document.body.classList.remove("intro-active");
     };
 
@@ -84,7 +107,6 @@ const Intro = () => {
 
     return () => {
       timers.forEach((t) => window.clearTimeout(t));
-      document.body.style.overflow = prevOverflow;
       document.body.classList.remove("intro-active");
     };
   }, [mounted, runId]);
@@ -93,6 +115,7 @@ const Intro = () => {
 
   return (
     <div
+      ref={rootRef}
       aria-hidden="true"
       className={`fixed inset-0 z-[100] flex items-center justify-center bg-[#0a0a0a] ${
         exiting ? "intro-layer-out" : ""
@@ -104,6 +127,8 @@ const Intro = () => {
           alt=""
           width={28}
           height={28}
+          decoding="sync"
+          fetchPriority="high"
           className="intro-mark h-7 w-7"
           style={{ filter: "brightness(0) invert(1)" }}
         />
@@ -120,7 +145,6 @@ const Intro = () => {
           <span className="intro-word-1 text-white">Perspective</span>{" "}
           <span className="intro-word-2 text-white">changes everything.</span>
         </p>
-
       </div>
     </div>
   );

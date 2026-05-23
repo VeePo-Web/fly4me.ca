@@ -866,9 +866,10 @@
   }
 }
 
-/* ---------- Intro v6 "Aperture" ----------
-   Mark fades in. Hairline draws from center. Slogan fades in. Hold. Crossfade out.
-   ~3.8s total. Reduced-motion gate handled below.                                */
+/* ---------- Intro v7 "Aperture" ----------
+   Mark fades in. Hairline draws from center. Word-1 fades. Word-2 racks
+   focus past it onto a second plane. 600ms hold. Layer crossfades out.
+   Total ~3.7s. Reduced-motion gate handled below.                       */
 @layer utilities {
   @keyframes intro-mark-in {
     0%   { opacity: 0; }
@@ -888,7 +889,7 @@
     width: 96px;
     transform: scaleX(0);
     transform-origin: center;
-    animation: intro-hairline-draw 900ms cubic-bezier(0.65, 0, 0.35, 1) 500ms forwards;
+    animation: intro-hairline-draw 800ms cubic-bezier(0.65, 0, 0.35, 1) 500ms forwards;
     will-change: transform;
   }
 
@@ -896,30 +897,33 @@
     0%   { opacity: 0; }
     100% { opacity: 0.65; }
   }
+  /* Rack focus: blur clears by 60% so the expensive raster pass is short.
+     Opacity + scale finish the last 40% cheaply on the compositor. */
   @keyframes intro-word-2-rack {
-    0%   { opacity: 0; transform: scale(1.04); filter: blur(4px); }
-    100% { opacity: 0.55; transform: scale(1); filter: blur(0); }
+    0%   { opacity: 0;    transform: scale(1.04); filter: blur(2px); }
+    60%  { opacity: 0.5;  transform: scale(1.012); filter: blur(0); }
+    100% { opacity: 0.65; transform: scale(1);    filter: blur(0); }
   }
   .intro-word-1 {
     opacity: 0;
-    animation: intro-word-1-in 600ms cubic-bezier(0.4, 0, 0.2, 1) 1400ms forwards;
+    animation: intro-word-1-in 550ms cubic-bezier(0.4, 0, 0.2, 1) 1300ms forwards;
     will-change: opacity;
   }
   .intro-word-2 {
     opacity: 0;
     display: inline-block;
     transform-origin: center;
-    animation: intro-word-2-rack 750ms cubic-bezier(0.2, 0.7, 0.2, 1) 2200ms forwards;
-    will-change: opacity, transform, filter;
+    animation: intro-word-2-rack 650ms cubic-bezier(0.2, 0.7, 0.2, 1) 1850ms forwards;
+    /* filter intentionally omitted from will-change — too expensive to keep hot. */
+    will-change: opacity, transform;
   }
-
 
   @keyframes intro-layer-out {
     0%   { opacity: 1; }
     100% { opacity: 0; }
   }
   .intro-layer-out {
-    animation: intro-layer-out 700ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: intro-layer-out 600ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
     will-change: opacity;
   }
 }
