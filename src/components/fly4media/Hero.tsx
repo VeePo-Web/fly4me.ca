@@ -116,9 +116,9 @@ export default function Hero({ onContact }: Props) {
       <div className="absolute inset-0 hero-vignette z-10" aria-hidden />
 
       {/* Content — z-20 so it's always above every video frame */}
-      <div className="relative z-20 container-x h-full hero-pt hero-pb pb-[max(28px,calc(env(safe-area-inset-bottom)+20px))] md:pb-0 flex flex-col">
+      <div className="relative z-20 container-x h-full hero-pt hero-pb pb-[max(28px,calc(env(safe-area-inset-bottom)+20px))] md:pb-0 flex flex-col justify-end md:justify-center">
 
-        <div className="flex-1 min-h-0 flex flex-col justify-center max-w-2xl lg:max-w-[52rem]">
+        <div className="flex flex-col max-w-2xl lg:max-w-[52rem] md:flex-1 md:min-h-0 md:justify-center">
 
           {/* Headline — hovering it (or the CTAs) reveals the sub-text */}
           <h1
