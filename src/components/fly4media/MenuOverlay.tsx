@@ -95,7 +95,7 @@ export default function MenuOverlay({ open, onClose, onContact }: Props) {
 
       {/* Content */}
       <div
-        className="relative z-10 h-full w-full container-x flex flex-col"
+        className="relative z-10 h-[100svh] w-full container-x flex flex-col overflow-hidden"
         style={{
           opacity: open ? 1 : 0,
           transition: "opacity 320ms cubic-bezier(0.22,1,0.36,1)",
@@ -118,8 +118,9 @@ export default function MenuOverlay({ open, onClose, onContact }: Props) {
           </button>
         </div>
 
-        {/* Body — two columns: oversized link list + editorial right rail */}
-        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 pb-12 lg:pb-16 pt-8 lg:pt-16">
+        {/* Body — two columns: oversized link list + slim contact rail */}
+        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 pb-[max(2rem,env(safe-area-inset-bottom))] lg:pb-10">
+
 
           {/* Link list */}
           <nav
