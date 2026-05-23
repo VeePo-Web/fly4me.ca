@@ -157,7 +157,7 @@ const Intro = () => {
       document.body.style.overflow = prevOverflow;
       document.body.classList.remove("intro-active");
     };
-  }, [mounted]);
+  }, [mounted, runId]);
 
   if (!mounted) return null;
 
