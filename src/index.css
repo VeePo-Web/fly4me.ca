@@ -652,6 +652,59 @@
     transform: translateY(0);
   }
 
+  /* ---------- Card tagline — reveal on hover ---------- */
+  .card-tagline {
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity var(--dur-soft) var(--ease-out-quart),
+      transform var(--dur-soft) var(--ease-out-quart);
+    transition-delay: 60ms;
+  }
+  .group:hover .card-tagline,
+  .group:focus-visible .card-tagline {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---------- Arrow circle lockup ---------- */
+  .arrow-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid hsl(var(--foreground) / 0.18);
+    color: hsl(var(--foreground) / 0.55);
+    background: transparent;
+    transition:
+      background-color var(--dur-soft) var(--ease-out-quart),
+      color var(--dur-soft) var(--ease-out-quart),
+      border-color var(--dur-soft) var(--ease-out-quart),
+      transform var(--dur-soft) var(--ease-out-quart);
+  }
+  .group:hover .arrow-circle,
+  .group:focus-visible .arrow-circle {
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+    border-color: hsl(var(--foreground));
+    transform: translate(2px, -2px);
+  }
+
+  /* ---------- Ghost numeral — spatial texture ---------- */
+  .ghost-numeral {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    color: hsl(var(--foreground));
+    opacity: 0.04;
+    font-size: clamp(120px, 16vw, 220px);
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+    font-weight: 500;
+  }
+
   /* Legacy alias — same physics as .media-img, no blur */
   .img-zoom {
     transition: transform var(--dur-cine) var(--ease-out-soft), filter var(--dur-soft) var(--ease-out-soft);
