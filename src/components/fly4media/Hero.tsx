@@ -28,6 +28,7 @@ export default function Hero({ onContact }: Props) {
   // dissolve begins, then snap to 0 so the natural choreography runs.
   const [revealDelay, setRevealDelay] = useState<number>(getInitialRevealDelay);
   const [ledeOpen, setLedeOpen] = useState(false);
+  const [noHover, setNoHover] = useState(false);
 
   useEffect(() => {
     if (revealDelay === 0) return;
@@ -36,14 +37,31 @@ export default function Hero({ onContact }: Props) {
     return () => window.removeEventListener("f4m:intro:exit", onExit as EventListener);
   }, [revealDelay]);
 
+  // Touch / no-hover devices: auto-reveal the lede after the headline lands.
+  // On hover-capable devices, the existing hover/focus behavior is preserved.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const noHoverMQ = window.matchMedia("(hover: none)");
+    const reducedMQ = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (!noHoverMQ.matches) return;
+    setNoHover(true);
+    if (reducedMQ.matches) {
+      setLedeOpen(true);
+      return;
+    }
+    const t = window.setTimeout(() => setLedeOpen(true), 900 + revealDelay);
+    return () => window.clearTimeout(t);
+  }, [revealDelay]);
+
   // Offset original animation delays by the intro's dissolve mark so the
   // hero reveals land *as* the veil clears, not after a beat of black.
   const d = (base: number) => `${base + revealDelay}ms`;
 
   // Hover handlers — sub-text only fades in when the headline or CTAs are
-  // hovered/focused. Otherwise the drone footage is left to breathe.
-  const showLede = () => setLedeOpen(true);
-  const hideLede = () => setLedeOpen(false);
+  // hovered/focused on devices that actually hover. On touch we auto-reveal.
+  const showLede = () => { if (!noHover) setLedeOpen(true); };
+  const hideLede = () => { if (!noHover) setLedeOpen(false); };
+
 
   return (
     <section
