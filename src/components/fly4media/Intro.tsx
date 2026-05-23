@@ -15,7 +15,7 @@ import mark from "@/assets/fly4media-mark.png";
  * Hero begins its own reveal at 2800ms so the crossfade overlaps cleanly.
  */
 
-const SESSION_KEY = "f4m:intro:v6";
+const SESSION_KEY = "f4m:intro:v7";
 const REPLAY_KEY = "f4m:intro:replay";
 
 const T_HAIRLINE = 500;
