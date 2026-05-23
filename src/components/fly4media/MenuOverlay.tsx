@@ -95,7 +95,7 @@ export default function MenuOverlay({ open, onClose, onContact }: Props) {
 
       {/* Content */}
       <div
-        className="relative z-10 h-full w-full container-x flex flex-col"
+        className="relative z-10 h-[100svh] w-full container-x flex flex-col overflow-hidden"
         style={{
           opacity: open ? 1 : 0,
           transition: "opacity 320ms cubic-bezier(0.22,1,0.36,1)",
@@ -118,13 +118,14 @@ export default function MenuOverlay({ open, onClose, onContact }: Props) {
           </button>
         </div>
 
-        {/* Body — two columns: oversized link list + editorial right rail */}
-        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 pb-12 lg:pb-16 pt-8 lg:pt-16">
+        {/* Body — two columns: oversized link list + slim contact rail */}
+        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 pb-[max(2rem,env(safe-area-inset-bottom))] lg:pb-10">
+
 
           {/* Link list */}
           <nav
             aria-label="Primary"
-            className="lg:col-span-8 flex flex-col justify-center gap-2 lg:gap-4"
+            className="lg:col-span-9 flex flex-col justify-center gap-1 sm:gap-2 lg:gap-3"
           >
             {[...NAV, { label: "Contact", to: "__contact" }].map((item, i) => {
               const active = item.to !== "__contact" && isActive(item.to);
@@ -150,7 +151,7 @@ export default function MenuOverlay({ open, onClose, onContact }: Props) {
                       opacity: active ? 1 : 0,
                     }}
                   />
-                  <span className="t-display-2 leading-[0.95] tracking-[-0.03em] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-3">
+                  <span className="text-[clamp(2.25rem,9vh,5.5rem)] leading-[0.95] tracking-[-0.03em] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-3">
                     {item.label}
                   </span>
                 </>
@@ -185,9 +186,9 @@ export default function MenuOverlay({ open, onClose, onContact }: Props) {
             })}
           </nav>
 
-          {/* Editorial right rail — echoes the hero bottom bar */}
+          {/* Slim contact rail */}
           <aside
-            className="lg:col-span-4 flex flex-col justify-end gap-10 text-white/55"
+            className="lg:col-span-3 flex flex-col justify-end gap-3 mt-auto text-white/55"
             style={{
               opacity: open ? 1 : 0,
               transform: open ? "translateY(0)" : "translateY(14px)",
@@ -196,39 +197,21 @@ export default function MenuOverlay({ open, onClose, onContact }: Props) {
               transitionDelay: open ? "680ms" : "0ms",
             }}
           >
-            <div className="space-y-3">
-              <p className="t-micro text-white/40">Studio</p>
-              <p className="t-body text-white/80">
-                Fly4MEdia — a cinematic
-                <br />
-                perspective studio.
-              </p>
-              <p className="t-micro text-white/35 tracking-[0.18em]">
-                N&thinsp;51.04°&ensp;W&thinsp;114.07° — Alberta, Canada
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <p className="t-micro text-white/40">Contact</p>
-              <a
-                href="mailto:tobyrennick@gmail.com"
-                data-cursor="hover"
-                className="block t-body text-white/80 hover:text-white transition-colors duration-300"
-              >
-                tobyrennick@gmail.com
-              </a>
-              <a
-                href="tel:+14038189686"
-                data-cursor="hover"
-                className="block t-body text-white/80 hover:text-white transition-colors duration-300"
-              >
-                +1 403 818 9686
-              </a>
-            </div>
-
-            <p className="t-micro text-white/30">
-              MMXXVI — Made carefully in Alberta
-            </p>
+            <p className="t-micro text-white/40">Contact</p>
+            <a
+              href="mailto:tobyrennick@gmail.com"
+              data-cursor="hover"
+              className="block t-body text-white/80 hover:text-white transition-colors duration-300"
+            >
+              tobyrennick@gmail.com
+            </a>
+            <a
+              href="tel:+14038189686"
+              data-cursor="hover"
+              className="block t-body text-white/80 hover:text-white transition-colors duration-300"
+            >
+              +1 403 818 9686
+            </a>
           </aside>
         </div>
       </div>
