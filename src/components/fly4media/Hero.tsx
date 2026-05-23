@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import HeroMedia from "./HeroMedia";
 import { LinkButton } from "./Button";
 import { INTRO_SESSION_KEY, INTRO_HERO_REVEAL_AT_MS } from "./Intro";
@@ -29,6 +29,7 @@ export default function Hero({ onContact }: Props) {
   const [revealDelay, setRevealDelay] = useState<number>(getInitialRevealDelay);
   const [ledeOpen, setLedeOpen] = useState(false);
   const [noHover, setNoHover] = useState(false);
+  const ledeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (revealDelay === 0) return;
@@ -52,6 +53,34 @@ export default function Hero({ onContact }: Props) {
     const t = window.setTimeout(() => setLedeOpen(true), 900 + revealDelay);
     return () => window.clearTimeout(t);
   }, [revealDelay]);
+
+  // Mobile-only: 8px upward parallax on the lede tied to scrollY 0–80.
+  // Direct style mutation through a ref — no React re-renders, single rAF loop.
+  useEffect(() => {
+    if (!noHover) return;
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    let pending = false;
+    const apply = () => {
+      const p = Math.min(Math.max(window.scrollY / 80, 0), 1);
+      if (ledeRef.current) {
+        ledeRef.current.style.transform = `translate3d(0, ${(-8 * p).toFixed(2)}px, 0)`;
+      }
+      pending = false;
+    };
+    const onScroll = () => {
+      if (pending) return;
+      pending = true;
+      raf = requestAnimationFrame(apply);
+    };
+    apply();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [noHover]);
 
   // Offset original animation delays by the intro's dissolve mark so the
   // hero reveals land *as* the veil clears, not after a beat of black.
@@ -87,9 +116,9 @@ export default function Hero({ onContact }: Props) {
       <div className="absolute inset-0 hero-vignette z-10" aria-hidden />
 
       {/* Content — z-20 so it's always above every video frame */}
-      <div className="relative z-20 container-x h-full hero-pt hero-pb pb-[max(28px,calc(env(safe-area-inset-bottom)+20px))] md:pb-0 flex flex-col">
+      <div className="relative z-20 container-x h-full hero-pt hero-pb pb-[max(28px,calc(env(safe-area-inset-bottom)+20px))] md:pb-0 flex flex-col justify-end md:justify-center">
 
-        <div className="flex-1 min-h-0 flex flex-col justify-center max-w-2xl lg:max-w-[52rem]">
+        <div className="flex flex-col max-w-2xl lg:max-w-[52rem] md:flex-1 md:min-h-0 md:justify-center">
 
           {/* Headline — hovering it (or the CTAs) reveals the sub-text */}
           <h1
@@ -121,7 +150,9 @@ export default function Hero({ onContact }: Props) {
             cheap if they linger). Reserves its own height so nothing shifts.
           */}
           <div
-            className={`hero-gap-lede max-w-[44ch] select-none ${noHover ? "" : "pointer-events-none"}`}
+            ref={ledeRef}
+            className={`hero-gap-lede max-w-[44ch] select-none will-change-transform ${noHover ? "" : "pointer-events-none"}`}
+            style={{ transition: "transform 240ms cubic-bezier(0.22, 1, 0.36, 1)" }}
             aria-hidden={noHover ? false : !ledeOpen}
           >
             {/* Hairline rule — draws in from the left, syncs with cascade */}
@@ -166,7 +197,7 @@ export default function Hero({ onContact }: Props) {
 
           {/* CTAs — hovering also reveals the sub-text on hover-capable devices */}
           <div
-            className="hero-gap-cta flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-8 animate-fade-up"
+            className="mt-7 md:mt-0 md:hero-gap-cta flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-8 animate-fade-up"
             style={{ animationDelay: d(440) }}
             onMouseEnter={showLede}
             onMouseLeave={hideLede}

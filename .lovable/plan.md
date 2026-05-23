@@ -1,66 +1,99 @@
-# Hero — mobile refinement (fantasy.co register)
+# Hero mobile — bottom-third composition + scroll-parallax lede
 
-Scope: `src/components/fly4media/Hero.tsx` only. No copy changes. No desktop changes. Same vocabulary, mobile-only behavior and layout fixes.
+Scope: `src/components/fly4media/Hero.tsx` only. Mobile (`<md`) behavior only. Desktop is untouched.
 
-## Problem statement
+## Target composition (mobile, top → bottom)
 
-Two mobile failures on the current hero (≤768px):
+```text
+┌──────────────────────────────┐
+│                              │  ← upper 2/3: pure drone footage,
+│                              │     vignette breathes, no copy
+│                              │
+│                              │
+├──────────────────────────────┤
+│  Your competitors            │  ← bottom third opens with headline
+│  look ordinary               │
+│  from up here.               │
+│                              │
+│  ─── (hairline)              │  ← lede group, floats up 8px on scroll 0→80
+│  What if perspective         │
+│  changed everything.         │
+│                              │
+│  ┌────────────────────────┐  │  ← primary CTA, full width
+│  │     View our work  ↗  │  │
+│  └────────────────────────┘  │
+│       Start a project        │  ← quiet secondary, centered
+│  ────── safe-area ──────     │
+└──────────────────────────────┘
+```
 
-1. **CTAs sit too high and too quiet.** `flex-wrap` lets "View our work" + "Start a project" share a line on phones, but they're floating in the middle of the frame with no anchor and no priority. The arrow button is the brand's primary verb on the homepage — on mobile it should be unmissable, full-width, and pinned near the bottom thumb zone. The text-only "Start a project" reads as decoration next to it.
+Headline opens the bottom third. CTAs hug the bottom. The lede + hairline live between them and respond to scroll.
 
-2. **"What if perspective changed everything." is invisible on mobile.** The lede is gated entirely behind `onMouseEnter` / `onFocus`. Phones have no hover, and `tabIndex={-1}` means it never receives focus either. The most important brand line on the site never renders for ~60% of traffic. We are throwing away the slogan echo.
+## Changes
 
-Everything else (headline, video, vignette, intro-sync) is correct on mobile and stays.
+### 1. Anchor the entire content stack to the bottom (mobile only)
 
-## What changes
+Inner content column:
 
-### 1. Show the lede automatically on mobile (no hover required)
+- Change `flex flex-col` → `flex flex-col justify-end md:justify-center`.
+- The inner `<div>` that wraps headline + lede + CTAs: drop `flex-1 min-h-0 flex flex-col justify-center` and replace with `flex flex-col` (no flex-grow on mobile) so the group naturally sits at the bottom of the column. Keep `md:flex-1 md:min-h-0 md:justify-center` for desktop parity.
+- Width constraint `max-w-2xl lg:max-w-[52rem]` stays.
+- Keep `max-h-[100dvh]` on the section and `hero-pb` + the safe-area `pb-[max(28px,calc(env(safe-area-inset-bottom)+20px))]` we already added.
 
-Treat the lede as a **timed reveal** on touch devices, not a hover affordance:
+Net effect on mobile: headline + lede + CTAs become a single bottom-anchored stack; everything above is video.
 
-- Detect "no hover" once on mount via `window.matchMedia('(hover: none)')` and store in a `noHover` state. (Avoids SSR mismatch by initialising in `useEffect`.)
-- When `noHover === true`, force `ledeOpen = true` after a delay timed to land **after** the headline cascade completes — `d(900)` for the open, so the order on a phone reads: headline resolves → hairline draws → "What if perspective changed everything." cascades in word-by-word → CTAs.
-- The existing per-word blur-to-sharp + hairline scaleX animations already do the work. We're just flipping `ledeOpen` from `false → true` automatically instead of from hover.
-- Desktop behavior unchanged: still hover/focus gated.
-- Reduced motion: respect `prefers-reduced-motion: reduce` — set `ledeOpen=true` immediately, skip the staged delay.
-- Remove `pointer-events-none` + `aria-hidden` gating only when `noHover` is true so screen readers can read the line on touch devices (it's content now, not an Easter egg).
+### 2. Headline sits at the top of that bottom-anchored stack
 
-### 2. Mobile CTAs — primary anchored, secondary supportive
+- Headline stays as-is — no copy change, same `hero-display`, same per-word reveal class, same hover/focus handlers (still no-ops on touch via `noHover`).
+- Because the stack is bottom-anchored, the headline naturally lands in the **bottom third** of the viewport on phones (375×667 → headline top ~y=440; 390×844 → ~y=560). The taller the phone, the more breathing room above — that's correct.
+- Verify on the three target sizes (375×667, 390×844, 414×896) — adjust by tightening `hero-gap-lede` / `hero-gap-cta` only if anything clips. No CSS edits expected.
 
-Two layout regions for the CTA block:
+### 3. Scroll-revealed lede (Idea #1)
 
-**Desktop (`md:` and up): unchanged.** Keep the inline row with hover-to-reveal.
+Auto-cascade already lands at ~900ms on touch. Add a tiny upward parallax on top of it, bound to scroll position 0–80px:
 
-**Mobile (`<md`): replace the inline row with a stacked, bottom-anchored block.**
+- Add a `ledeRef` on the existing lede `<div>` (the `hero-gap-lede` wrapper).
+- New `useEffect` (mobile only — guarded by the existing `noHover` state):
+    - Single `scroll` listener, passive, throttled with `requestAnimationFrame` (project rule: no Framer Motion, single observer pattern; mirror `useScrollVelocity` style).
+    - Compute `p = clamp(window.scrollY / 80, 0, 1)`.
+    - Set `ledeRef.current.style.transform = translate3d(0, ${-8 * p}px, 0)`.
+    - Apply via direct style mutation (not React state) to avoid re-renders. Use `transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1)` set once in JSX `style` so the float feels eased, not snappy.
+    - Cleanup: cancel rAF, remove listener.
+- Why bound to `noHover` only: desktop already gets a hover-driven reveal; parallax would fight cursor intent. Mobile-only.
+- Why 8px / 80px: matches the lede's existing 14px translate vocabulary — small enough to feel like air, big enough to register on a 390×844 retina screen. Same `cubic-bezier(0.22, 1, 0.36, 1)` as the rest of the hero.
+- `prefers-reduced-motion: reduce`: skip the listener entirely; lede sits at rest.
 
-- Push the CTA group to the bottom of the hero on mobile by changing the inner flex column to `justify-end md:justify-center` on `<md`, with the headline + lede group keeping `mt-auto` headroom. (No `flex-1 min-h-0` change — still single section, no overflow.)
-- Primary CTA: "View our work" becomes a **full-width** `LinkButton` on mobile (`w-full md:w-auto`). It's the only button with visual weight.
-- Secondary CTA: "Start a project" stays a quiet text button, centered under the primary with `mt-4 md:mt-0`. Same `t-button` class. No background, no border — keeps the editorial restraint.
-- Stack vertically on mobile: `flex-col md:flex-row`, `gap-4 md:gap-8`, `items-stretch md:items-center`.
-- Drop `flex-wrap` — no longer needed once we stack.
-- Remove the mobile hover handlers' role for the lede (handled by section 1) but keep `onFocus`/`onBlur` so keyboard users on hybrid devices still get the desktop reveal.
+### 4. CTAs — already correct, one tweak
 
-### 3. Breathing room adjustments (mobile-only, no token edits)
+The previous pass made `View our work` full-width and stacked `Start a project` underneath. Keep all of that. One refinement:
 
-- The bottom-anchored CTA needs a slightly larger `hero-pb` buffer on mobile so the primary button doesn't kiss the safe-area. Add a Tailwind utility on the inner container: `pb-[max(28px,calc(env(safe-area-inset-bottom)+20px))] md:pb-0` (compounds with existing `hero-pb`). No CSS file edit.
-- The lede's `hero-gap-lede` (clamp 14–32px) is already correct; no change.
+- Remove `hero-gap-cta` on mobile and replace with a fixed `mt-7 md:hero-gap-cta` so the CTA block hugs the lede consistently regardless of viewport height (current `clamp(20px, 3vh, 40px)` opens too much on tall phones where every pixel of footage counts).
+- Result on mobile: ~28px between lede and the full-width primary button. Desktop unchanged.
+
+### 5. Vignette tweak (mobile only) — readability insurance
+
+With the headline now in the bottom third, ensure the existing `.hero-vignette` darkens the bottom enough that white type stays legible over any drone frame:
+
+- Read `.hero-vignette` first. If the bottom darkening on mobile is weak, add a single mobile-only class `md:hidden` overlay `<div>` with `bg-gradient-to-t from-black/55 via-black/20 to-transparent` covering the bottom 55% of the section (`absolute inset-x-0 bottom-0 h-[55%] z-[5]` — sits between video and content z-20).
+- Skip this if the vignette already handles it (check during implementation; this is a contingent step, not a guaranteed edit).
 
 ## Files
 
-- `src/components/fly4media/Hero.tsx` — only. ~25 lines touched. No new imports, no new CSS, no token changes, no new components.
+- `src/components/fly4media/Hero.tsx` — only file touched. ~20 lines changed + one new `useEffect` for parallax + one `ref`.
+- No new components, no new packages, no CSS file edits (the contingent gradient overlay would be inline Tailwind only).
 
 ## Verification
 
-- 375×667 (iPhone SE), 390×844, 414×896, 360×800: headline → hairline → "What if perspective changed everything." cascades automatically ~900ms after headline; primary CTA full-width near bottom; secondary "Start a project" centered beneath.
-- 768×1024 (iPad portrait): inherits desktop hover behavior (matches `(hover: hover)`).
-- 1280×720 and up: completely unchanged — hover still gates the lede, CTAs inline.
-- `prefers-reduced-motion: reduce` on a phone: lede appears immediately, no cascade delay.
-- Cold reload with intro: lede still waits for the intro veil to dissolve (revealDelay propagates).
-- Tab key on desktop: focusing "View our work" still reveals the lede.
+- 375×667, 390×844, 414×896, 360×800: headline opens the bottom third, lede + hairline sit between headline and CTAs, primary CTA full-width pinned to bottom with safe-area buffer.
+- Begin scrolling on mobile: lede + hairline drift up 8px smoothly over the first 80px of scroll, then settle. No re-renders (verified by React DevTools profiler if needed).
+- iPad portrait (768×1024): inherits desktop layout — vertically centered, hover-gated lede, inline CTAs.
+- Desktop (≥1024): zero visual change.
+- Reduced motion on mobile: lede appears immediately at rest, no parallax.
+- Intro cold-load: lede + parallax still wait for the intro veil dissolve (revealDelay propagates to the auto-reveal timer; parallax listener attaches regardless but produces 0 translate at scrollY=0).
 
 ## Explicitly NOT changing
 
-- Copy: headline, lede, button labels — all unchanged.
-- Visual style: monochrome, Inter, italic "perspective changed everything.", hairline, vignette — unchanged.
-- Video layer, `HeroMedia`, intro choreography, scroll indicator, GPS quote bar.
-- Desktop layout at any breakpoint ≥768px.
+- Copy: headline, lede, CTA labels — all verbatim.
+- Italic on "perspective changed everything.", `t-*` token usage, monochrome palette.
+- Desktop hover-to-reveal, scroll indicator, GPS quote bar.
+- Video sources, intro choreography, vignette layer's existing behavior.
