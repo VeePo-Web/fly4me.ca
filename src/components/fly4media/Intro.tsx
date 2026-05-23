@@ -43,16 +43,8 @@ if (typeof document !== "undefined" && !document.head.querySelector('link[data-f
   document.head.appendChild(link);
 }
 
-/** Prefetch internal route chunks during the otherwise idle intro window. */
-function prefetchIdleRoutes() {
-  const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
-  if (conn?.saveData) return;
-  if (conn?.effectiveType === "2g" || conn?.effectiveType === "slow-2g") return;
-  // Touch the lazy chunks the user is most likely to hit next.
-  void import("@/pages/Work");
-  void import("@/pages/Services");
-  void import("@/pages/About");
-}
+/* Routes are eagerly bundled in App.tsx, so there's nothing to prefetch here
+ * beyond the hero poster (handled above at module-eval time). */
 
 const Intro = () => {
   const [mounted, setMounted] = useState(() => {
