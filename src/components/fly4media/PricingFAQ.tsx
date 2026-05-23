@@ -3,36 +3,44 @@ import { useReveal } from "./useReveal";
 
 const FAQS = [
   {
-    q: "Do you travel outside Calgary / Alberta?",
-    a: "Yes. Travel within Alberta is included for most projects — no surprise fuel surcharges. For projects outside the province (BC, Saskatchewan, or further), travel costs are quoted upfront as a flat line item before any booking is confirmed. No hidden costs after the fact.",
+    q: "I've never hired drone footage before. How do I know which package is right for me?",
+    a: "Start with where the footage will live. MLS listing only — Essential covers everything you need. Multiple platforms including social and your website — Elevated gives you all the formats. A flagship asset you'll use for 12 months or more — Signature is the right investment. If you're still unsure, the best 15 minutes you can spend is a call before booking. We'll work out exactly what you need — and what you don't — before any money changes hands. Book a free call through the contact form.",
+  },
+  {
+    q: "What's the actual difference between this and a $200 drone operator?",
+    a: "A $200 operator delivers raw files from ungraded footage. You edit, colour correct, add music, and compress for platforms yourself — or you don't, and the footage sits unused. Every Fly4MEdia package delivers a finished asset: colour graded, music licensed, exported for every platform it needs to live on, and in your hands within 48 hours. The licence matters too. Unlicensed music gets your listing video muted on YouTube and flagged on social. Every package includes music cleared for MLS, social, and web. RPAS Advanced certification allows shooting over populated areas, near airports, and in controlled airspace — the locations that produce the most valuable footage. Most $200 operators hold Basic certification, which legally restricts where they can fly.",
+  },
+  {
+    q: "What does the brief process actually involve?",
+    a: "A 20-minute call or a written brief you send by email — whichever you prefer. We cover: the location, the feeling you want the footage to produce, where it will be used (MLS, Instagram, website, boardroom presentation), and any specific shots you have in mind. You don't need a production background. The brief is what makes the delivered footage match what you needed — and what makes the reshoot guarantee rarely apply.",
   },
   {
     q: "What happens if weather cancels the shoot?",
-    a: "We reschedule, not refund. Your booking deposit holds your spot on the calendar, not a specific date. If conditions on the day won't produce footage worth delivering, we call it and reschedule at no cost. You're never charged for a shoot that didn't happen.",
+    a: "We reschedule, not refund. Your deposit holds your spot on the calendar, not a specific date. If conditions on the shoot day won't produce footage worth delivering — high winds, poor visibility, rain — we call it and reschedule at no cost. You're never charged for a shoot that didn't happen. Most bookings are weather-confirmed 48 hours in advance.",
   },
   {
-    q: "How do I know the quality will match what I see in the portfolio?",
-    a: "Every project on the site was shot by the same operator — Toby — using the same camera system. The brief process before each shoot exists to capture exactly what you've seen and want. If the result doesn't match the brief, the reshoot guarantee covers you.",
+    q: "Can I request a specific time of day — sunrise, golden hour, or sunset?",
+    a: "Yes. Signature packages include a golden-hour or sunset window by default. Essential and Elevated packages can request preferred timing and we schedule around it where conditions allow. If you have a specific light condition in mind — overcast for even colour, sunrise for a particular sky — mention it in the brief. It usually doesn't add cost.",
   },
   {
-    q: "Do you handle editing, or is this raw footage only?",
-    a: "All packages include a fully edited, colour-graded deliverable — not raw files. Raw selects are included with Elevated and Signature packages so you have the source material for future use. You receive a finished asset, not a hard drive.",
+    q: "Do you handle editing or is this raw footage?",
+    a: "Everything is edited and delivered as a finished asset. You receive colour-graded video, licensed music embedded, exported for every platform you need. Elevated and Signature packages also include the raw selects so you have source material for future use. You receive a finished deliverable, not a hard drive full of clips.",
   },
   {
-    q: "Can I book a specific time of day — sunset, golden hour?",
-    a: "Yes. Signature packages include a golden-hour shoot window by default. For Essential and Elevated packages, preferred timing can be requested and we'll schedule around it where conditions allow. Premium light conditions are included in Signature tiers because that's when the footage earns its place.",
+    q: "Can I upgrade my package after booking?",
+    a: "Yes. If your scope expands — you want to add the ground walkthrough, more photographs, or a vertical cut — we re-quote before the shoot day. No surprise invoices. If it becomes clear on the day that something extra is worth capturing, we'll tell you before we shoot it.",
   },
   {
-    q: "What's included in the brief process?",
-    a: "A 20-minute call or written brief — your choice. We cover: the property or location, the feeling you want the footage to produce, where it will be used, and any specific shots you have in mind. This is how we make sure the delivered footage is exactly what you needed. It takes 20 minutes and prevents everything from going wrong.",
+    q: "Do you travel outside Calgary and Alberta?",
+    a: "Travel within Alberta is included in all packages — no fuel surcharges, no travel fees within the province. For projects outside Alberta, travel is quoted upfront as a flat line item before booking is confirmed. Current rate: $1.20 per km. It's in the add-ons section above. No surprises after the fact.",
   },
   {
-    q: "How many shoot days do you take on per month?",
-    a: "Intentionally limited. Toby operates alone — there's no crew of operators under a brand name. Keeping shoot volume controlled is how the quality stays consistent. Current availability is posted at the top of the page. When spots fill, they fill.",
+    q: "How many projects do you take on per month?",
+    a: "Intentionally limited. Toby operates alone — there's no crew of operators dispatched under a brand name. Keeping project volume controlled is how quality stays consistent. When the calendar fills, it fills. If you have a date-sensitive project — a listing going live in two weeks, a venue with a peak inquiry season — book early and lock the date.",
   },
   {
-    q: "Can I get a custom quote for something not listed?",
-    a: "Yes. If your project doesn't map to a listed package — multi-day campaigns, international shoots, broadcast commissions — the best starting point is a conversation. Use the contact form and describe the brief. A scoped quote comes back within 24 hours.",
+    q: "What does RPAS Advanced certification mean for my project?",
+    a: "Transport Canada RPAS Advanced Operations certification allows flight in controlled airspace, over populated areas, and near aerodromes — the locations that matter for real estate in urban infill areas, weddings at venues near town centres, and commercial shoots in downtown Calgary. Basic-certified operators can't legally fly many of the locations that produce the most valuable footage. Advanced certification is not a credential badge — it's what makes the shoot legal and the footage usable.",
   },
 ];
 
@@ -50,10 +58,6 @@ function FAQItem({ q, a }: { q: string; a: string }) {
         <span className="t-body font-medium group-hover:text-foreground transition-colors duration-200">
           {q}
         </span>
-        {/*
-          Grid-template-rows accordion — protocol-compliant.
-          The +/− indicator uses transform not layout change.
-        */}
         <span
           className={`shrink-0 mt-0.5 text-muted-foreground transition-transform duration-300 ease-[var(--ease-out-soft)] ${
             open ? "rotate-45" : ""
@@ -64,7 +68,6 @@ function FAQItem({ q, a }: { q: string; a: string }) {
         </span>
       </button>
 
-      {/* grid-template-rows: 0fr → 1fr — no max-height jank */}
       <div
         className={`grid transition-[grid-template-rows] duration-400 ease-[var(--ease-out-soft)] ${
           open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
@@ -87,7 +90,6 @@ export default function PricingFAQ() {
   return (
     <section className="py-section border-t border-border">
       <div className="container-x">
-
         <div ref={headRef} className="reveal mb-14 md:mb-20">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
             <div className="md:col-span-5">
@@ -114,7 +116,6 @@ export default function PricingFAQ() {
             ))}
           </div>
         </div>
-
       </div>
     </section>
   );

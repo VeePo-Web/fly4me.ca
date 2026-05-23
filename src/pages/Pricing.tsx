@@ -278,9 +278,90 @@ function ProcessStrip() {
 }
 
 /* ─── Page ───────────────────────────────────────────── */
+const ADDONS = [
+  { n: "A", name: "Extra 10 photographs", detail: "Additional colour-corrected images from any session — aerial or ground.", price: "+$150" },
+  { n: "B", name: "Additional vertical cut", detail: "Extra short-form format — Reels, TikTok, YouTube Shorts. Same footage, new edit.", price: "+$120" },
+  { n: "C", name: "Rush delivery (24 hrs)", detail: "Your listing goes live tomorrow, not in 48 hours. Priority edit queue.", price: "+$200" },
+  { n: "D", name: "Second location (same day)", detail: "Up to 30–45 min drive between sites. Added to any shoot session.", price: "+$300" },
+  { n: "E", name: "Sunset / golden-hour window", detail: "Not included in Essential — adds approximately 1 hour to the session window.", price: "+$150" },
+  { n: "F", name: "Music upgrade", detail: "Premium sync licence instead of standard stock — broadcast and ad clearance included.", price: "+$100" },
+  { n: "G", name: "Travel outside Calgary", detail: "Flat rate per 100km, quoted upfront before booking. No surprises after the fact.", price: "$1.20/km" },
+  { n: "H", name: "Additional edit revision", detail: "One revision round is included in all packages. This adds another.", price: "+$80/round" },
+];
+
+function PricingAddOns() {
+  const gridRef = useReveal<HTMLDivElement>();
+
+  return (
+    <section className="py-section border-t border-border">
+      <div className="container-x">
+        <div className="mb-14 md:mb-20">
+          <p className="t-eyebrow text-muted-foreground mb-5">À la carte</p>
+          <h2 className="t-headline-1 mb-5">Add to any package.</h2>
+          <p className="t-lede text-muted-foreground max-w-[48ch]">
+            Everything below can be added to any Essential, Elevated, or
+            Signature package. Confirm at booking — no surprise invoices.
+          </p>
+        </div>
+
+        <div
+          ref={gridRef}
+          className="reveal grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-border"
+        >
+          {ADDONS.map((addon) => (
+            <article key={addon.n} className="bg-background p-6">
+              <p className="t-micro tabular-nums text-muted-foreground mb-5">
+                {addon.n}
+              </p>
+              <h3 className="t-body font-medium mb-2">{addon.name}</h3>
+              <p className="t-micro text-muted-foreground leading-relaxed mb-4">
+                {addon.detail}
+              </p>
+              <p className="t-headline-2 text-foreground">{addon.price}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Pricing() {
   useEffect(() => {
-    document.title = "Pricing — Aerial Cinematography Packages · Fly4MEdia";
+    document.title =
+      "Drone Videography Pricing Alberta — Aerial Cinematography Packages · Fly4MEdia";
+
+    const schemaData = {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: "Drone Videography Pricing — Fly4MEdia Alberta",
+      description:
+        "Aerial cinematography packages for real estate, wedding venues, farms, construction, tourism, and commercial brands in Alberta. Prices from $600. Transport Canada RPAS Advanced certified operator.",
+      url: "https://fly4media.ca/pricing",
+      provider: {
+        "@type": "LocalBusiness",
+        name: "Fly4MEdia",
+        telephone: "+14038189686",
+        email: "tobyrennick@gmail.com",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Calgary",
+          addressRegion: "AB",
+          addressCountry: "CA",
+        },
+        areaServed: "Alberta, Canada",
+        priceRange: "$600 – $5,500+",
+      },
+    };
+
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.text = JSON.stringify(schemaData);
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
   }, []);
 
   return (
@@ -291,6 +372,7 @@ export default function Pricing() {
           <Differentiators />
           <ProcessStrip />
           <PricingPackages onContact={openContact} />
+          <PricingAddOns />
           <PricingGuarantee onContact={openContact} />
           <PricingFAQ />
           <CTA
