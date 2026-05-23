@@ -151,7 +151,7 @@ export default function MenuOverlay({ open, onClose, onContact }: Props) {
                       opacity: active ? 1 : 0,
                     }}
                   />
-                  <span className="t-display-2 leading-[0.95] tracking-[-0.03em] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-3">
+                  <span className="text-[clamp(2.25rem,9vh,5.5rem)] leading-[0.95] tracking-[-0.03em] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-3">
                     {item.label}
                   </span>
                 </>
