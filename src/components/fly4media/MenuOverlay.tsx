@@ -125,7 +125,7 @@ export default function MenuOverlay({ open, onClose, onContact }: Props) {
           {/* Link list */}
           <nav
             aria-label="Primary"
-            className="lg:col-span-8 flex flex-col justify-center gap-2 lg:gap-4"
+            className="lg:col-span-9 flex flex-col justify-center gap-1 sm:gap-2 lg:gap-3"
           >
             {[...NAV, { label: "Contact", to: "__contact" }].map((item, i) => {
               const active = item.to !== "__contact" && isActive(item.to);
