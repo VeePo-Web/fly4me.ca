@@ -50,18 +50,40 @@ type Phase = "anchor" | "frame" | "slogan" | "hold" | "brand" | "dissolve";
 export const INTRO_SESSION_KEY = SESSION_KEY;
 export const INTRO_HERO_REVEAL_AT_MS = T_DISSOLVE_START - HERO_HANDOFF_LEAD;
 
+const REPLAY_KEY = "f4m:intro:replay";
+
 const Intro = () => {
   const [mounted, setMounted] = useState(() => {
     if (typeof window === "undefined") return false;
     if (window.location.pathname !== "/") return false;
     if (new URLSearchParams(window.location.search).has("nointro")) return false;
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return false;
+    if (sessionStorage.getItem(REPLAY_KEY)) {
+      sessionStorage.removeItem(REPLAY_KEY);
+      sessionStorage.removeItem(SESSION_KEY);
+      return true;
+    }
     if (sessionStorage.getItem(SESSION_KEY)) return false;
     return true;
   });
   const [phase, setPhase] = useState<Phase>("anchor");
   const [counter, setCounter] = useState(0);
+  const [runId, setRunId] = useState(0);
   const finishedRef = useRef(false);
+
+  useEffect(() => {
+    const onReplay = () => {
+      if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+      sessionStorage.removeItem(SESSION_KEY);
+      finishedRef.current = false;
+      setPhase("anchor");
+      setCounter(0);
+      setRunId((n) => n + 1);
+      setMounted(true);
+    };
+    window.addEventListener("f4m:intro:replay", onReplay);
+    return () => window.removeEventListener("f4m:intro:replay", onReplay);
+  }, []);
 
   // Center-out delays.
   const letters = useMemo(() => {
@@ -135,7 +157,7 @@ const Intro = () => {
       document.body.style.overflow = prevOverflow;
       document.body.classList.remove("intro-active");
     };
-  }, [mounted]);
+  }, [mounted, runId]);
 
   if (!mounted) return null;
 
