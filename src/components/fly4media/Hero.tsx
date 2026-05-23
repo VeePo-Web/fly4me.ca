@@ -197,7 +197,7 @@ export default function Hero({ onContact }: Props) {
 
           {/* CTAs — hovering also reveals the sub-text on hover-capable devices */}
           <div
-            className="hero-gap-cta flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-8 animate-fade-up"
+            className="mt-7 md:mt-0 md:hero-gap-cta flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-8 animate-fade-up"
             style={{ animationDelay: d(440) }}
             onMouseEnter={showLede}
             onMouseLeave={hideLede}
