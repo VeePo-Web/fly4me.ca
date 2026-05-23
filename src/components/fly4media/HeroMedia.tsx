@@ -22,10 +22,12 @@ interface Props {
 
 /**
  * Cinematic hero media layer.
- * - Poster paints first (acts as LCP), video fades in on `canplay`
+ * - Poster paints first (acts as LCP), first video fades in on `canplay`
+ * - When `nextSources` is provided, BOTH videos are mounted simultaneously.
+ *   The second clip is preloaded silently while the first is playing, then we
+ *   cross-fade between them on `ended` — no poster flash, no gap.
  * - Pauses when offscreen (battery/GPU)
  * - Honors prefers-reduced-motion + Save-Data
- * - Optional `nextSources`: plays first clip once, then hands off to second clip on loop
  */
 export default function HeroMedia({
   image,
@@ -38,8 +40,10 @@ export default function HeroMedia({
   width = 1920,
   height = 1080,
 }: Props) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [ready, setReady] = useState(false);
+  const firstRef = useRef<HTMLVideoElement>(null);
+  const nextRef = useRef<HTMLVideoElement>(null);
+  const [firstReady, setFirstReady] = useState(false);
+  const [nextReady, setNextReady] = useState(false);
   const [enabled, setEnabled] = useState(true);
   const [phase, setPhase] = useState<"first" | "next">("first");
 
@@ -51,8 +55,6 @@ export default function HeroMedia({
         : [];
 
   const hasSequence = !!(nextSources && nextSources.length > 0);
-  const activeSources = phase === "next" && hasSequence ? nextSources! : firstSources;
-  const shouldLoop = phase === "next" || !hasSequence;
 
   // Respect reduced motion + save-data
   useEffect(() => {
@@ -66,30 +68,31 @@ export default function HeroMedia({
 
   // Pause when offscreen
   useEffect(() => {
-    const el = videoRef.current;
-    if (!el || !enabled) return;
+    if (!enabled) return;
+    const active = phase === "next" ? nextRef.current : firstRef.current;
+    const inactive = phase === "next" ? firstRef.current : nextRef.current;
+    if (inactive) inactive.pause();
+    if (!active) return;
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          el.play().catch(() => {});
-        } else {
-          el.pause();
-        }
+        if (entry.isIntersecting) active.play().catch(() => {});
+        else active.pause();
       },
       { threshold: 0.05 },
     );
-    io.observe(el);
+    io.observe(active);
     return () => io.disconnect();
   }, [enabled, phase]);
 
-  const showVideo = enabled && activeSources.length > 0;
-
-  const handleEnded = () => {
-    if (phase === "first" && hasSequence) {
-      setReady(false);
-      setPhase("next");
-    }
+  const handleFirstEnded = () => {
+    if (!hasSequence) return;
+    const v = nextRef.current;
+    if (v) v.play().catch(() => {});
+    setPhase("next");
   };
+
+  const showFirst = enabled && firstSources.length > 0;
+  const showNext = enabled && hasSequence;
 
   return (
     <>
@@ -104,30 +107,60 @@ export default function HeroMedia({
         className={`absolute inset-0 w-full h-full object-cover ${className}`}
         style={{ transform: "translateZ(0)" }}
       />
-      {showVideo && (
+
+      {/* First clip — visible until it ends */}
+      {showFirst && (
         <video
-          key={phase}
-          ref={videoRef}
+          ref={firstRef}
           poster={image}
           autoPlay
           muted
-          loop={shouldLoop}
+          loop={!hasSequence}
           playsInline
-          preload="metadata"
+          preload="auto"
           disableRemotePlayback
           disablePictureInPicture
           aria-hidden="true"
-          onCanPlay={() => setReady(true)}
-          onEnded={handleEnded}
+          onCanPlay={() => setFirstReady(true)}
+          onEnded={handleFirstEnded}
           className={`absolute inset-0 w-full h-full object-cover ${className}`}
           style={{
-            opacity: ready ? 1 : 0,
-            transition: "opacity 700ms cubic-bezier(0.22, 1, 0.36, 1)",
+            opacity: firstReady && phase === "first" ? 1 : 0,
+            transition: "opacity 800ms cubic-bezier(0.22, 1, 0.36, 1)",
             transform: "translateZ(0)",
             willChange: "opacity",
+            zIndex: 1,
           }}
         >
-          {activeSources.map((s) => (
+          {firstSources.map((s) => (
+            <source key={s.src} src={s.src} type={s.type} media={s.media} />
+          ))}
+        </video>
+      )}
+
+      {/* Second clip — preloads silently behind the first, then cross-fades up */}
+      {showNext && (
+        <video
+          ref={nextRef}
+          poster={image}
+          muted
+          loop
+          playsInline
+          preload="auto"
+          disableRemotePlayback
+          disablePictureInPicture
+          aria-hidden="true"
+          onCanPlay={() => setNextReady(true)}
+          className={`absolute inset-0 w-full h-full object-cover ${className}`}
+          style={{
+            opacity: phase === "next" && nextReady ? 1 : 0,
+            transition: "opacity 1000ms cubic-bezier(0.22, 1, 0.36, 1)",
+            transform: "translateZ(0)",
+            willChange: "opacity",
+            zIndex: 2,
+          }}
+        >
+          {nextSources!.map((s) => (
             <source key={s.src} src={s.src} type={s.type} media={s.media} />
           ))}
         </video>

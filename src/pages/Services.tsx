@@ -11,6 +11,7 @@ import csCanmore1 from "@/assets/cs-canmore-1.jpg";
 import csLake2 from "@/assets/cs-lake-2.jpg";
 import csField2 from "@/assets/cs-field-2.jpg";
 import strip from "@/assets/services-strip.jpg";
+import ctaWedding from "@/assets/cta-wedding-aerial.jpg";
 
 /* ─── Compact services (06–08) rendered as a 3-up grid ─────── */
 const COMPACT_SERVICES = [
@@ -160,6 +161,8 @@ export default function Services() {
 
           <CTA
             onContact={openContact}
+            backgroundImage={ctaWedding}
+            backgroundAlt="Aerial wedding ceremony in the Canadian Rocky Mountains"
             heading={
               <>
                 Some stories deserve

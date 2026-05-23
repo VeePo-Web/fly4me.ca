@@ -1,20 +1,53 @@
+import { useEffect, useState } from "react";
 import HeroMedia from "./HeroMedia";
 import { LinkButton } from "./Button";
+import { INTRO_SESSION_KEY, INTRO_HERO_REVEAL_AT_MS } from "./Intro";
 import hero from "@/assets/hero-drone.jpg";
 
 interface Props {
   onContact: () => void;
 }
 
+/**
+ * Compute the reveal offset for hero contents.
+ * If the cinematic intro is about to play, delay the hero's animations so
+ * they land *during* the veil dissolve instead of finishing behind a black veil.
+ */
+function getInitialRevealDelay(): number {
+  if (typeof window === "undefined") return 0;
+  if (window.location.pathname !== "/") return 0;
+  if (new URLSearchParams(window.location.search).has("nointro")) return 0;
+  if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return 0;
+  if (sessionStorage.getItem(INTRO_SESSION_KEY)) return 0;
+  return INTRO_HERO_REVEAL_AT_MS;
+}
+
+
 export default function Hero({ onContact }: Props) {
+  // When the intro is about to play, hold the hero animations until the
+  // dissolve begins, then snap to 0 so the natural choreography runs.
+  const [revealDelay, setRevealDelay] = useState<number>(getInitialRevealDelay);
+  const [ledeOpen, setLedeOpen] = useState(false);
+
+  useEffect(() => {
+    if (revealDelay === 0) return;
+    const onExit = () => setRevealDelay(0);
+    window.addEventListener("f4m:intro:exit", onExit as EventListener);
+    return () => window.removeEventListener("f4m:intro:exit", onExit as EventListener);
+  }, [revealDelay]);
+
+  // Offset original animation delays by the intro's dissolve mark so the
+  // hero reveals land *as* the veil clears, not after a beat of black.
+  const d = (base: number) => `${base + revealDelay}ms`;
+
+  // Hover handlers — sub-text only fades in when the headline or CTAs are
+  // hovered/focused. Otherwise the drone footage is left to breathe.
+  const showLede = () => setLedeOpen(true);
+  const hideLede = () => setLedeOpen(false);
+
   return (
     <section
       id="top"
-      /*
-        bg-[#0a0a0a] — if the poster is momentarily absent, the dark
-        background is consistent with the vignette rather than flashing
-        the old light bg-secondary.
-      */
       className="relative w-full overflow-hidden bg-[#0a0a0a] h-[100svh] md:h-[100dvh] max-h-[100dvh]"
     >
       {/* Media layer — full-viewport subject, not wallpaper */}
@@ -28,51 +61,99 @@ export default function Hero({ onContact }: Props) {
           { src: "/hero/hero-drone.mp4",  type: "video/mp4" },
         ]}
         nextSources={[
-          { src: "/hero/dji-0398.mp4", type: "video/mp4" },
+          { src: "/hero/sabines-property.mp4", type: "video/mp4" },
         ]}
       />
 
-      {/*
-        Cinematic vignette — replaces the cheap left-to-right gradient wipe.
-        Desktop: a dark radial ellipse anchored left-center where the copy lives.
-        The right 50%+ of the aerial footage is completely unobstructed.
-        Mobile: bottom-rise so the copy at the lower viewport reads clearly.
-        See .hero-vignette in index.css for the gradient definition.
-      */}
-      <div className="absolute inset-0 hero-vignette" aria-hidden />
+      {/* Cinematic vignette — sits above the video layer (z:2) so copy reads */}
+      <div className="absolute inset-0 hero-vignette z-10" aria-hidden />
 
-      {/* Content — relative so it sits above both media and vignette layers */}
-      <div className="relative container-x h-full hero-pt hero-pb flex flex-col">
+      {/* Content — z-20 so it's always above every video frame */}
+      <div className="relative z-20 container-x h-full hero-pt hero-pb flex flex-col">
 
-        {/* Main copy — vertically centered, constrained to left column */}
         <div className="flex-1 min-h-0 flex flex-col justify-center max-w-2xl lg:max-w-[52rem]">
 
-          {/* Headline — leads the sequence, no eyebrow crutch */}
+          {/* Headline — hovering it (or the CTAs) reveals the sub-text */}
           <h1
-            className="hero-display wrap-editorial text-background t-reveal-track"
-            style={{ animationDelay: "0ms" }}
+            className="hero-display wrap-editorial text-background t-reveal-track cursor-default"
+            style={{ animationDelay: d(0) }}
+            onMouseEnter={showLede}
+            onMouseLeave={hideLede}
+            onFocus={showLede}
+            onBlur={hideLede}
+            tabIndex={-1}
           >
-            The brands,
+            Your competitors
             <br />
-            places, and stories
+            look ordinary
             <br />
-            the world actually looks up at.
+            from up here.
           </h1>
 
-          {/* Lede — cascades in as headline is mid-animation */}
-          <p
-            className="hero-lede hero-gap-lede max-w-[38ch] text-background/50 animate-fade-up"
-            style={{ animationDelay: "260ms" }}
+          {/*
+            Lede — hidden by default; only present when the headline or CTAs
+            are hovered/focused. Subtle fade + slight rise, no layout shift
+            (uses opacity + transform only; reserves its own height).
+          */}
+          {/*
+            Lede — fantasy.co-grade reveal. Each word resolves independently
+            from blur(6px) + translateY(14px) + opacity 0 → crisp, with a
+            70ms cascade. A hairline draws in from the left at the same rate,
+            anchoring the line. Reverses faster than it arrives (releases feel
+            cheap if they linger). Reserves its own height so nothing shifts.
+          */}
+          <div
+            className="hero-gap-lede max-w-[44ch] pointer-events-none select-none"
+            aria-hidden={!ledeOpen}
           >
-            For the founders, marketers, and destinations who already know — the
-            way you're presented is the position you hold. We just make sure the
-            frame deserves it.
-          </p>
+            {/* Hairline rule — draws in from the left, syncs with cascade */}
+            <span
+              aria-hidden
+              className="block h-px bg-background/25 origin-left transition-transform ease-[cubic-bezier(0.22,1,0.36,1)]"
+              style={{
+                transform: ledeOpen ? "scaleX(1)" : "scaleX(0)",
+                transitionDuration: ledeOpen ? "900ms" : "420ms",
+                width: "3.5rem",
+                marginBottom: "1.1rem",
+              }}
+            />
 
-          {/* CTAs */}
+            <p className="hero-lede text-background/85 font-light leading-[1.45]">
+              {[
+                { w: "What", prefix: true },
+                { w: "if", prefix: true },
+                { w: "perspective" },
+                { w: "changed" },
+                { w: "everything." },
+              ].map((item, i, arr) => (
+                <span
+                  key={i}
+                  className="inline-block transition-[opacity,transform,filter,letter-spacing] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[transform,opacity,filter]"
+                  style={{
+                    opacity: ledeOpen ? (item.prefix ? 0.5 : 1) : 0,
+                    transform: ledeOpen ? "translateY(0)" : "translateY(14px)",
+                    filter: ledeOpen ? "blur(0px)" : "blur(6px)",
+                    letterSpacing: ledeOpen ? "0em" : "0.08em",
+                    transitionDuration: ledeOpen ? "1200ms" : "520ms",
+                    transitionDelay: ledeOpen ? `${i * 70}ms` : `${(arr.length - 1 - i) * 24}ms`,
+                    fontStyle: item.prefix ? "normal" : "italic",
+                    marginRight: i < arr.length - 1 ? "0.32em" : 0,
+                  }}
+                >
+                  {item.w}
+                </span>
+              ))}
+            </p>
+          </div>
+
+          {/* CTAs — hovering also reveals the sub-text */}
           <div
             className="hero-gap-cta flex items-center gap-8 flex-wrap animate-fade-up"
-            style={{ animationDelay: "440ms" }}
+            style={{ animationDelay: d(440) }}
+            onMouseEnter={showLede}
+            onMouseLeave={hideLede}
+            onFocus={showLede}
+            onBlur={hideLede}
           >
             <LinkButton to="/work" variant="light">
               View our work
@@ -88,27 +169,20 @@ export default function Hero({ onContact }: Props) {
           </div>
         </div>
 
-        {/* Bottom bar — GPS coordinate + availability. Desktop only. */}
+        {/* Bottom bar — GPS coordinate. Desktop only. */}
         <div
           className="hidden md:flex items-end justify-between shrink-0 animate-fade-up"
-          style={{ animationDelay: "600ms" }}
+          style={{ animationDelay: d(600) }}
         >
           <span className="t-micro text-background/25 tracking-[0.18em]">
             N&thinsp;51.04°&ensp;W&thinsp;114.07°
           </span>
-          <span className="t-micro text-background/25 text-right tracking-[0.08em]">
-            Available worldwide
-          </span>
         </div>
       </div>
 
-      {/*
-        Scroll indicator — a thin vertical line that pulses downward.
-        Desktop only. No label — the animation implies the direction.
-        Centered at the bottom of the hero.
-      */}
+      {/* Scroll indicator */}
       <div
-        className="absolute bottom-8 md:bottom-10 left-1/2 -translate-x-1/2 hidden md:block"
+        className="absolute bottom-8 md:bottom-10 left-1/2 -translate-x-1/2 hidden md:block z-20"
         aria-hidden
       >
         <div className="w-px h-9 bg-background/20 hero-scroll-line" />
@@ -116,3 +190,4 @@ export default function Hero({ onContact }: Props) {
     </section>
   );
 }
+
