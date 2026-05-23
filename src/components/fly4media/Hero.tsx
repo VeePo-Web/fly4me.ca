@@ -150,7 +150,9 @@ export default function Hero({ onContact }: Props) {
             cheap if they linger). Reserves its own height so nothing shifts.
           */}
           <div
-            className={`hero-gap-lede max-w-[44ch] select-none ${noHover ? "" : "pointer-events-none"}`}
+            ref={ledeRef}
+            className={`hero-gap-lede max-w-[44ch] select-none will-change-transform ${noHover ? "" : "pointer-events-none"}`}
+            style={{ transition: "transform 240ms cubic-bezier(0.22, 1, 0.36, 1)" }}
             aria-hidden={noHover ? false : !ledeOpen}
           >
             {/* Hairline rule — draws in from the left, syncs with cascade */}
