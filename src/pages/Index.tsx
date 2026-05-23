@@ -10,6 +10,7 @@ import CTA from "@/components/fly4media/CTA";
 import Footer from "@/components/fly4media/Footer";
 import ContactModal from "@/components/fly4media/ContactModal";
 import Intro from "@/components/fly4media/Intro";
+import ctaSpringbank from "@/assets/cta-springbank-estate.jpg";
 
 const Index = () => {
   const [open, setOpen] = useState(false);
@@ -25,7 +26,11 @@ const Index = () => {
         <Services />
         <Divider />
         <CaseStudyTeaser />
-        <CTA onContact={openContact} />
+        <CTA
+          onContact={openContact}
+          backgroundImage={ctaSpringbank}
+          backgroundAlt="Aerial view of a modern luxury estate on a Springbank acreage at last light, Canadian Rockies on the horizon"
+        />
       </main>
       <Footer onContact={openContact} />
 
