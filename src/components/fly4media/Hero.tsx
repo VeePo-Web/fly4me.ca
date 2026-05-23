@@ -54,6 +54,34 @@ export default function Hero({ onContact }: Props) {
     return () => window.clearTimeout(t);
   }, [revealDelay]);
 
+  // Mobile-only: 8px upward parallax on the lede tied to scrollY 0–80.
+  // Direct style mutation through a ref — no React re-renders, single rAF loop.
+  useEffect(() => {
+    if (!noHover) return;
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    let pending = false;
+    const apply = () => {
+      const p = Math.min(Math.max(window.scrollY / 80, 0), 1);
+      if (ledeRef.current) {
+        ledeRef.current.style.transform = `translate3d(0, ${(-8 * p).toFixed(2)}px, 0)`;
+      }
+      pending = false;
+    };
+    const onScroll = () => {
+      if (pending) return;
+      pending = true;
+      raf = requestAnimationFrame(apply);
+    };
+    apply();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [noHover]);
+
   // Offset original animation delays by the intro's dissolve mark so the
   // hero reveals land *as* the veil clears, not after a beat of black.
   const d = (base: number) => `${base + revealDelay}ms`;
