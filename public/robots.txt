@@ -14,3 +14,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://fly4me.ca/sitemap.xml
+
+Sitemap: https://fly4me.ca/sitemap.xml

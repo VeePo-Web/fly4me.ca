@@ -11,6 +11,8 @@ import CaseStudy from "./pages/CaseStudy";
 import Services from "./pages/Services";
 import About from "./pages/About";
 import Pricing from "./pages/Pricing";
+import AreasWeServe from "./pages/AreasWeServe";
+import AreaPage from "./pages/AreaPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +32,8 @@ const App = () => (
           <Route path="/services" element={<Services />} />
           <Route path="/about" element={<About />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/areas-we-serve" element={<AreasWeServe />} />
+          <Route path="/areas-we-serve/:slug" element={<AreaPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -74,6 +74,7 @@ export default function Footer({ onContact }: Props) {
               {[
                 { label: "Work", to: "/work" },
                 { label: "Services", to: "/services" },
+                { label: "Areas We Serve", to: "/areas-we-serve" },
                 { label: "Pricing", to: "/pricing" },
                 { label: "About", to: "/about" },
               ].map((item) => (
