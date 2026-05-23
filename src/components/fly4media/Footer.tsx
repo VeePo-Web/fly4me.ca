@@ -65,7 +65,7 @@ export default function Footer({ onContact }: Props) {
         </div>
 
         {/* Right — nav + contact, two sub-columns (7 cols) */}
-        <div className="md:col-span-7 md:pl-10 grid grid-cols-2 gap-10">
+        <div className="md:col-span-7 md:pl-10 grid grid-cols-1 sm:grid-cols-2 gap-10">
 
           {/* Studio nav */}
           <div>
@@ -74,6 +74,7 @@ export default function Footer({ onContact }: Props) {
               {[
                 { label: "Work", to: "/work" },
                 { label: "Services", to: "/services" },
+                { label: "Pricing", to: "/pricing" },
                 { label: "About", to: "/about" },
               ].map((item) => (
                 <li key={item.to}>
@@ -97,7 +98,7 @@ export default function Footer({ onContact }: Props) {
                 <a
                   href="mailto:tobyrennick@gmail.com"
                   data-cursor="hover"
-                  className="t-body text-background/60 hover:text-background transition-[color,transform] duration-300 link-underline inline-block hover:translate-x-0.5"
+                  className="t-body text-background/60 hover:text-background transition-[color,transform] duration-300 link-underline inline-block hover:translate-x-0.5 break-all"
                 >
                   tobyrennick@gmail.com
                 </a>

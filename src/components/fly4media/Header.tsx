@@ -9,6 +9,7 @@ interface Props {
 const NAV: { label: string; to: string }[] = [
   { label: "Work", to: "/work" },
   { label: "Services", to: "/services" },
+  { label: "Pricing", to: "/pricing" },
   { label: "About", to: "/about" },
 ];
 
@@ -67,7 +68,7 @@ export default function Header({ onContact }: Props) {
       } ${open ? "bg-background/95" : ""}`}
     >
       <div className="container-x flex items-center justify-between h-16 md:h-20 nav-compress">
-        {/* Brand mark — scale on hover, never rotate; marks are anchors */}
+        {/* Brand mark */}
         <Link
           to="/"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -101,33 +102,45 @@ export default function Header({ onContact }: Props) {
               {item.label}
             </Link>
           ))}
+
+          {/*
+            Contact — bordered CTA button, distinct from navigation links.
+            A bordered frame separates commercial action from editorial navigation.
+            ml-6 gives breathing room; border-foreground/25 is quiet at rest,
+            rises to border-foreground on hover signalling commitment.
+          */}
           <button
             onClick={handleContact}
             data-cursor="hover"
-            className="link-underline t-nav text-foreground/70 hover:text-foreground transition-colors duration-300 ml-4 pl-4 border-l border-border/40"
+            className="t-nav ml-6 px-4 py-1.5 border border-foreground/25 text-foreground/70 hover:text-foreground hover:border-foreground/70 transition-[color,border-color] duration-300"
           >
             Contact
           </button>
         </nav>
 
-        {/* Mobile hamburger — two bars, editorial */}
+        {/*
+          Mobile hamburger — two bars, editorial.
+          min-h-[44px] min-w-[44px]: Apple HIG 44×44px touch target minimum.
+        */}
         <button
           onClick={() => setOpen((v) => !v)}
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           data-cursor="hover"
-          className="md:hidden flex flex-col gap-[5px] p-2 -mr-2"
+          className="md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center -mr-3"
         >
-          <span
-            className={`block w-5 h-px bg-foreground transition-transform duration-500 ease-[var(--ease-out-soft)] ${
-              open ? "translate-y-[6px] rotate-45" : ""
-            }`}
-          />
-          <span
-            className={`block w-5 h-px bg-foreground transition-transform duration-500 ease-[var(--ease-out-soft)] ${
-              open ? "-translate-y-[1px] -rotate-45" : ""
-            }`}
-          />
+          <span className="flex flex-col gap-[5px]">
+            <span
+              className={`block w-5 h-px bg-foreground transition-transform duration-500 ease-[var(--ease-out-soft)] ${
+                open ? "translate-y-[6px] rotate-45" : ""
+              }`}
+            />
+            <span
+              className={`block w-5 h-px bg-foreground transition-transform duration-500 ease-[var(--ease-out-soft)] ${
+                open ? "-translate-y-[1px] -rotate-45" : ""
+              }`}
+            />
+          </span>
         </button>
       </div>
 
@@ -170,7 +183,7 @@ export default function Header({ onContact }: Props) {
               Contact
             </button>
 
-            {/* Mobile location footnote — editorial anchor */}
+            {/* Mobile location footnote — editorial brand anchor */}
             <p
               className="t-micro text-foreground/35 mt-4"
               style={{
