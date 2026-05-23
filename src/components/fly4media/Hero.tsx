@@ -29,6 +29,7 @@ export default function Hero({ onContact }: Props) {
   const [revealDelay, setRevealDelay] = useState<number>(getInitialRevealDelay);
   const [ledeOpen, setLedeOpen] = useState(false);
   const [noHover, setNoHover] = useState(false);
+  const ledeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (revealDelay === 0) return;
