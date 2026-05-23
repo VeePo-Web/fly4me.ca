@@ -866,188 +866,52 @@
   }
 }
 
-/* ---------- Cinematic intro (v3) ----------
-   Five-phase sequence: dark → slogan (letter cascade, center-out) → hold →
-   brand stack (slogan softens, hairline reframes wide) → dissolve (stack
-   zooms + blurs while veil clears). All sequencing owned by Intro.tsx;
-   per-element delays are passed inline so the JS is the single timeline.   */
+/* ---------- Intro v6 "Aperture" ----------
+   Mark fades in. Hairline draws from center. Slogan fades in. Hold. Crossfade out.
+   ~3.8s total. Reduced-motion gate handled below.                                */
 @layer utilities {
-  /* Slogan — letter-by-letter cascade (delay set inline per letter). No blur. */
-  @keyframes intro-letter-in {
-    0%   { opacity: 0; transform: translateY(14px); letter-spacing: 0.14em; }
-    100% { opacity: 1; transform: translateY(0);    letter-spacing: 0.02em; }
-  }
-  .intro-letter {
-    display: inline-block;
-    opacity: 0;
-    will-change: opacity, transform, letter-spacing;
-    animation: intro-letter-in 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  /* Hairline — strikes once the cascade settles, then re-frames wider. */
-  @keyframes intro-hl-strike {
-    0%   { transform: scaleX(0); opacity: 0; }
-    100% { transform: scaleX(1); opacity: 1; }
-  }
-  @keyframes intro-hl-expand {
-    0%   { width: 3rem; }
-    100% { width: 9rem; }
-  }
-  .intro-hairline {
-    width: 3rem;
-    transform-origin: center;
-    transform: scaleX(0);
-    opacity: 0;
-    will-change: transform, opacity, width;
-  }
-  .intro-hairline.is-drawn {
-    animation: intro-hl-strike 1400ms var(--ease-emphasized) forwards;
-  }
-  .intro-hairline.is-wide {
-    animation: intro-hl-expand 1100ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
-  }
-
-  /* Slogan dims (does NOT exit) when brand stack arrives. */
-  @keyframes intro-slogan-dim {
-    0%   { opacity: 1; }
-    100% { opacity: 0.35; }
-  }
-  .intro-slogan-soften {
-    animation: intro-slogan-dim 1100ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
-  }
-
-  /* Suspend breath — barely-perceptible inhale during the hold. */
-  @keyframes intro-stack-breath {
-    0%   { transform: scale(1); }
-    50%  { transform: scale(1.012); }
-    100% { transform: scale(1); }
-  }
-  .intro-stack-breath {
-    animation: intro-stack-breath 2000ms cubic-bezier(0.45, 0, 0.55, 1) both;
-    will-change: transform;
-  }
-
-  /* Mark ring — one soft pulse around the drone mark during suspend. */
-  @keyframes intro-ring-pulse {
-    0%   { transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
-    25%  { opacity: 0.35; }
-    100% { transform: translate(-50%, -50%) scale(1.4); opacity: 0; }
-  }
-  .intro-mark-ring {
-    opacity: 0;
-    animation: intro-ring-pulse 1600ms cubic-bezier(0.16, 1, 0.3, 1) both;
-    will-change: transform, opacity;
-  }
-
-  /* Dissolve — stack pulls toward camera. No blur. */
-  @keyframes intro-stack-zoom {
-    0%   { transform: scale(1); }
-    100% { transform: scale(1.04); }
-  }
-  .intro-stack-zoom {
-    animation: intro-stack-zoom 1500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-
-  /* Light sweep — single calm pass during suspend. */
-  @keyframes intro-sweep {
-    0%   { transform: translateX(0);    opacity: 0; }
-    20%  { opacity: 1; }
-    100% { transform: translateX(400%); opacity: 0; }
-  }
-  .intro-sweep { animation: intro-sweep 2000ms var(--ease-out-soft) 3600ms both; }
-
-  /* Drone mark — anchors before any type, then settles square. No blur. */
   @keyframes intro-mark-in {
-    0%   { opacity: 0;    transform: scale(0.85) rotate(-4deg); }
-    100% { opacity: 0.92; transform: scale(1)    rotate(0); }
+    0%   { opacity: 0; }
+    100% { opacity: 0.9; }
   }
   .intro-mark {
     opacity: 0;
-    transform: scale(0.85) rotate(-4deg);
-    will-change: opacity, transform;
-  }
-  .intro-mark.is-framed {
-    animation: intro-mark-in 800ms var(--ease-out-quart) 80ms forwards;
-  }
-
-  /* Viewfinder brackets — staggered snap-in. */
-  @keyframes intro-bracket-in {
-    0%   { opacity: 0; transform: scale(0.6); }
-    100% { opacity: 1; transform: scale(1); }
-  }
-  .intro-bracket {
-    opacity: 0;
-    transform: scale(0.6);
-    will-change: opacity, transform;
-  }
-  .intro-bracket.is-in {
-    animation: intro-bracket-in 600ms var(--ease-spring) both;
-  }
-
-  /* Frame counter — visible during slogan + suspend. */
-  .intro-counter {
-    opacity: 0;
-    transition: opacity 500ms var(--ease-out-quart);
+    animation: intro-mark-in 500ms cubic-bezier(0.4, 0, 0.2, 1) 0ms forwards;
     will-change: opacity;
   }
-  .intro-counter.is-on  { opacity: 0.4; }
-  .intro-counter.is-off { opacity: 0; }
 
-  /* Clip-path wipe — wordmark + descriptor reveal. */
-  @keyframes intro-clip-wipe {
-    0%   { clip-path: inset(0 0 100% 0); opacity: 0; transform: translateY(4px); }
-    100% { clip-path: inset(0 0 0 0);    opacity: 1; transform: translateY(0); }
+  @keyframes intro-hairline-draw {
+    0%   { transform: scaleX(0); }
+    100% { transform: scaleX(1); }
   }
-  .intro-clip-wipe {
-    clip-path: inset(0 0 100% 0);
-    opacity: 0;
-    will-change: clip-path, opacity, transform;
-    animation: intro-clip-wipe 1000ms var(--ease-out-quart) both;
-  }
-
-  /* Aperture part — vertical panels open like a camera shutter. */
-  @keyframes intro-aperture-top {
-    0%   { transform: translateY(0); }
-    100% { transform: translateY(-100%); }
-  }
-  @keyframes intro-aperture-bottom {
-    0%   { transform: translateY(0); }
-    100% { transform: translateY(100%); }
-  }
-  .intro-aperture-top {
-    animation: intro-aperture-top 1400ms cubic-bezier(0.83, 0, 0.17, 1) 200ms forwards;
-    will-change: transform;
-  }
-  .intro-aperture-bottom {
-    animation: intro-aperture-bottom 1400ms cubic-bezier(0.83, 0, 0.17, 1) 200ms forwards;
-    will-change: transform;
-  }
-
-  /* Seam flare — 1px white line at the parting line. */
-  @keyframes intro-seam-flare {
-    0%   { transform: translateY(-50%) scaleX(0); opacity: 0; }
-    20%  { opacity: 1; }
-    100% { transform: translateY(-50%) scaleX(3); opacity: 0; }
-  }
-  .intro-seam-flare {
+  .intro-hairline {
+    width: 96px;
+    transform: scaleX(0);
     transform-origin: center;
-    animation: intro-seam-flare 900ms var(--ease-expo) 180ms forwards;
-    will-change: transform, opacity;
+    animation: intro-hairline-draw 900ms cubic-bezier(0.65, 0, 0.35, 1) 500ms forwards;
+    will-change: transform;
   }
 
-  /* Drifting fog — ambient, runs the whole intro. */
-  @keyframes intro-fog-drift {
-    0%   { transform: translate3d(-3%, 0, 0) scale(1.05); }
-    50%  { transform: translate3d(3%, 1%, 0)  scale(1.08); }
-    100% { transform: translate3d(-3%, 0, 0) scale(1.05); }
+  @keyframes intro-text-in {
+    0%   { opacity: 0; }
+    100% { opacity: 0.65; }
   }
-  .intro-fog { animation: intro-fog-drift 40s ease-in-out infinite; }
+  .intro-text {
+    opacity: 0;
+    animation: intro-text-in 700ms cubic-bezier(0.4, 0, 0.2, 1) 1400ms forwards;
+    will-change: opacity;
+  }
 
-  /* Veil dissolve — symmetric curve, paired with stack zoom. */
-  @keyframes intro-veil-fade { to { opacity: 0; } }
-  .intro-veil-out { animation: intro-veil-fade 1500ms cubic-bezier(0.7, 0, 0.3, 1) forwards; }
-
+  @keyframes intro-layer-out {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  .intro-layer-out {
+    animation: intro-layer-out 700ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    will-change: opacity;
+  }
 }
+
 
 /* ---------- Reduced motion guard ---------- */
 @media (prefers-reduced-motion: reduce) {
