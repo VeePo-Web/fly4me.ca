@@ -899,7 +899,9 @@
     transform: scaleX(0);
     opacity: 0;
     will-change: transform, opacity, width;
-    animation: intro-hl-strike 700ms cubic-bezier(0.7, 0, 0.3, 1) 1700ms forwards;
+  }
+  .intro-hairline.is-drawn {
+    animation: intro-hl-strike 900ms var(--ease-emphasized) forwards;
   }
   .intro-hairline.is-wide {
     animation: intro-hl-expand 900ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
@@ -949,7 +951,87 @@
     20%  { opacity: 1; }
     100% { transform: translateX(400%); opacity: 0; }
   }
-  .intro-sweep { animation: intro-sweep 1800ms var(--ease-out-soft) 2200ms both; }
+  .intro-sweep { animation: intro-sweep 1800ms var(--ease-out-soft) 2600ms both; }
+
+  /* Drone mark — anchors before any type, then settles square. */
+  @keyframes intro-mark-in {
+    0%   { opacity: 0; transform: scale(0.78) rotate(-6deg); filter: blur(6px); }
+    100% { opacity: 0.92; transform: scale(1) rotate(0); filter: blur(0); }
+  }
+  .intro-mark {
+    opacity: 0;
+    transform: scale(0.78) rotate(-6deg);
+    will-change: opacity, transform, filter;
+  }
+  .intro-mark.is-framed {
+    animation: intro-mark-in 760ms var(--ease-out-quart) 80ms forwards;
+  }
+
+  /* Viewfinder brackets — staggered snap, optional outward nudge on open. */
+  @keyframes intro-bracket-in {
+    0%   { opacity: 0; transform: scale(0.6); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .intro-bracket {
+    opacity: 0;
+    transform: scale(0.6);
+    transition: transform 700ms var(--ease-out-quart);
+    will-change: opacity, transform;
+  }
+  .intro-bracket.is-in {
+    animation: intro-bracket-in 520ms var(--ease-spring) both;
+  }
+
+  /* Frame counter — fades in with cascade, out before brand. */
+  .intro-counter {
+    opacity: 0;
+    transition: opacity 400ms var(--ease-out-quart);
+    will-change: opacity;
+  }
+  .intro-counter.is-on  { opacity: 0.4; }
+  .intro-counter.is-off { opacity: 0; }
+
+  /* Clip-path wipe — wordmark + descriptor reveal as typography. */
+  @keyframes intro-clip-wipe {
+    0%   { clip-path: inset(0 0 100% 0); opacity: 0; transform: translateY(4px); }
+    100% { clip-path: inset(0 0 0 0);    opacity: 1; transform: translateY(0); }
+  }
+  .intro-clip-wipe {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+    will-change: clip-path, opacity, transform;
+    animation: intro-clip-wipe 720ms var(--ease-out-quart) both;
+  }
+
+  /* Aperture part — vertical panels open like a camera shutter. */
+  @keyframes intro-aperture-top {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(-100%); }
+  }
+  @keyframes intro-aperture-bottom {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(100%); }
+  }
+  .intro-aperture-top {
+    animation: intro-aperture-top 1100ms var(--ease-emphasized) 200ms forwards;
+    will-change: transform;
+  }
+  .intro-aperture-bottom {
+    animation: intro-aperture-bottom 1100ms var(--ease-emphasized) 200ms forwards;
+    will-change: transform;
+  }
+
+  /* Seam flare — 1px white line at the parting line. */
+  @keyframes intro-seam-flare {
+    0%   { transform: translateY(-50%) scaleX(0); opacity: 0; }
+    20%  { opacity: 1; }
+    100% { transform: translateY(-50%) scaleX(3); opacity: 0; }
+  }
+  .intro-seam-flare {
+    transform-origin: center;
+    animation: intro-seam-flare 850ms var(--ease-expo) 180ms forwards;
+    will-change: transform, opacity;
+  }
 
   /* Drifting fog — ambient, runs the whole intro. */
   @keyframes intro-fog-drift {

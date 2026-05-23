@@ -1,103 +1,94 @@
 
-# Section 02 — "Proof, not portfolio." → fantasy.co grade
+# Intro animation — fantasy.co / Calemwood-grade rebuild
 
-## Diagnosis (why it reads cheap right now)
+## What we have now
 
-1. **Five cards land at once.** The asymmetric grid is editorial in theory but on a 928px viewport it stacks into a busy column of equally-weighted images. There is no lead, no rest, no rhythm — five projects shouting at the same volume.
-2. **Meta block is generic.** `01 — Category / Title / tagline / ↗` repeats five times in the same type sizes. Fantasy.co never repeats the same meta pattern five times — they vary scale per card so the eye knows which one is the headline act.
-3. **Hover is flat.** Cards do nothing on hover beyond a link-underline and a tiny arrow translate. No image scale, no parallax, no meta reveal, no cursor change in register, no scrim shift. The image is inert.
-4. **Section opener is abrupt.** `t-display-2` "Proof, not portfolio." sits alone with no eyebrow, no counter, no transition from the hero — it just appears. Fantasy.co always frames a section: a tiny index, a quiet line, then the statement.
-5. **No connective tissue.** Between cards there is dead grid space. Fantasy.co uses index numerals (01/05, 02/05…) as spatial anchors, plus subtle horizontal rules or year tags that thread the cards into one essay rather than five posters.
-6. **Reveal animation is uniform.** Every card fades up the same way at the same threshold. Fantasy.co staggers by column, varies easing per card, and lets larger cards arrive slightly later (anticipation).
-7. **"View all work" CTA is timid.** Small muted text, right-aligned, easy to miss. Fantasy.co treats the section-end CTA as a moment — large type, generous space, a quiet hairline above it.
+Five phases (dark → slogan → hold → brand → dissolve), 6.2s total. Center-out letter cascade, hairline rule, brand stack rise, stack-zoom + blur exit. It's competent but generic — it feels like a typography demo, not a *cinematic threshold*.
 
-## The fix (fantasy.co register)
+## What Calemwood is doing right (that we should steal in our register)
 
-### A. Section framing — give it a chapter opening
+1. **Architectural framing** — corner L-brackets snap in like camera viewfinder marks. The screen feels *composed*, not just decorated.
+2. **The logo enters before the wordmark** — drone mark scales/settles, then the type wipes in beside it. Hierarchy is explicit.
+3. **A "suspend" beat** — progress hits 100%, everything inhales, the rule fills, ring pulse expands. The frame *breathes* before it parts.
+4. **Curtain-part exit** — two halves slide opposite directions on a dramatic ease with a shimmer seam at the parting line. The reveal is *theatrical*, not a fade.
+5. **One micro-counter** — `00–100%` in monospace. Tiny but reads as "the studio is loading something deliberate", not "a website is rendering".
+6. **Orchestrated easing** — every motion uses one of three named eases. Nothing is default-tween.
 
-Replace the lone H2 with a three-part editorial header:
+Calemwood is industrial-luxe; we're editorial-cinema. We don't copy the copper accents, the brackets-as-machinery, or the progress bar as a *progress bar*. We translate.
 
-```text
-Selected work — 05               ← t-eyebrow, top-left, muted
-                                   counter not date range
-Proof,                           ← t-display-2, unchanged copy
-not portfolio.
-                                 ← 1px hairline, 40% width, left-aligned
-Five projects. Each one shifted  ← t-lede, max-w-[36ch], muted-foreground
-how a place was seen.              one quiet supporting line — no more
+## The rebuild — Fly4MEdia "Threshold" intro
+
+Six beats, ~6.6s, all CSS keyframes + JS timeline (no Framer Motion — performance memory line). Skippable as before.
+
+### Beat 1 — Anchor (0–520ms)
+
+Pure black. Grain + warm pulse (current). Add: the **drone mark** (`fly4media-mark.png`) fades in dead-center at 28% scale, rotated `-6deg`, opacity 0 → 0.85. Easing `--ease-out-expo`. This is the "lens cap off" moment — one object, no copy.
+
+### Beat 2 — Frame (520–1100ms)
+
+**Viewfinder brackets** snap in at the four corners — four `28px` L-brackets, 1px white at 25% opacity, staggered 0/60/120/180ms with `--ease-spring`. Mark rotates to `0deg` and scales `0.28 → 0.32` in the same 580ms. The composition is now *framed* — the eye reads "we're composing a shot".
+
+### Beat 3 — Slogan cascade (1100–2500ms)
+
+Keep the center-out letter cascade (it's strong). Two refinements:
+- Cascade now reads under the mark, not centered on its own — vertical stack: `[brackets · mark · slogan · counter]`.
+- Each letter rises from `translateY(14px) blur(8px) opacity 0` → `0 / 0 / 1` over 700ms with `--ease-out-quart` (currently no blur; the blur-release is what gives fantasy.co text its weight).
+- A tiny **`00 → 100`** counter (Inter 500, 11px, white/40, tabular-nums) ticks under the slogan starting at `T+1500ms`, completing at `T+2400ms`. Not a progress bar — a *frame counter*. Disappears at the suspend.
+
+### Beat 4 — Suspend (2500–3400ms)
+
+Everything stops. The hairline rule **draws itself** from center outward (`scaleX 0 → 1`, transform-origin center, 900ms `--ease-emphasized`) — replaces the current static `mt-14 h-px`. Brackets nudge outward by 4px (the frame *opens*). Counter fades. A single light-sweep passes left→right across the slogan only (gradient mask, 1.1s).
+
+This is the breath. The current "hold" phase has nothing happening — Calemwood's suspend is what makes the exit feel earned.
+
+### Beat 5 — Brand mark (3400–4700ms)
+
+Slogan softens to `opacity 0.45` and shrinks `0.96` (current does this — keep). The hairline reframes wider (current `is-wide` — keep). Below the rule, **wordmark wipes in via clip-path** instead of the current fade-rise:
 ```
-
-The eyebrow + counter + hairline + supporting line is the fantasy.co opening signature. It tells the eye *"a section is starting, settle in"* before the work arrives.
-
-### B. Hierarchy — one hero, four supporting
-
-Re-rank the 5 cards by intent (not by order):
-- **Card 01** = hero card — full-bleed-ish (lg:col-span-10, lg:col-start-2), `aspect-[21/9]` cinema scope. Meta below uses `t-headline-1` (not `-2`) and the tagline gets `t-lede`.
-- **Cards 02–05** = supporting — current asymmetric positions but tighter spans (max col-span-6), meta stays at `t-headline-2`, taglines drop to `t-body text-muted-foreground/70`.
-
-The eye now has a clear lead actor. The remaining four feel like a chosen ensemble, not a wall.
-
-### C. Card hover — earn the "cinema" claim
-
-Replace the current near-static hover with a four-layer choreography (all CSS, no Framer):
-
-1. **Image** — `scale(1.04)` over 900ms `var(--ease-out-quart)`. Inner overflow-hidden on `media-frame` so it stays clean.
-2. **Scrim** — a `from-black/0` to `from-black/35` bottom gradient fades in over 600ms. Pulls the eye toward the title.
-3. **Meta translate** — the title + tagline block translates `translateY(0)` from `translateY(8px)` and the tagline fades from `opacity-0` to `opacity-100`. At rest, only `eyebrow + title` are visible; tagline appears on hover. This is the fantasy.co reveal — the card whispers extra context only when you lean in.
-4. **Arrow** — replace the standalone ↗ with a small composed lockup: a 24px circle with a hairline border that fills on hover (border-foreground/15 → bg-foreground, ↗ inverts to background). Position bottom-right of the meta row.
-
-All four layers share the same `var(--ease-out-quart)` and stagger by 60ms so the choreography feels orchestrated, not simultaneous.
-
-### D. Index numerals as spatial anchors
-
-Each card gets a giant ghost numeral `01` `02` `03` `04` `05` rendered behind/beside the meta row in `t-display-1` at `opacity-[0.04] text-foreground`, positioned absolutely. Mirrors the `Services` section technique (which already works in this codebase) — it threads the section into one essay and gives empty grid space a job.
-
-Hidden on mobile (it's spatial texture, not content).
-
-### E. Connective hairlines
-
-Add a 1px `border-foreground/10` horizontal rule between the section header and the grid, and another between the grid and the CTA. Two hairlines, no more — they frame the work without caging it.
-
-### F. CTA — make it a moment
-
-Replace the small muted right-aligned link with:
-
-```text
-                                 ← 1px hairline, full container width, foreground/10
-   See all five →                ← t-headline-3, foreground (not muted), centered
-   2024 — 2026                   ← t-meta, muted, centered below
+clipPath: inset(0 0 100% 0) → inset(0 0 0% 0)
+opacity: 0 → 1
+duration: 720ms, ease --ease-out-quart, delay 200ms
 ```
+Descriptor "A cinematic perspective studio" wipes in the same way at delay 480ms. Clip-path wipes are the single biggest visual upgrade — they read as *typography revealing itself*, not fading in.
 
-Generous `py-20` around it. The arrow nudges 6px on hover. The year range below grounds it. This is the section's exit moment — it should feel like the end of a chapter.
+### Beat 6 — Curtain part (4700–6200ms)
 
-### G. Stagger — orchestrated reveal
+The current `stack-zoom + blur + opacity` is fine but too soft. Replace with **camera shutter** — Calemwood's curtain idea, our register:
 
-Replace uniform `useReveal` with column-aware stagger:
-- Hero card (01): delay 0ms
-- Card 02 (right column): delay 120ms
-- Card 03 (left column): delay 80ms
-- Card 04 (right column): delay 200ms
-- Card 05 (center-wide): delay 160ms
+- The entire stack (brackets + mark + type) zooms `1.00 → 1.06` and blurs `0 → 8px` over 1200ms (`--ease-emphasized`). Current behavior, slightly intensified.
+- Simultaneously, **two black panels** slide outward — top half `translateY(0) → translateY(-100%)`, bottom half `translateY(0) → translateY(100%)` — over 1100ms with `--ease-emphasized` starting at T+200ms into the dissolve. NOT left/right curtains (too literal/Calemwood). Vertical = aperture opening = camera language.
+- A **1px white hairline** at the horizontal seam scales `scaleX 0 → 3` while fading `opacity 1 → 0` over 800ms (`--ease-out-expo`) as the panels part. This is the lens-flare moment.
+- Hero behind takes over (current `f4m:intro:exit` event 200ms before unmount — keep).
 
-The larger/wider cards arrive slightly later — creates anticipation, the eye reads the smaller cards first and the wide ones land as punctuation.
+### Easing register (used throughout)
 
-### H. Motion register on scroll
+All four eases already exist in `index.css`:
+- `--ease-out-quart` — letter cascade, type wipes, brackets snap
+- `--ease-spring` — bracket settle (the only spring use — selective)
+- `--ease-emphasized` — hairline draw, aperture part, stack dissolve
+- `--ease-out-expo` — mark entrance, seam flare
 
-Add a subtle parallax to card images via `--scroll-y` CSS var (already-established pattern if Hero uses it; otherwise a 12-line `useParallax` hook). Each image translates `translateY(-8px → +8px)` across its viewport pass. Very subtle — fantasy.co's parallax is always *barely there*.
+No raw `ease`/`ease-out`. Nothing default.
 
-If parallax is too much scope, skip it. The hover choreography and stagger alone get us most of the way.
+### Sound (optional, opt-in)
 
-## Files to touch
+Calemwood is silent. Fantasy.co intros sometimes layer a single low whoosh on the exit. Out of scope for this pass — flag for future if you want it.
 
-- `src/components/fly4media/FeaturedWork.tsx` — restructure header, re-rank cards (hero + 4), rewrite ProjectCard meta layout, add ghost numerals, new CTA block, column-aware stagger via `--reveal-delay` inline style.
-- `src/index.css` — add `.card-hover-group` utility (scale + scrim + meta translate orchestration), `.cta-moment` utility for the exit block, optional `.card-arrow-circle` for the bottom-right lockup.
-- `src/components/fly4media/CinematicMedia.tsx` — verify the inner `<img>` accepts a hover-driven `scale` transform without breaking video swap-in (read first, then minimal patch).
+## File changes
 
-No data changes (`projects.ts` stays as-is). No new dependencies.
+- `src/components/fly4media/Intro.tsx` — restructure the JSX (add mark + corner brackets + counter), rewrite the phase timeline (beats 1/2 are new, beat 6 swaps curtain+seam in), add inline `--reveal-i` style for bracket stagger.
+- `src/index.css` — add keyframes for: `intro-mark-in`, `intro-bracket-in`, `intro-letter` (update to include blur), `intro-rule-draw`, `intro-counter-tick`, `intro-clip-wipe`, `intro-aperture-top`, `intro-aperture-bottom`, `intro-seam-flare`. Probably ~80 lines of CSS.
+- No new dependencies. No Framer Motion. Mark asset already imported as `@/assets/fly4media-mark.png`.
+
+## Performance / accessibility (preserved)
+
+- `prefers-reduced-motion` → skip entirely (current).
+- `sessionStorage` flag → plays once per session (current — but we should bump key to `f4m:intro:v4` so returning users see the new intro once).
+- `Esc` / `Enter` / Skip button → instant exit (current).
+- Hero handoff event still fires 200ms before unmount (current).
 
 ## Open questions
 
-1. **Hero card pick** — should the lead card be project[0] (current order) or do you want to manually nominate which project earns the hero slot? Some studios put their most recognizable client first; others put their most cinematic shot.
-2. **Tagline on hover only** — okay to hide taglines at rest and reveal on hover, or should they stay visible (current behavior) so the section reads at a glance without interaction?
-3. **Ghost numerals** — `01–05` (matches `projects.ts` `.number` field) or roman/larger format `001 / 005`? Fantasy.co tends toward the latter; this site has used `01` so far.
-4. **Parallax** — include the subtle image parallax (Section H) or skip it for this pass and keep motion to hover + stagger only?
+1. **Counter — keep or cut?** It's a tasteful addition (`00 → 100`) and reinforces "deliberate composition", but it could also feel like a webdev cliché. Keep, cut, or replace with a static `01 / 01` shot-slate?
+2. **Curtain direction** — vertical aperture (recommended, camera-shutter language) or horizontal letterbox (top + bottom panels closing onto a 2.39:1 strip, then opening — even more cinema, but adds ~400ms). Pick vertical-aperture by default unless you want the letterbox?
+3. **Session bump** — should v4 replay for every existing visitor (recommended so they see the new intro once), or keep v3 key so only fresh sessions get it?
