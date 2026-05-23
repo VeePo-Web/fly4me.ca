@@ -1,67 +1,95 @@
-# Intro v6 — "Aperture" (fantasy.co register)
+# Intro v7 — "Focal Pull" (fantasy.co register)
 
-A complete teardown of v5. Strip the intro to its absolute minimum: one mark, one line of type, one quiet curtain lift. No brackets, no counter, no ring pulse, no light sweep, no fog, no grain, no aperture shutter — all gone. The reference is fantasy.co's site loaders: black field, generous silence, one motion, one moment, then gone. Total runtime ~3.8s.
+Same skeleton as v6 (mark → hairline → slogan → hold → crossfade), but the slogan itself becomes the moment. Two words, two planes, one lens rack. Total runtime stays ~3.8s.
 
-## The brief (for the animation designer)
+## The move
 
-> Design a single-frame loader for the Fly4MEdia home hero. Black field. Centered. Three things happen in sequence, slowly, with the confidence of a studio that doesn't need to perform:
->
-> 1. A thin 1px white hairline draws from the center outward to 96px wide. 900ms.
-> 2. **Perspective changes everything.** fades in beneath the line — set in Inter Regular, sentence case, ~13–14px, tracked +120, white at 65% opacity. Letters resolve as a single block (opacity only — no stagger, no blur, no slide). 700ms.
-> 3. Everything holds for 900ms. The viewer reads it. Nothing moves.
-> 4. The entire intro layer fades to transparent over 700ms, revealing the home hero already present underneath. No shutter, no aperture, no zoom. Just a clean cross-dissolve.
->
-> The mark above the hairline is the drone glyph at 28×28px (smaller than v5 — it's a punctuation mark, not the subject). It eases in at 0ms over 500ms, opacity 0 → 0.9, no scale, no rotation. The hairline starts drawing once the mark is at full opacity.
->
-> Easings: `cubic-bezier(0.65, 0, 0.35, 1)` on the hairline and the fade-out; `cubic-bezier(0.4, 0, 0.2, 1)` on the mark and the text. Tempo: slow but not sleepy — every beat finishes cleanly before the next begins.
+The slogan is split into two spans on a single line:
+
+> **Perspective** · **changes everything.**
+
+They arrive on different focal planes:
+
+1. **"Perspective"** fades in flat, already at depth 0. Opacity 0 → 0.65, no scale, no blur. 600ms. It lands like the first thing the camera was focused on.
+2. **200ms beat of stillness.** The viewer registers the word as the subject.
+3. **"changes everything."** racks in from behind. Starts at `scale(1.04)`, `blur(4px)`, `opacity(0)`. Resolves to `scale(1)`, `blur(0)`, `opacity(0.55)` over 750ms with `cubic-bezier(0.2, 0.7, 0.2, 1)` (a soft focus-pull curve — slow start, decisive settle). It feels like the lens just found a second subject behind the first.
+4. Both words hold together for 900ms.
+5. Intro layer crossfades out over 700ms. Hero already revealing underneath.
+
+The first word is set at the same weight as before (white at 65%). The second word resolves slightly dimmer (white at 55%) — the depth cue. The eye reads "Perspective" as foreground, "changes everything." as the plane behind it. The full sentence is legible the entire time after 1750ms.
+
+Spacing: a single space between the two spans, no manual gap. The line never reflows — the second span animates in place, so the layout is committed from the moment the first word lands (we reserve the width with a hidden ghost copy, see Technical below).
 
 ## Total timeline (~3800ms)
 
 ```text
-0     →  500    mark fade in           (opacity 0 → 0.9)
-500   →  1400   hairline draws         (scaleX 0 → 1, 96px wide)
-1400  →  2100   slogan fades in        (opacity 0 → 0.65)
-2100  →  3000   HOLD                   (everything still)
-3000  →  3700   intro layer fades out  (opacity 1 → 0)
-3700           hero is fully visible
+0     →  500    mark fade in              (opacity 0 → 0.9)
+500   →  1400   hairline draws            (scaleX 0 → 1, 96px wide)
+1400  →  2000   "Perspective" fades in    (opacity 0 → 0.65, flat)
+2000  →  2200   beat                       (still — let it land)
+2200  →  2950   "changes everything."     (scale 1.04 → 1, blur 4px → 0, opacity 0 → 0.55)
+2950  →  3000   micro-settle
+3000  →  3700   intro layer fades out     (opacity 1 → 0)
 ```
 
-Hero handoff: the hero starts its own subtle reveal at `2800ms` (200ms before the intro begins fading) so the cross-dissolve overlaps cleanly — no flash of black between intro and hero.
+Hero handoff stays at **2800ms** — the rack-focus is still resolving when the hero starts opening underneath, which sells the depth illusion (the intro feels like a foreground plane being defocused away as a deeper plane resolves).
 
-## What this removes (intentional)
+## What stays from v6
 
-- Viewfinder brackets (corner Ls)
-- 00/100 frame counter
-- Mark ring pulse
-- Stack-breath scale animation
-- Light sweep
-- Drifting fog gradient
-- Film grain overlay
-- Center vignette
-- Letter-by-letter cascade with letter-spacing animation
-- Wordmark + descriptor reveal ("Fly4MEdia / A cinematic perspective studio")
-- Slogan-softens transition (slogan never softens — it just fades with the layer)
-- Vertical aperture shutter exit
-- Seam flare
-- Stack-zoom dissolve
+- Mark fade-in, hairline draw, hold, crossfade-out
+- All easings on those existing beats
+- `INTRO_HERO_REVEAL_AT_MS = 2800`, body scroll lock, `?nointro` escape, reduced-motion gate, logo-click replay
+- Session key bumps to `f4m:intro:v7`
+- No brackets, counter, sweep, fog, grain, aperture, seam, stack-zoom
 
-The Fly4MEdia wordmark and descriptor no longer appear in the intro. Reasoning: the header already shows the brand the moment the curtain lifts; restating it here is theater the brand doesn't need. The intro becomes purely **a promise** ("Perspective changes everything.") and a **handoff**.
+## Why this works for the brand
 
-## Implementation
+The slogan is "Perspective changes everything." The animation literally performs a perspective change — a focal-plane shift — on the sentence that says it. The motion *is* the meaning. fantasy.co-quality moves earn their existence by being the idea, not decorating it.
 
-- **`src/components/fly4media/Intro.tsx`** — rewrite. Two state phases (`enter`, `exit`). JSX is just: black backdrop, centered column with `<img>` mark, hairline `<span>`, slogan `<p>`. Drop the `Brackets` subcomponent, the counter rAF, the `runId` state, the suspend/brand/dissolve phases, the aperture panels, the seam flare, the fog, the grain, the vignette. Keep: replay listener (logo click), session key (bump to `f4m:intro:v6`), reduced-motion gate, `?nointro` escape, `INTRO_HERO_REVEAL_AT_MS = 2800`, body scroll lock during the intro.
-- **`src/index.css`** — delete every `.intro-*` keyframe and class except `intro-fade-out`. Add three new ones: `intro-mark-in` (opacity only), `intro-hairline-draw` (scaleX from 0 to 1, transform-origin center), `intro-text-in` (opacity 0 → 0.65). Remove the `.intro-fog`, `.intro-sweep`, `.intro-bracket*`, `.intro-counter*`, `.intro-ring*`, `.intro-stack-*`, `.intro-aperture-*`, `.intro-seam-flare`, `.intro-clip-wipe`, `.intro-slogan-soften`, `.intro-letter*`, `.intro-veil-out`, `.intro-skip*` definitions.
-- **Hero handoff** — verify `Hero.tsx` listens to `f4m:intro:exit` or reads `INTRO_HERO_REVEAL_AT_MS` to time its own opening reveal; if it currently expects 6720ms, adjust to align with the new 2800ms.
+## Technical
+
+- **`src/components/fly4media/Intro.tsx`** — split the `<p>` into:
+  ```tsx
+  <p className="intro-text relative ...">
+    <span className="intro-word-1">Perspective</span>{" "}
+    <span className="intro-word-2 inline-block">changes everything.</span>
+  </p>
+  ```
+  Both spans start at `opacity: 0` via the keyframes. Use `will-change: transform, filter, opacity` on `.intro-word-2` only (don't pay the cost on word 1, it's a pure opacity fade). The `<p>` reserves width naturally because both spans render in the layout pass — they just start transparent. No ghost copy needed; CSS animations don't pull elements from the flow.
+
+- **`src/index.css`** — replace `intro-text-in` with two keyframes:
+  ```css
+  @keyframes intro-word-1-in {
+    from { opacity: 0; }
+    to   { opacity: 0.65; }
+  }
+  @keyframes intro-word-2-rack {
+    from { opacity: 0; transform: scale(1.04); filter: blur(4px); }
+    to   { opacity: 0.55; transform: scale(1); filter: blur(0); }
+  }
+  .intro-word-1 {
+    opacity: 0;
+    animation: intro-word-1-in 600ms cubic-bezier(0.4, 0, 0.2, 1) 1400ms forwards;
+  }
+  .intro-word-2 {
+    opacity: 0;
+    transform-origin: center;
+    animation: intro-word-2-rack 750ms cubic-bezier(0.2, 0.7, 0.2, 1) 2200ms forwards;
+  }
+  ```
+  Keep `intro-mark-in`, `intro-hairline-draw`, `intro-layer-out` exactly as they are. Delete `intro-text-in`.
+
+- **`Intro.tsx` constants** — `T_TEXT` (1400) stays as the start of word 1. Add `T_WORD2 = 2200` for documentation; no new timers needed (CSS handles it). `T_HOLD_END = 3000` and `T_TOTAL = 3700` unchanged.
+
+- **`src/components/fly4media/Hero.tsx`** — no change. Still listens to `f4m:intro:exit` at 2800ms.
 
 ## Files
 
-- `src/components/fly4media/Intro.tsx` *(full rewrite, ~80 lines)*
-- `src/index.css` *(delete v5 intro block, replace with 3 tiny keyframes)*
-- `src/components/fly4media/Hero.tsx` *(verify timing only — likely a one-line constant change)*
+- `src/components/fly4media/Intro.tsx` *(split slogan into two spans, bump session key)*
+- `src/index.css` *(replace `intro-text-in` with `intro-word-1-in` + `intro-word-2-rack`)*
 
 ## Notes
 
-- Logo-click-to-replay still works (REPLAY_KEY path, replay event listener).
-- Session key bumps to `f4m:intro:v6` so every visitor sees the new intro once.
-- Mobile: identical timing. The mark and hairline are already small enough that no responsive adjustments are needed.
-- No new dependencies. Pure CSS keyframes + minimal JS timeline.
+- Reduced-motion: the existing gate skips the intro entirely, so the rack-focus never runs for users who opted out. No additional handling needed.
+- Mobile: identical. The blur radius (4px) and scale delta (1.04) are sub-perceptible at any sensible viewport, but they read as depth — they don't need to be large to work.
+- Performance: one element transforms + blurs for 750ms. GPU-cheap. No paint thrash because `filter: blur()` on a 13px text span is trivial.
