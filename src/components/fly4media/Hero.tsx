@@ -28,6 +28,7 @@ export default function Hero({ onContact }: Props) {
   // dissolve begins, then snap to 0 so the natural choreography runs.
   const [revealDelay, setRevealDelay] = useState<number>(getInitialRevealDelay);
   const [ledeOpen, setLedeOpen] = useState(false);
+  const [noHover, setNoHover] = useState(false);
 
   useEffect(() => {
     if (revealDelay === 0) return;
@@ -36,14 +37,31 @@ export default function Hero({ onContact }: Props) {
     return () => window.removeEventListener("f4m:intro:exit", onExit as EventListener);
   }, [revealDelay]);
 
+  // Touch / no-hover devices: auto-reveal the lede after the headline lands.
+  // On hover-capable devices, the existing hover/focus behavior is preserved.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const noHoverMQ = window.matchMedia("(hover: none)");
+    const reducedMQ = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (!noHoverMQ.matches) return;
+    setNoHover(true);
+    if (reducedMQ.matches) {
+      setLedeOpen(true);
+      return;
+    }
+    const t = window.setTimeout(() => setLedeOpen(true), 900 + revealDelay);
+    return () => window.clearTimeout(t);
+  }, [revealDelay]);
+
   // Offset original animation delays by the intro's dissolve mark so the
   // hero reveals land *as* the veil clears, not after a beat of black.
   const d = (base: number) => `${base + revealDelay}ms`;
 
   // Hover handlers — sub-text only fades in when the headline or CTAs are
-  // hovered/focused. Otherwise the drone footage is left to breathe.
-  const showLede = () => setLedeOpen(true);
-  const hideLede = () => setLedeOpen(false);
+  // hovered/focused on devices that actually hover. On touch we auto-reveal.
+  const showLede = () => { if (!noHover) setLedeOpen(true); };
+  const hideLede = () => { if (!noHover) setLedeOpen(false); };
+
 
   return (
     <section
@@ -69,7 +87,7 @@ export default function Hero({ onContact }: Props) {
       <div className="absolute inset-0 hero-vignette z-10" aria-hidden />
 
       {/* Content — z-20 so it's always above every video frame */}
-      <div className="relative z-20 container-x h-full hero-pt hero-pb flex flex-col">
+      <div className="relative z-20 container-x h-full hero-pt hero-pb pb-[max(28px,calc(env(safe-area-inset-bottom)+20px))] md:pb-0 flex flex-col">
 
         <div className="flex-1 min-h-0 flex flex-col justify-center max-w-2xl lg:max-w-[52rem]">
 
@@ -103,8 +121,8 @@ export default function Hero({ onContact }: Props) {
             cheap if they linger). Reserves its own height so nothing shifts.
           */}
           <div
-            className="hero-gap-lede max-w-[44ch] pointer-events-none select-none"
-            aria-hidden={!ledeOpen}
+            className={`hero-gap-lede max-w-[44ch] select-none ${noHover ? "" : "pointer-events-none"}`}
+            aria-hidden={noHover ? false : !ledeOpen}
           >
             {/* Hairline rule — draws in from the left, syncs with cascade */}
             <span
@@ -146,27 +164,28 @@ export default function Hero({ onContact }: Props) {
             </p>
           </div>
 
-          {/* CTAs — hovering also reveals the sub-text */}
+          {/* CTAs — hovering also reveals the sub-text on hover-capable devices */}
           <div
-            className="hero-gap-cta flex items-center gap-8 flex-wrap animate-fade-up"
+            className="hero-gap-cta flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-8 animate-fade-up"
             style={{ animationDelay: d(440) }}
             onMouseEnter={showLede}
             onMouseLeave={hideLede}
             onFocus={showLede}
             onBlur={hideLede}
           >
-            <LinkButton to="/work" variant="light">
+            <LinkButton to="/work" variant="light" className="w-full md:w-auto justify-center md:justify-start">
               View our work
             </LinkButton>
 
             <button
               onClick={onContact}
               data-cursor="hover"
-              className="t-button text-background/70 hover:text-background transition-colors duration-[260ms] ease-[var(--ease-out-soft)]"
+              className="t-button text-background/70 hover:text-background transition-colors duration-[260ms] ease-[var(--ease-out-soft)] self-center md:self-auto"
             >
               Start a project
             </button>
           </div>
+
         </div>
 
         {/* Bottom bar — GPS coordinate. Desktop only. */}
