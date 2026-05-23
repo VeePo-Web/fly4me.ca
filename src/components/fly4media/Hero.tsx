@@ -164,27 +164,28 @@ export default function Hero({ onContact }: Props) {
             </p>
           </div>
 
-          {/* CTAs — hovering also reveals the sub-text */}
+          {/* CTAs — hovering also reveals the sub-text on hover-capable devices */}
           <div
-            className="hero-gap-cta flex items-center gap-8 flex-wrap animate-fade-up"
+            className="hero-gap-cta flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-8 animate-fade-up"
             style={{ animationDelay: d(440) }}
             onMouseEnter={showLede}
             onMouseLeave={hideLede}
             onFocus={showLede}
             onBlur={hideLede}
           >
-            <LinkButton to="/work" variant="light">
+            <LinkButton to="/work" variant="light" className="w-full md:w-auto justify-center md:justify-start">
               View our work
             </LinkButton>
 
             <button
               onClick={onContact}
               data-cursor="hover"
-              className="t-button text-background/70 hover:text-background transition-colors duration-[260ms] ease-[var(--ease-out-soft)]"
+              className="t-button text-background/70 hover:text-background transition-colors duration-[260ms] ease-[var(--ease-out-soft)] self-center md:self-auto"
             >
               Start a project
             </button>
           </div>
+
         </div>
 
         {/* Bottom bar — GPS coordinate. Desktop only. */}
