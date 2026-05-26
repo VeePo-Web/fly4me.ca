@@ -1,58 +1,84 @@
-## Goal
+## The bug
 
-On the `/work` route, mobile only, anchor the page header ("Perspective, in motion." + count line) to the bottom of the first viewport — same gravity as the Hero. Right now the H1 sits at the top of the page and gets covered/passed by the first video card as the user scrolls.
+When a `<br/>` is collapsed (hidden or made inline) by one of the wrap helpers, JSX has already stripped the surrounding indentation whitespace, so the two text runs render with no separator.
 
-## Scope
+Affected helpers in `src/index.css`:
 
-- File: `src/pages/Work.tsx` only.
-- Mobile only (< `md`). Desktop layout untouched.
-- Visual/layout only. No copy changes, no new components, no data changes.
-
-## Design intent
-
-Mirror the Hero's mobile composition:
-
-- Header occupies a full `100svh` band on mobile, content anchored to the bottom (`justify-end`), generous safe-area-aware bottom padding.
-- Title (`Perspective, / in motion.`) sits low; the `5 projects · 2024–2026` meta line sits directly above or below it with the same rhythm as the Hero CTAs.
-- As the user scrolls, cards rise up from below and pass the title — same "video plays behind anchored type" feel as the hero, just static (no video here).
-- Optional tiny upward parallax on the title (-8px over 0–80px scroll) to match the hero lede, mobile only, respects `prefers-reduced-motion`. Keep this lightweight — single rAF, ref-based style mutation, no re-renders.
-
-## Layout change (mobile)
-
-Current header section:
-
-```text
-<section pt-36 pb-section-sm>
-  H1
-  meta
-</section>
-<section> cards </section>
+```css
+.wrap-editorial > br { display: inline; }                 /* always inline → strips space */
+.wrap-editorial-mobile-off > br { display: none; }        /* mobile collapse → strips space */
+.wrap-art > br { display: inline; }                        /* mobile default */
 ```
 
-New header section (mobile):
+Screenshot confirms the symptom on `BrandStatement` mobile:
+- "How something is seen[BR]decides what it's worth." → "seendecides"
+- "The difference between[BR]being shown and being remembered." → "betweenbeing"
 
-```text
-<section h-[100svh] flex flex-col justify-end
-         pb-[max(28px,calc(env(safe-area-inset-bottom)+20px))]>
-  meta (eyebrow position)
-  H1
-</section>
-<section> cards </section>  ← unchanged, scrolls up from below
+The same risk exists on every `<br/>` written across multiple JSX lines inside any of these three helpers.
+
+## Fix (single CSS change, no JSX edits)
+
+Update the three rules so a collapsed `<br>` still injects a real space character via a generated `::before`. This fixes every site at once with zero copy/layout changes.
+
+`src/index.css` around lines 338–346:
+
+```css
+/* Editorial wrapping helpers — art-directed line breaks on desktop,
+   balanced wrap on mobile. When a <br> is collapsed to inline, JSX has
+   already trimmed surrounding whitespace, so we inject a real space via
+   ::before to prevent adjacent words from concatenating. */
+.wrap-editorial > br { display: inline; }
+.wrap-editorial > br::before { content: "\00a0"; }
+
+@media (max-width: 640px) {
+  .wrap-editorial-mobile-off > br { display: inline; }
+  .wrap-editorial-mobile-off > br::before { content: "\00a0"; }
+}
+
+.wrap-art > br { display: inline; }
+.wrap-art > br::before { content: "\00a0"; }
+@media (min-width: 768px) {
+  .wrap-art > br { display: block; }
+  .wrap-art > br::before { content: none; }
+}
 ```
 
-Desktop keeps the current `pt-36 md:pt-48 lg:pt-56 pb-section-sm` block — no full-viewport hijack on wider screens.
+Notes:
+- `\00a0` (non-breaking space) is chosen so the word pair stays together if the line wraps — matches the editorial intent better than a regular space.
+- Switching `wrap-editorial-mobile-off` from `display: none` to `display: inline` is necessary so the `::before` actually renders. The `<br>` itself produces no visual break when `display: inline`, so the mobile layout is unchanged except for the inserted space.
+- Desktop `.wrap-art > br { display: block }` reverts to a real line break and suppresses the inserted space with `content: none`.
 
-## Technical notes
+## Audit pass (no changes — just verification after the fix)
 
-- Use Tailwind responsive utilities to swap height + flex direction at `md`:
-  - Container: `min-h-[100svh] md:min-h-0 flex flex-col justify-end md:block pt-0 md:pt-48 lg:pt-56 pb-[max(28px,calc(env(safe-area-inset-bottom)+20px))] md:pb-section-sm`
-- Keep existing `animate-fade-up` delays; they already feel right.
-- Parallax effect (optional, mobile only): `useRef` on the header `<div>`, `useEffect` gated by `matchMedia("(hover: none)")` and `!prefers-reduced-motion`, scroll listener `{ passive: true }`, single rAF, write `translate3d(0, -8px*p, 0)` where `p = clamp(scrollY/80, 0, 1)`. Same pattern as `Hero.tsx` lines 59–83.
-- Z-index: no overlap concern — cards live in a sibling section that scrolls normally over the document flow; the header doesn't need `position: sticky`. The "stays on screen like the hero" feel comes from the first paint being anchored bottom + the parallax nudge as scroll begins. The cards then take over the viewport naturally.
+After the CSS edit, sweep these files for `<br />` inside the three helpers to confirm each pair now reads with a space on mobile and a break on desktop. No JSX edits needed.
+
+- `src/components/fly4media/BrandStatement.tsx` (the screenshot case)
+- `src/components/fly4media/Hero.tsx`
+- `src/components/fly4media/FeaturedWork.tsx`
+- `src/components/fly4media/CTA.tsx`
+- `src/components/fly4media/CaseStudyPerspective.tsx`
+- `src/components/fly4media/CaseStudyTakeaway.tsx`
+- `src/components/fly4media/CaseStudyNarrative.tsx`
+- `src/components/fly4media/PricingPackages.tsx`
+- `src/components/fly4media/PricingGuarantee.tsx`
+- `src/components/fly4media/PricingFAQ.tsx`
+- `src/components/fly4media/ProcessList.tsx`
+- `src/components/fly4media/Services.tsx`
+- `src/pages/Work.tsx`, `Services.tsx`, `Pricing.tsx`, `CaseStudy.tsx`, `About.tsx`, `AreaPage.tsx`, `AreasWeServe.tsx`
+
+If any spot uses a literal `\n` newline + `<br/>` pattern not inside one of the helpers (plain `<br/>`), it's already a hard line break and isn't affected.
+
+## QA checklist (mobile, 390px)
+
+- `/` → BrandStatement: "How something is seen decides what it's worth." reads as one line with a space.
+- `/` → BrandStatement: "The difference between being shown and being remembered." reads with a space.
+- `/` Hero headline still wraps the same (uses real `<br/>`, no helper collapse).
+- `/work` title "Perspective, / in motion." still breaks because `t-display-2` + `wrap-editorial-mobile-off` — verify the comma still ends the first line and "in motion." starts the second on desktop, and reads as "Perspective, in motion." on mobile.
+- All case-study perspective/takeaway lines render with proper spacing.
 
 ## What we are NOT doing
 
-- Not making the title `position: sticky` over the cards (would conflict with card readability and create a desktop regression).
-- Not changing any card layout, aspect ratios, or copy.
-- Not touching `Hero.tsx`, `FeaturedWork.tsx`, or any case-study pages.
-- Not adding a video to the work page header.
+- No JSX/copy edits.
+- No new components.
+- No layout, typography, or spacing changes beyond the inserted nbsp.
+- Not touching `Hero.tsx`'s headline (uses `wrap-editorial` with real `<br/>` between words on separate lines — the nbsp keeps them readable if a future device ever collapses them).
