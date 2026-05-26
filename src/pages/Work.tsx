@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import PageShell from "@/components/fly4media/PageShell";
 import CTA from "@/components/fly4media/CTA";
