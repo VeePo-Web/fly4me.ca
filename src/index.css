@@ -335,14 +335,21 @@
     animation: t-track-settle 1100ms var(--ease-out-soft) both;
   }
 
-  /* Editorial wrapping helpers — art-directed line breaks on desktop, balanced wrap on mobile. */
+  /* Editorial wrapping helpers — art-directed line breaks on desktop,
+     balanced wrap on mobile. When a <br> is collapsed to inline, JSX has
+     already trimmed surrounding whitespace, so we inject a non-breaking
+     space via ::before to prevent adjacent words from concatenating. */
   .wrap-editorial > br { display: inline; }
+  .wrap-editorial > br::before { content: "\00a0"; }
   @media (max-width: 640px) {
-    .wrap-editorial-mobile-off > br { display: none; }
+    .wrap-editorial-mobile-off > br { display: inline; }
+    .wrap-editorial-mobile-off > br::before { content: "\00a0"; }
   }
   .wrap-art > br { display: inline; }
+  .wrap-art > br::before { content: "\00a0"; }
   @media (min-width: 768px) {
     .wrap-art > br { display: block; }
+    .wrap-art > br::before { content: none; }
   }
 
   /* Section rhythm utilities (fluid) */
