@@ -25,17 +25,51 @@ export default function Work() {
     document.title = "Work — Perspective in motion · Fly4MEdia";
   }, []);
 
+  // Mobile-only: 8px upward parallax on the header tied to scrollY 0–80.
+  // Mirrors the Hero lede behavior so the title feels anchored before
+  // the cards rise behind/past it. Single rAF, ref-based, no re-renders.
+  const headerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!window.matchMedia("(hover: none)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    let pending = false;
+    const apply = () => {
+      const p = Math.min(Math.max(window.scrollY / 80, 0), 1);
+      if (headerRef.current) {
+        headerRef.current.style.transform = `translate3d(0, ${(-8 * p).toFixed(2)}px, 0)`;
+      }
+      pending = false;
+    };
+    const onScroll = () => {
+      if (pending) return;
+      pending = true;
+      raf = requestAnimationFrame(apply);
+    };
+    apply();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
     <PageShell>
       {({ openContact }: { openContact: () => void }) => (
         <>
           {/*
-            Page header — no eyebrow.
-            The previous "Selected Work / 2024 — 2025" was wrong
-            (projects span 2024–2026) and implied filtering where none exists.
-            The heading stands alone; the count line below confirms scope.
+            Page header — mobile pins to bottom of viewport (100svh, justify-end)
+            so the title behaves like the Hero: anchored, cards rise past it as
+            the user scrolls. Desktop keeps its standard top-padded layout.
           */}
-          <section className="pt-36 md:pt-48 lg:pt-56 pb-section-sm container-x">
+          <section className="container-x min-h-[100svh] md:min-h-0 flex flex-col justify-end md:block pt-0 md:pt-48 lg:pt-56 pb-[max(28px,calc(env(safe-area-inset-bottom)+20px))] md:pb-section-sm">
+            <div
+              ref={headerRef}
+              className="will-change-transform"
+              style={{ transition: "transform 240ms cubic-bezier(0.22, 1, 0.36, 1)" }}
+            >
             <h1
               className="t-display-2 wrap-editorial wrap-editorial-mobile-off animate-fade-up"
               style={{ animationDelay: "0ms" }}
@@ -52,6 +86,7 @@ export default function Work() {
             >
               {projects.length} projects · 2024–2026
             </p>
+            </div>
           </section>
 
           {/*
