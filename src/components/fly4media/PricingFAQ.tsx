@@ -8,7 +8,7 @@ const FAQS = [
   },
   {
     q: "What's the actual difference between this and a $200 drone operator?",
-    a: "A $200 operator delivers raw files from ungraded footage. You edit, colour correct, add music, and compress for platforms yourself — or you don't, and the footage sits unused. Every Fly4MEdia package delivers a finished asset: colour graded, music licensed, exported for every platform it needs to live on, and in your hands within 48 hours. The licence matters too. Unlicensed music gets your listing video muted on YouTube and flagged on social. Every package includes music cleared for MLS, social, and web. RPAS Advanced certification allows shooting over populated areas, near airports, and in controlled airspace — the locations that produce the most valuable footage. Most $200 operators hold Basic certification, which legally restricts where they can fly.",
+    a: "A $200 operator delivers raw files from ungraded footage. You edit, colour correct, add music, and compress for platforms yourself — or you don't, and the footage sits unused. Every Fly4MEdia package delivers a finished asset: colour graded, music licensed, exported for every platform it needs to live on, and in your hands within 48 hours. The music licence matters too — unlicensed tracks get listing videos muted on YouTube and flagged on social. Every package includes music cleared for MLS, social, and web. The difference you're paying for is the gap between a hard drive of clips and a finished asset you can publish the day you receive it.",
   },
   {
     q: "What does the brief process actually involve?",
@@ -37,10 +37,6 @@ const FAQS = [
   {
     q: "How many projects do you take on per month?",
     a: "Intentionally limited. Toby operates alone — there's no crew of operators dispatched under a brand name. Keeping project volume controlled is how quality stays consistent. When the calendar fills, it fills. If you have a date-sensitive project — a listing going live in two weeks, a venue with a peak inquiry season — book early and lock the date.",
-  },
-  {
-    q: "What does RPAS Advanced certification mean for my project?",
-    a: "Transport Canada RPAS Advanced Operations certification allows flight in controlled airspace, over populated areas, and near aerodromes — the locations that matter for real estate in urban infill areas, weddings at venues near town centres, and commercial shoots in downtown Calgary. Basic-certified operators can't legally fly many of the locations that produce the most valuable footage. Advanced certification is not a credential badge — it's what makes the shoot legal and the footage usable.",
   },
 ];
 
