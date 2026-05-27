@@ -57,7 +57,7 @@ const CATEGORIES: Category[] = [
           { item: "Licensed music — cleared for MLS, YouTube, Instagram, and social", value: "$80" },
           { item: "10 aerial photographs, colour corrected and horizon-levelled, MLS-ready", value: "$220" },
           { item: "Delivered via private download link within 48 hours of shoot", value: "—" },
-          { item: "Transport Canada RPAS Advanced operator — fully insured, legal in all airspace", value: "—" },
+          
         ],
         totalValue: "$720",
         price: "$600",
@@ -189,7 +189,7 @@ const CATEGORIES: Category[] = [
           { item: "15 aerial photographs — boundary lines, infrastructure, field-of-view shots for MLS or private listing", value: "$300" },
           { item: "Geotagged high-resolution aerial still for boundary reference", value: "—" },
           { item: "Delivered via download link within 48 hours", value: "—" },
-          { item: "RPAS Advanced licensed — legal over rural and populated airspace", value: "—" },
+          
         ],
         totalValue: "$750",
         price: "$700",
@@ -254,7 +254,7 @@ const CATEGORIES: Category[] = [
           { item: "Suitable for progress reports, investor updates, planning submissions, and insurance documentation", value: "—" },
           { item: "Raw files + colour-corrected set both delivered", value: "—" },
           { item: "Priority 24-hour delivery for active construction timelines", value: "—" },
-          { item: "RPAS Advanced certified — legal over urban, restricted, and controlled airspace", value: "—" },
+          
         ],
         totalValue: "$900",
         price: "$750",
@@ -699,7 +699,7 @@ function CategorySection({
           </div>
           <p className="t-micro text-muted-foreground mt-3 pb-section">
             Stated values reflect standard market rates for individual services.
-            All packages include a licensed, RPAS Advanced-certified operator.
+            Every package is delivered by Toby personally — one operator, end to end.
           </p>
         </div>
       </section>

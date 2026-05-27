@@ -4,8 +4,8 @@ const ITEMS = [
   "Cinema-grade aerial drone systems",
   "FPV platforms — for the shot a crane can't get to",
   "Stabilised ground & gimbal workflows",
-  "Transport Canada — Advanced RPAS",
-  "Insured commercial operations",
+  "Weather-judged shoots — patience over volume",
+  "End-to-end delivery — graded, scored, platform-ready",
   "Alberta-rooted. On a plane when the brief calls for it.",
 ];
 

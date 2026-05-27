@@ -3,7 +3,7 @@ import { useReveal, useRevealStagger } from "./useReveal";
 const STEPS = [
   { n: "01", title: "Discovery", desc: "The first call isn't a sales call. I'm listening for the thing under the brief — the reason you actually picked up the phone." },
   { n: "02", title: "Creative Direction", desc: "Before anything flies, you see the film on paper. Storyboards, shot lists, references. Nothing leaves the ground until you've nodded." },
-  { n: "03", title: "Production", desc: "Licensed, insured, cinema-grade. And patient. I'd rather lose a day to weather than hand you a shot we both know is just fine." },
+  { n: "03", title: "Production", desc: "Cinema-grade and patient. I'd rather lose a day to weather than hand you a shot we both know is just fine." },
   { n: "04", title: "Delivery", desc: "Master files, channel-ready cuts, and the version your team will actually use on Monday. The job isn't done until the room goes quiet when it plays." },
 ];
 
