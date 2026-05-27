@@ -22,8 +22,8 @@ const DIFFERENTIATORS = [
   },
   {
     n: "03",
-    heading: "Licensed, insured, RPAS Advanced-certified.",
-    body: "Transport Canada Advanced Operations certification covers complex airspace and populated areas. Every project is fully insured. Your liability is zero.",
+    heading: "Weather-safe and reshoot-backed.",
+    body: "If conditions on the day won't produce footage worth delivering, we reschedule at no cost. If the final cut misses the brief, we reshoot.",
   },
   {
     n: "04",
@@ -336,7 +336,7 @@ export default function Pricing() {
       "@type": "WebPage",
       name: "Drone Videography Pricing — Fly4MEdia Alberta",
       description:
-        "Aerial cinematography packages for real estate, wedding venues, farms, construction, tourism, and commercial brands in Alberta. Prices from $600. Transport Canada RPAS Advanced certified operator.",
+        "Aerial cinematography packages for real estate, wedding venues, farms, construction, tourism, and commercial brands in Alberta. Prices from $600.",
       url: "https://fly4media.ca/pricing",
       provider: {
         "@type": "LocalBusiness",
